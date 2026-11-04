@@ -1,0 +1,14 @@
+data/
+runs/
+runs_attn/
+results.jsonl
+attn_results.jsonl
+__pycache__/
+*.pt
+.DS_Store
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.pdf
