@@ -93,6 +93,33 @@ Wang et al.'s design on our model, with `debug/map_parts.py 5s --add`, data in `
 
 Query and key on Adam cost .0025 at Adam's shared lr and gain .0023 at their own lr, so at this size the sign of the query and key cost depends on that one lr. The whole-matrix map at this size is in `results/add/w48_out.jsonl`: value and output -.0198 (.0031), query and key +.0023 (.0012), gate, up and down -.0065 (.0027), per-head +.0022 (.0014).
 
+## 2026-11-05: Adding Muon to Adam with fixed lrs, width 32, 1,000 steps
+
+The same design at the `long` tier, data in `results/add/w32.jsonl`. Adam's shared lr and its own lr for query and key are both .01 here, so fixing that lr changes nothing. All Muon scores 4.2602 and all Adam scores 4.2749.
+
+| Muon on | Against all Muon | Against all Adam |
+| --- | --- | --- |
+| Query and key only | -.0141 (.0018) | +.0006 |
+| Value and output only | -.0032 (.0023) | +.0115 |
+| Gate, up and down only | -.0163 (.0029) | -.0016 |
+| Value, output, gate, up and down, with query and key on Adam | +.0002 (.0015) | +.0149 |
+| The same, with the other Muon lrs retuned | -.0007 (.0020) | +.0140 |
+
+The whole-matrix map at this size is in `results/add/w32_out.jsonl`: value and output -.0137 (.0040), query and key +.0002 (.0015), gate, up and down -.0024 (.0005), per-head +.0001 (.0010), all seven -.0147 (.0019).
+
+## 2026-11-05: Adding and removing Muon agree at small size
+
+Each group's gain from adding Muon to all Adam nearly equals its cost when removed from all Muon, and the groups nearly sum to the total, so the groups act independently at these sizes.
+
+| Group | Width 48, added | Width 48, removed | Width 32, added | Width 32, removed |
+| --- | --- | --- | --- | --- |
+| Value and output | +.0199 | .0198 | +.0115 | .0137 |
+| Gate, up and down | +.0077 | .0065 | -.0016 | .0024 |
+| Query and key | +.0021 | -.0023 | +.0006 | -.0002 |
+| Sum of added gains, against the all Muon gain | .0297 vs .0265 | | .0105 vs .0147 | |
+
+Wang et al.'s gated table does not behave this way: each feed-forward matrix added alone gains about .09 to .10, while removing one from the full set costs .017 to .052. Their query and key cost of .0187 is 5% of their all Adam to all Muon gap of .3712, and at width 48 the cost at Adam's shared lr is .0025 of .0265, which is 9%, so the two results differ less than the raw numbers suggest.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
