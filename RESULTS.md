@@ -719,6 +719,22 @@ Momentum (v,o, 10 worlds):
 
 The gain needs momentum .95 and a step about a third of Muon's; the ramp beats the flat step at every momentum except .9. Longer momentum averages the gradient over more steps, which fits weak directions being slow, consistent signal that needs averaging to show.
 
+A per-direction curvature probe (gradient change along each update direction divided by the step taken) returned step ratios that exactly echoed the step sizes put in, and a flat step gave flat "curvature". The step directions come from momentum that already holds the current gradient's noise, so that estimate is biased; the probe was dropped. A gradient summed over the next 50 steps opposes every quarter about equally (z -.8 to -1.0, `debug/spectrum_probe.py --sum 50`), so it does not separate the quarters either.
+
+Same band test at 250 steps (`results/papers/band_vo_250.json`, base `results/add/w48_out.jsonl`, 10 worlds, errors .0009-.0018):
+
+| v,o setting, momentum .95 | Gain | Wins |
+|---|---|---|
+| Quarter steps .32 .40 .48 .71 | +.0024 (.0013) | 8/10 |
+| .32 flat | +.0014 (.0015) | 6/10 |
+| .25 .32 .40 .60 | +.0003 (.0014) | 6/10 |
+| .20 .25 .30 .45 | +.0003 (.0015) | 7/10 |
+| .32 .32 .32 1.0 | -.0004 (.0015) | 4/10 |
+| .50 .62 .75 1.1 | -.0036 (.0012) | 1/10 |
+| Muon walked, best cell (momentum .95, lr x.35) | +.0006 | |
+
+At 250 steps the same ramp is again best, but its neighbours are near 0 and errors are twice as large, so 250 steps neither confirms nor rules it out.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.

@@ -12,13 +12,13 @@ PARTS = dict(vo=("v", "o"), qk=("q", "k"), ffn=("gate", "up", "down")); sig = la
 
 
 def main():
-    p = argparse.ArgumentParser(); p.add_argument("--part", required=True); p.add_argument("--results", required=True); p.add_argument("--out", required=True); p.add_argument("--cs", default=".3,.4,.5,.6,.7,.8"); p.add_argument("--fs", default=".25,.35,.5,.7,1"); p.add_argument("--beta", type=float, default=.9); p.add_argument("--par", type=int, default=9); p.add_argument("--hours", type=float, default=.1); p.add_argument("--worlds", default="5,6,7,8,9"); p.add_argument("--muon", action="store_true", help="control: Muon itself (Newton-Schulz) at each lr and --beta; c is ignored"); a = p.parse_args()
-    mp.PATH = os.path.abspath(a.results); b = arms.parse([json.loads(l) for l in open("results/add/w48x1000_out.jsonl") if "gaps" in l][-1]["base"]); held = [int(x) for x in a.worlds.split(",")]; mods = PARTS[a.part]
-    R = mp.Runner("5sx4", a.par, a.hours); R.need([b], held); B = np.array([R.val(b, w) for w in held])
+    p = argparse.ArgumentParser(); p.add_argument("--part", required=True); p.add_argument("--results", required=True); p.add_argument("--out", required=True); p.add_argument("--cs", default=".3,.4,.5,.6,.7,.8"); p.add_argument("--fs", default=".25,.35,.5,.7,1"); p.add_argument("--beta", type=float, default=.9); p.add_argument("--par", type=int, default=9); p.add_argument("--hours", type=float, default=.1); p.add_argument("--worlds", default="5,6,7,8,9"); p.add_argument("--muon", action="store_true", help="control: Muon itself (Newton-Schulz) at each lr and --beta; c is ignored"); p.add_argument("--base", default="results/add/w48x1000_out.jsonl"); p.add_argument("--tier", default="5sx4"); a = p.parse_args()
+    mp.PATH = os.path.abspath(a.results); b = arms.parse((lambda L: ([x for x in L if "gaps" in x] or L)[-1])([json.loads(l) for l in open(a.base) if '"base"' in l])["base"]); held = [int(x) for x in a.worlds.split(",")]; mods = PARTS[a.part]
+    R = mp.Runner(a.tier, a.par, a.hours); R.need([b], held); B = np.array([R.val(b, w) for w in held])
     grid = {(c, f): {m: (dict(g, lr=sig(g["lr"] * f), beta=a.beta) if a.muon else dict(rule="x_rand", shape=2, p3=round(1 - 2 * c, 2), beta=a.beta, lr=sig(g["lr"] * f), h=4)) if m in mods else g for m, g in b.items()} for c in map(float, a.cs.split(",")) for f in map(float, a.fs.split(","))}
     specs = list(grid.values())
     for i in range(0, len(specs), 9): R.need(specs[i:i + 9], held)
-    out = dict(part=a.part, worlds=held, base_held=round(float(B.mean()), 4), rows=[])
+    out = dict(part=a.part, tier=a.tier, worlds=held, base_held=round(float(B.mean()), 4), rows=[])
     for (c, f), s in grid.items():
         g = B - np.array([R.val(s, w) for w in held]); out["rows"].append(dict(c=c, f=f, gain=round(float(g.mean()), 4), error=round(float(g.std(ddof=1) / len(held) ** .5), 4), wins=int((g > 0).sum())))
     cs = sorted({r["c"] for r in out["rows"]}); fs = sorted({r["f"] for r in out["rows"]}); G = {(r["c"], r["f"]): r["gain"] for r in out["rows"]}

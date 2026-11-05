@@ -12,9 +12,9 @@ PARTS = dict(vo=("v", "o"), qk=("q", "k"), ffn=("gate", "up", "down"))
 
 
 def main():
-    p = argparse.ArgumentParser(); p.add_argument("--part", required=True); p.add_argument("--bands", required=True); p.add_argument("--results", required=True); p.add_argument("--out", required=True); p.add_argument("--beta", type=float, default=.95); p.add_argument("--worlds", default="5,6,7,8,9,10,11,12,13,14"); p.add_argument("--tier", default="5sx4"); p.add_argument("--par", type=int, default=9); p.add_argument("--hours", type=float, default=.075); p.add_argument("--flip4", type=int, default=0); a = p.parse_args()
+    p = argparse.ArgumentParser(); p.add_argument("--part", required=True); p.add_argument("--bands", required=True); p.add_argument("--results", required=True); p.add_argument("--out", required=True); p.add_argument("--beta", type=float, default=.95); p.add_argument("--worlds", default="5,6,7,8,9,10,11,12,13,14"); p.add_argument("--tier", default="5sx4"); p.add_argument("--par", type=int, default=9); p.add_argument("--hours", type=float, default=.075); p.add_argument("--flip4", type=int, default=0); p.add_argument("--base", default="results/add/w48x1000_out.jsonl"); a = p.parse_args()
     mp.PATH = os.path.abspath(a.results); W = [int(x) for x in a.worlds.split(",")]; mods = PARTS[a.part]
-    b = arms.parse([json.loads(l) for l in open("results/add/w48x1000_out.jsonl") if "gaps" in l][-1]["base"])
+    b = arms.parse((lambda L: ([x for x in L if "gaps" in x] or L)[-1])([json.loads(l) for l in open(a.base) if '"base"' in l])["base"])
     R = mp.Runner(a.tier, a.par, a.hours); R.need([b], W); B = np.array([R.val(b, w) for w in W])
     bands = [tuple(float(x) for x in s.split(",")) for s in a.bands.split()]
     grid = {t: {m: dict(rule="x_band", lr=g["lr"], beta=a.beta, t1=t[0], t2=t[1], t3=t[2], t4=t[3], **({"flip4": 1} if a.flip4 else {})) if m in mods else g for m, g in b.items()} for t in bands}
@@ -22,8 +22,8 @@ def main():
     for i in range(0, len(specs), 9): R.need(specs[i:i + 9], W)
     old = json.load(open(a.out)) if os.path.exists(a.out) else dict(part=a.part, worlds=W, base=round(float(B.mean()), 4), rows=[])
     for t, s in grid.items():
-        g = B - np.array([R.val(s, w) for w in W]); row = dict(t=list(t), beta=a.beta, flip4=a.flip4, gain=round(float(g.mean()), 4), error=round(float(g.std(ddof=1) / len(W) ** .5), 4), wins=int((g > 0).sum()))
-        old["rows"] = [r for r in old["rows"] if (r["t"], r["beta"], r.get("flip4", 0)) != (row["t"], row["beta"], a.flip4)] + [row]
+        g = B - np.array([R.val(s, w) for w in W]); row = dict(tier=a.tier, t=list(t), beta=a.beta, flip4=a.flip4, gain=round(float(g.mean()), 4), error=round(float(g.std(ddof=1) / len(W) ** .5), 4), wins=int((g > 0).sum()))
+        old["rows"] = [r for r in old["rows"] if (r.get("tier", "5sx4"), r["t"], r["beta"], r.get("flip4", 0)) != (a.tier, row["t"], row["beta"], a.flip4)] + [row]
         print(f"{a.part} quarters {t} momentum {a.beta}{' random signs in quarter 4' if a.flip4 else ''}: {row['gain']:+.4f} error {row['error']:.4f} wins {row['wins']}/{len(W)}", flush=True)
     json.dump(old, open(a.out, "w"), indent=0); R.ex.shutdown()
 
