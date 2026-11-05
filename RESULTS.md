@@ -247,6 +247,42 @@ The prediction failed. In every group the gradient's shape lowers the next unsee
 
 The best lr for the gradient's shape was x.4 of Muon's on value and output at 250 steps and x.63 at 1,000, and on query and key x.63 and x1.6.
 
+## 2026-11-05: Does QK-norm explain query and key, prediction before running
+
+The model normalizes query and key per head, which removes their overall scale, and query and key are the group that needs Muon least. `debug/noqk_parts.py` repeats the tests without QK-norm, with Muon lrs walked again. Prediction at width 48, 250 steps: without QK-norm, moving query and key to Adam costs at least .005 (it was +.0023 with QK-norm) and removing their weak directions costs at least .005 (it was +.0011), while value and output keep their costs.
+
+Result at width 48, 250 steps, data in `results/noqk/w48.jsonl`. Base without QK-norm 4.3638, against 4.3606 with it. Gaps are against the base of the same row's model.
+
+| Change | With QK-norm | Without QK-norm |
+| --- | --- | --- |
+| Query and key to Adam | +.0023 (.0012) | +.0023 (.0014) |
+| Query and key, weak removed | +.0011 (.0008) | +.0010 (.0012) |
+| Query and key, gradient's shape | +.0029 (.0013) | -.0014 (.0014) |
+| Query and key, `p=-.5` | -.0218 (.0014) | -.0149 (.0011) |
+| Value and output to Adam | -.0198 (.0031) | -.0128 (.0010) |
+| Value and output, weak removed | -.0112 (.0011) | -.0085 (.0008) |
+| Value and output, gradient's shape | -.0229 (.0020) | -.0186 (.0015) |
+
+The prediction failed. Without QK-norm, query and key still gain nothing from Muon, so QK-norm does not explain their indifference.
+
+## 2026-11-05: Kaggle map, width 256, 2,000 steps (job map-c)
+
+`kaggle/out/map-c`, 9.7 GPU hours, 6.8M weights, base held-out 4.1375. Whole-matrix Muon baseline, gaps on worlds 5 to 9.
+
+| Moved to Adam | Width 64 | Width 128 | Width 256 | Wins of 5 at 256 |
+| --- | --- | --- | --- | --- |
+| Value and output | -.0135 (.0026) | -.0202 (.0018) | -.0403 (.0019) | 0 |
+| Value | | -.0069 (.0005) | -.0154 (.0028) | 0 |
+| Output | | -.0103 (.0018) | -.0145 (.0021) | 0 |
+| Query and key | -.0002 (.0019) | +.0056 (.0014) | -.0012 (.0014) | 1 |
+| Query | | +.0063 (.0012) | +.0032 (.0010) | 5 |
+| Key | | +.0024 (.0012) | -.0019 (.0006) | 0 |
+| Gate, up and down | -.0022 (.0022) | -.0053 (.0015) | -.0111 (.0014) | 0 |
+| All seven | -.0119 (.0017) | -.0511 (.0029) | -.0507 (.0019) | 0 |
+| Muon per head on q,k | .0000 (.0021) | +.0052 (.0008) | +.0038 (.0015) | 5 |
+
+The cost of moving value and output to Adam roughly doubles with each doubling of width, feed-forward does too, and query and key stay near zero. Muon per head on query and key beats whole-matrix Muon by .0052 and .0038 in all 5 worlds at widths 128 and 256, which is under the .005 win line at 256.
+
 ## 2026-11-05: Kaggle map, width 64, 8,000 steps (job map-d)
 
 `kaggle/out/map-d`, 7.25 GPU hours, base held-out 4.3148. Whole-matrix Muon baseline, gaps on worlds 5 to 9.
