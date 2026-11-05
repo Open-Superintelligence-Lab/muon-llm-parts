@@ -91,6 +91,28 @@ The design is cheaper than at small size because of the GPU budget. The baseline
 
 % MAPTABLE
 
+\paragraph{Adding Muon and removing it.} To compare with Wang et al.\ directly, we also run their design on our model with whole-matrix query and key. Adam trains every hidden matrix with one learning rate chosen on the tune worlds, and Muon then takes some matrices at the baseline's Muon learning rates. Table~\ref{tab:add} gives each group's gain from adding Muon and its cost when removed from full Muon, where removal uses that group's own tuned Adam learning rate. At both small sizes the two numbers nearly agree, and the added gains sum to .0297 against a full gain of .0265 at width 48 and to .0105 against .0147 at width 32. The groups therefore act close to independently at these sizes. Wang et al.'s gated table does not behave this way, since each feed-forward matrix added alone gains about .09 to .10 while removing one from the full set costs .017 to .052.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{Width 48, 250 steps} & \multicolumn{2}{c}{Width 32, 1,000 steps} \\
+Group & Added & Removed & Added & Removed \\
+\midrule
+Value and output & $+.0199$ & $.0198$ & $+.0115$ & $.0137$ \\
+Gate, up and down & $+.0077$ & $.0065$ & $-.0016$ & $.0024$ \\
+Query and key & $+.0021$ & $-.0023$ & $+.0006$ & $-.0002$ \\
+\bottomrule
+\end{tabular}
+\caption{Gain from adding Muon to one group over Adam everywhere, and cost of removing Muon from that group, on held-out worlds 5 to 9. A negative cost means Adam beat Muon on that group.}
+\label{tab:add}
+\end{table}
+
+\paragraph{The learning rate on query and key.} At width 48, moving query and key to Adam from the full Muon baseline costs .0025 (.0009) at Adam's shared learning rate of .01 and gains .0023 (.0012) at their own tuned rate of .025, so that one learning rate sets the sign. At width 32 both rates are .01 and the gap is $+.0002$ (.0015). Wang et al.'s cost of .0187 is 5\% of their gap of .3712 between Adam and Muon everywhere, while the .0025 here is 9\% of .0265, so the two results differ less than the raw numbers suggest.
+
+\paragraph{When the gain appears.} The gaps shrink during training. At width 128, moving all seven matrices to Adam costs about .186 at step 250 and about .056 at step 2,000, and moving value and output costs about .050 and .022. These curve values use only 64 validation rows at each mark, so they are noisier than the final gaps, which use 3,200 rows.
+
 
 \section{Related work}
 

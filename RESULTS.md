@@ -120,6 +120,19 @@ Each group's gain from adding Muon to all Adam nearly equals its cost when remov
 
 Wang et al.'s gated table does not behave this way: each feed-forward matrix added alone gains about .09 to .10, while removing one from the full set costs .017 to .052. Their query and key cost of .0187 is 5% of their all Adam to all Muon gap of .3712, and at width 48 the cost at Adam's shared lr is .0025 of .0265, which is 9%, so the two results differ less than the raw numbers suggest.
 
+## 2026-11-05: When the gain appears during training
+
+From the saved curves, averaged over worlds 5 to 9. Curve values use only the first 64 validation rows at each mark, while final gaps use 3,200 rows, so one world's curve gap can differ by .01 from its final gap. Use final gaps for claims.
+
+| Moved to Adam, width 128 | Step 250 | Step 500 | Step 1,000 | Step 2,000 |
+| --- | --- | --- | --- | --- |
+| All seven | -.1864 | -.1226 | -.0819 | -.0555 |
+| Value and output | -.0495 | -.0309 | -.0254 | -.0221 |
+| Gate, up and down | -.0548 | -.0249 | -.0157 | -.0088 |
+| Query and key | +.0091 | +.0088 | +.0028 | -.0012 |
+
+At width 64, value and output go from -.0473 at step 250 to -.0043 at step 2,000. Much of Muon's gain at these lengths is early speed, and the 8,000-step run tests whether it keeps shrinking.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
