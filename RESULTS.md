@@ -570,6 +570,101 @@ Result of `debug/c_lr_grid.py` on v,o (width 48, 1,000 steps, worlds 5-9, moment
 
 Errors are about .0015. Reading: the best gain is about the same for c=.5, .6 and .7 (+.0022, +.0031, +.0034, within one error), but the best lr doubles from c=.5 to c=.7. Below .5 and at .8, every lr loses. So on v,o the exponent mostly moves the best step size; it gives a flat ridge of equal loss from .5 to .7, not a better optimum. Likely reason, not measured: at a fixed update size, a larger c puts more of the update into small singular directions and less into the top ones, so the top directions need a larger lr to move as far.
 
+## 2026-11-05: Exponent x lr grid on query, key and FFN
+
+Same `debug/c_lr_grid.py` as v,o above (width 48, 1,000 steps, worlds 5-9, momentum .9, gain over tuned Muon, lr is a multiple of Muon's tuned lr for each matrix). Data in `results/papers/c_lr_qk*.json` and `c_lr_ffn*.json`. Errors .0004-.0024, median about .0014.
+
+Query and key:
+
+| c | lr x.25 | x.35 | x.5 | x.7 | x1 | x1.4 | x2 | x2.8 |
+|---|---|---|---|---|---|---|---|---|
+| .1 | -.0004 | -.0003 | +.0007 | +.0026 | +.0007 | -.0001 | -.0003 | -.0002 |
+| .2 | -.0015 | +.0009 | +.0009 | +.0001 | +.0013 | | | |
+| .3 | -.0021 | -.0000 | +.0008 | -.0005 | +.0006 | +.0006 | -.0002 | +.0003 |
+| .4 | -.0042 | -.0021 | +.0016 | -.0005 | -.0006 | | | |
+| .5 | -.0041 | -.0020 | -.0011 | +.0009 | +.0010 | +.0006 | -.0012 | -.0008 |
+| .6 | -.0047 | -.0043 | -.0037 | -.0029 | -.0026 | | | |
+
+Reading: from c=.1 (close to plain momentum SGD) to c=.5 (exact polar) and from .5x to 2.8x the lr, every cell is within about .002 of Muon, and the one +.0026 cell is the largest of 30 noisy cells. Query and key barely care about either the spectrum shape or the step size over a 10x range. Only c=.6, which boosts small directions, loses at every lr. This matches the earlier finding that moving query and key to Adam costs nothing, with or without QK-norm.
+
+FFN (gate, up, down together):
+
+| c | lr x.25 | x.35 | x.5 | x.7 | x1 | x1.4 | x2 | x2.8 |
+|---|---|---|---|---|---|---|---|---|
+| .3 | -.0043 | -.0012 | -.0017 | -.0008 | -.0014 | | | |
+| .4 | -.0031 | -.0017 | -.0008 | -.0015 | -.0001 | -.0014 | -.0055 | -.0299 |
+| .5 | -.0038 | -.0011 | -.0005 | +.0003 | +.0011 | -.0005 | -.0036 | -.0187 |
+| .6 | -.0038 | -.0012 | -.0007 | +.0015 | +.0039 | +.0020 | -.0008 | -.0089 |
+| .7 | -.0037 | -.0030 | -.0005 | +.0011 | +.0025 | +.0032 | -.0007 | -.0054 |
+| .8 | -.0047 | -.0031 | -.0001 | +.0001 | +.0015 | -.0008 | -.0013 | -.0035 |
+
+Reading: unlike v,o, FFN's exact polar (c=.5) peaks at only +.0011, while c=.6 at the tuned lr gives +.0039 (error .0007, 5/5 worlds) and c=.7 gives +.0032 at 1.4x. On FFN the exponent is not only a step-size change; a little extra weight on small singular directions helps by about .003 at its best lr. This is the best of 40 cells, so it needs a check on worlds not used for picking it before it counts.
+
+Summary of the three grids: q,k is flat in both c and lr; v,o has a flat ridge from c=.5 to .7 where the best lr grows with c; FFN has a real peak near c=.6-.7.
+
+## 2026-11-06: Do the exponent gains hold on worlds no choice looked at?
+
+Every choice so far was made on worlds 0-1 (lr) and read on worlds 5-9. `debug/recheck_worlds.py` scores each positive 1,000-step arm's stored spec on worlds 10-14, which nothing in this repo was picked on (sealed worlds untouched). Data in `results/papers/recheck_w10.json`.
+
+| Arm (part) | Worlds 5-9 | Worlds 10-14 | Wins 10-14 |
+|---|---|---|---|
+| c=.7, momentum .95, lr x1 (v,o) | +.0030 | +.0025 (.0006) | 5/5 |
+| Dion3 f=1 (FFN) | +.0012 | +.0013 (.0006) | 4/5 |
+| Learned exponent rho=.99 (v,o) | +.0029 | +.0013 (.0014) | 2/5 |
+| Dion3 f=1 (v,o) | +.0021 | +.0006 (.0006) | 3/5 |
+| Kaon (v,o) | +.0021 | +.0009 (.0011) | 3/5 |
+| Exact polar c=.5 (v,o) | +.0020 | -.0001 (.0008) | 3/5 |
+| Newton-Schulz 10 steps (v,o) | +.0017 | +.0000 (.0008) | 2/5 |
+| Learned exponent rho=.99 (FFN) | +.0019 | +.0007 (.0009) | 3/5 |
+| c=.6 (FFN) | +.0012 | -.0008 (.0007) | 1/5 |
+
+The c x lr grid peaks also shrank on worlds 10-14: FFN c=.6 at x1 went from +.0039 to +.0011, v,o c=.7 at x1 with momentum .9 from +.0034 to +.0008 (`c_lr_ffn_confirm.json`, `c_lr_vo_confirm.json`). Most gains near +.002 on worlds 5-9 were partly the luck of picking the best of many. Only v,o c=.7 with momentum .95 held 5/5.
+
+## 2026-11-06: Is v,o's gain the exponent, the momentum or the step size?
+
+Ten worlds (5-14), width 48, 1,000 steps, gain over tuned Muon (Newton-Schulz, momentum .8, lr .051).
+
+Muon itself, walked again on these 10 worlds (`muon_vo_b*.json`), best cells: momentum .8 at x.7 +.0008 (6/10), .9 at x.5 +.0011 (6/10), .95 at x.35 +.0013 (7/10). Tuned Muon is close to its best; a retuned Muon gains at most about .0013.
+
+Exponent at momentum .95 (`c_lr_vo_b95.json`): c=.6 at x.5 +.0027 (.0007, 10/10), c=.7 at x1 +.0027 (.0005, 10/10), c=.5 at x.5 +.0006 (5/10). Exact polar at x1 loses .0077.
+
+Why does the best lr double from c=.5 to c=.7? `debug/top_step.py` takes the momentum's singular values every 25 steps of one v,o c=.7 run (world 0) and computes, for each c, the RMS step in each quarter of directions (top first) relative to a flat update of the same size:
+
+| c | Top singular value vs c=.5 | Quarter 1 | 2 | 3 | 4 |
+|---|---|---|---|---|---|
+| .3 | 2.62 | 1.58 | .95 | .66 | .38 |
+| .5 | 1 | 1 | 1 | 1 | 1 |
+| .6 | .48 | .64 | .80 | .96 | 1.42 |
+| .7 | .17 | .32 | .48 | .70 | 1.77 |
+| .8 | .05 | .13 | .23 | .41 | 1.93 |
+
+Matching the top step would predict a best-lr ratio near 6 between c=.5 and c=.7; the grid shows about 2, so that explanation fails. But c=.6 at x.5 and c=.7 at x1 give the top quarter the same step (.32 of flat), and both win by +.0027, while their bottom quarters differ 2.5x (.71 against 1.77).
+
+`optimizers/x_band.py` sets the step of each quarter directly (exact SVD, momentum .95, Muon's v,o lr; 1,1,1,1 is exact polar at Muon's size). `debug/band_grid.py`, 10 worlds, data in `results/papers/band_vo.json`:
+
+| Quarter steps, top first | Gain | Wins |
+|---|---|---|
+| .32 .40 .48 .71 (c=.6 at x.5) | +.0032 (.0007) | 10/10 |
+| .32 .32 .48 .71 | +.0030 (.0007) | 9/10 |
+| .25 .32 .40 .60 | +.0030 (.0008) | 9/10 |
+| .32 .32 .32 1.0 | +.0027 (.0008) | 7/10 |
+| .32 .40 .48 1.0 | +.0027 (.0005) | 9/10 |
+| .32 .48 .70 1.77 (c=.7 at x1) | +.0022 (.0009) | 7/10 |
+| .32 .32 .32 .71 | +.0022 (.0007) | 7/10 |
+| .40 .50 .60 .90 | +.0021 (.0009) | 7/10 |
+| .40 .40 .40 .71 | +.0018 (.0008) | 7/10 |
+| .32 .32 1 1 | +.0017 (.0008) | 6/10 |
+| .25 .25 .25 .71 | +.0016 (.0008) | 7/10 |
+| .32 .32 .32 1.77 | +.0016 (.0011) | 6/10 |
+| .32 .32 .32 .32 | +.0014 (.0007) | 7/10 |
+| .32 .70 .70 .70 | +.0013 (.0008) | 7/10 |
+| .50 .50 .50 .50 (c=.5 at x.5) | +.0006 (.0010) | 5/10 |
+| .20 1 1 1 | +.0002 (.0005) | 5/10 |
+| .32 1 1 1 | -.0012 (.0007) | 3/10 |
+| .50 1 1 1 | -.0014 (.0009) | 4/10 |
+
+Reading: two parts. (1) A flat step about a third of Muon's (.32) gives +.0014, the same as Muon walked down to x.35. (2) On top of that, giving the weakest quarter of directions 2-3x the step of the top quarter, with the middle quarters kept small, adds about .0015, to +.003 with 9-10/10 wins. Raising the middle quarters to .7-1 removes the gain or loses. The weakest quarter holds under 1% of the momentum's squared size (earlier table), so v,o gains from moving directions the gradient barely pushes, but only the weakest ones and only by 2-3x. Each step is one to two errors; the whole +.003 against Muon's best +.0013 is about two errors. Not yet tested at width 128.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
