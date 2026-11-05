@@ -35,17 +35,28 @@ def label(k): return " + ".join(NAMES[s][int(k.get(s, 0))] for s in NAMES if k.g
 
 
 def main():
-    p = argparse.ArgumentParser(); p.add_argument("--n", type=int, default=100); p.add_argument("--results", required=True); p.add_argument("--out", required=True); p.add_argument("--par", type=int, default=8); p.add_argument("--hours", type=float, default=.13); p.add_argument("--parts", default=""); p.add_argument("--top2", type=int, default=20); p.add_argument("--top3", type=int, default=6); p.add_argument("--long", default=""); p.add_argument("--check", action="store_true"); a = p.parse_args()
+    p = argparse.ArgumentParser(); p.add_argument("--n", type=int, default=100); p.add_argument("--results", required=True); p.add_argument("--out", required=True); p.add_argument("--par", type=int, default=8); p.add_argument("--hours", type=float, default=.13); p.add_argument("--parts", default=""); p.add_argument("--top2", type=int, default=20); p.add_argument("--top3", type=int, default=6); p.add_argument("--tier", default="5s"); p.add_argument("--long", default=""); p.add_argument("--long-tier", default="5sx4"); p.add_argument("--long-min", type=float, default=.002); p.add_argument("--check", action="store_true"); a = p.parse_args()
     mp.PATH = os.path.abspath(a.results); os.makedirs(os.path.dirname(mp.PATH), exist_ok=True); parts = a.parts.split(",") if a.parts else list(PARTS)
     last = lambda f: arms.parse([json.loads(l) for l in open(f) if "gaps" in l][-1]["base"]); B250, B1k = last("results/add/w48_out.jsonl"), last("results/add/w48x1000_out.jsonl"); tune, held = [0, 1], [5, 6, 7, 8, 9]; H = 4
     def make(b, part, k, f): return {m: dict(k, rule="x_rand", lr=sig(LR0.get(part, g["lr"]) * f), h=H) if m in PARTS[part] else g for m, g in b.items()}
-    R = mp.Runner("5s", a.par, a.hours)
+    R = mp.Runner(a.tier, a.par, a.hours)
+    if a.tier == "5sx4": B250 = B1k
     def need(R, specs, worlds):
         specs = list(specs)
         for i in range(0, len(specs), 48): R.need(specs[i:i + 48], worlds)
     if a.check:
         same = {"beta": .8}; need(R, [B250] + [make(B250, x, same, 1) for x in ("vo", "qk", "ffn")], [0]); print("check, all stages 0 against Muon, world 0:", R.val(B250, 0), [R.val(make(B250, x, same, 1), 0) for x in ("vo", "qk", "ffn")], flush=True); return R.ex.shutdown()
-    need(R, [B250], tune + held); base = {w: R.val(B250, w) for w in tune + held}; print(f"250 base tune {np.mean([base[w] for w in tune]):.4f} held {np.mean([base[w] for w in held]):.4f}", flush=True); out = dict(n=a.n, base=arms.show(B250), screen={}, tune={}, held={}, long={})
+    need(R, [B250], tune + held); base = {w: R.val(B250, w) for w in tune + held}; print(f"{a.tier} base tune {np.mean([base[w] for w in tune]):.4f} held {np.mean([base[w] for w in held]):.4f}", flush=True); out = dict(n=a.n, base=arms.show(B250), screen={}, tune={}, held={}, long={})
+    if a.long:
+        # survivors from a finished search, at a longer run: retune lr on worlds 0,1 from the longer baseline, then score on worlds 5-9. --long takes the search's out file; --long-tier debug only.
+        done = json.load(open(a.long)); R2 = mp.Runner(a.long_tier, a.par, a.hours); need(R2, [B1k], tune + held); base2 = {w: R2.val(B1k, w) for w in tune + held}; print(f"{a.long_tier} base tune {np.mean([base2[w] for w in tune]):.4f} held {np.mean([base2[w] for w in held]):.4f}", flush=True); long = {}
+        for part, rows in done["held"].items():
+            long[part] = []
+            for r in rows:
+                if r["mean"] < a.long_min: continue
+                opts = [make(B1k, part, r["k"], f) for f in (.25, .35, .5, .7, 1, 1.4, 2, 2.8, 4)]; need(R2, opts, tune); s = min(opts, key=lambda x: float(np.mean([R2.val(x, w) for w in tune]))); need(R2, [s], held); g = np.array([base2[w] - R2.val(s, w) for w in held])
+                long[part].append(dict(i=r["i"], name=r["name"], k=r["k"], spec=arms.show(s), held250=r["mean"], mean=round(float(g.mean()), 4), error=round(float(g.std(ddof=1) / 5 ** .5), 4), wins=int((g > 0).sum()))); print(f"{part} {r['name']}: 250 steps {r['mean']:+.4f}, {a.long_tier} {g.mean():+.4f} error {g.std(ddof=1) / 5 ** .5:.4f} wins {(g > 0).sum()}/5", flush=True); json.dump(long, open(a.out, "w"), indent=0)
+        R2.ex.shutdown(); R.ex.shutdown(); return
     G = (.35, 1, 2.8); gain = lambda s, ws: float(np.mean([base[w] - R.val(s, w) for w in ws]))
     for part in parts:
         C = [sample(i, part) for i in range(a.n)]; need(R, [make(B250, part, k, f) for k in C for f in G], [0]); rows = []

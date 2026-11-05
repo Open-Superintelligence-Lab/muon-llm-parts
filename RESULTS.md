@@ -427,6 +427,37 @@ The size check for the screen: over the 13 moves in the map, part costs at width
 
 Prediction: no candidate passes the win rule (gain above .005 in 5 of 5 worlds at both lengths, and above 7.53 errors). Many will beat the base on world 0 by chance, since a one-world gap under about .004 is noise.
 
+## 2026-11-05: Random optimizer search, first results
+
+Width 48, 250 steps, gain over the tuned baseline on worlds 5-9. Each part had 100 random candidates, and q,k had 300.
+
+| Part | Beat base on world 0 | Best on worlds 5-9 |
+|---|---|---|
+| v,o | 2 of 100 | col-then-muon +.0003, 3/5; plain Muon came back as a top candidate |
+| q,k | 176 of 300 | head-muon + agreement +.0058 error .0007, 5/5; rownorm + weight-size +.0057 error .0007, 5/5 |
+| FFN | 13 of 100 | heavy + muon+sign + grow -.0005, 3/5 |
+| Embeddings | 0 of 100 | tanh + grow -.0036, 1/5 |
+| Head | 0 of 100 | head-muon -.0075, 1/5 |
+
+The q,k survivors at 1,000 steps, with lr retuned on worlds 0,1:
+
+| Candidate | 250 steps | 1,000 steps |
+|---|---|---|
+| head-muon + agreement | +.0058 | +.0024 error .0014, 4/5 |
+| rownorm + weight-size | +.0057 | +.0011 error .0015, 4/5 |
+| rownorm | +.0020 | +.0014 error .0011, 3/5 |
+| row-clip + head-muon + grow | +.0044 | +.0000 error .0011, 2/5 |
+| centre-cols + muon+adam + tangent | +.0044 | -.0017 error .0014, 1/5 |
+| adam-scale + raw | +.0034 | +.0006 error .0017, 3/5 |
+
+Published rules on q,k at 1,000 steps gain: MuonSplit +.0019, Lion +.0015, RowNorm +.0008, Adam +.0002. The prediction held: no candidate passes the win rule at both lengths. Worlds 5-9 are not clean for these picks, because all six candidates were chosen from a list after tune worlds only but these worlds have scored earlier searches too.
+
+What this says: a 250-step q,k gain mostly fades by 1,000 steps. A 250-step screen therefore picks fast starters, so the next search runs at 1,000 steps directly.
+
+## 2026-11-05: Random search at 1,000 steps, prediction before running
+
+The same candidates, 100 each on q,k, v,o and FFN, screened at width 48, 1,000 steps, tier `5sx4`. Prediction: no candidate passes the win rule at 1,000 steps. V,o and FFN stay at or below Muon, and q,k tops out near +.003.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
