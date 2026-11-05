@@ -377,17 +377,25 @@ Verdict for each part, fixed now:
 
 Prediction: value and output are "matters, baseline is best", with only Muon-like rules close. Query and key are the part closest to "any optimizer works". Embedding and head matter and keep Adam. Norm scales are "any optimizer works". A candidate may appear at 250 steps on query and key, as Lion did, but no win appears at 1,000 steps.
 
-First part, stopped early on 2026-11-05 because a video job needed the Mac. Width 48, 250 steps, data in `results/panel/w48.jsonl`. Base 4.3606. Positive beats the baseline.
+All parts at width 48 and 250 steps, data in `results/panel/w48.jsonl`, summary in `results/panel/w48_out.json`. Base 4.3606. Each cell is the gap to the baseline, with the error in brackets and wins of 5 worlds after it. Positive beats the baseline. The baseline uses Muon on value, output, query, key and the feed-forward layers, and Adam on embeddings, the head and norms.
 
-| Query and key use | Gap | Wins of 5 |
-| --- | --- | --- |
-| Frozen | -.0507 (.0024) | 0 |
-| SGD with momentum | -.0011 (.0021) | 3 |
-| Lion | -.0003 (.0016) | 2 |
-| Adam | +.0017 (.0024) | 2 |
-| RowNorm | +.0041 (.0013) | 5 |
+| Part | Frozen | Adam | SGD with momentum | Lion | RowNorm | Normalized SGD | Muon | Per-head Muon | norm1d |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Value, output | -.0475 (.0022) 0 | -.0163 (.0020) 0 | -.0336 (.0023) 0 | -.0156 (.0025) 0 | -.0181 (.0014) 0 | -.0185 (.0028) 0 | base | -.0068 (.0012) 0 | |
+| Query, key | -.0507 (.0024) 0 | +.0017 (.0024) 2 | -.0011 (.0021) 3 | -.0003 (.0016) 2 | +.0041 (.0013) 5 | +.0043 (.0013) 5 | base | +.0024 (.0005) 5 | |
+| Feed-forward | -.0197 (.0013) 0 | -.0051 (.0016) 0 | -.0157 (.0034) 0 | -.0031 (.0021) 1 | -.0039 (.0022) 1 | -.0059 (.0014) 0 | base | | |
+| Embeddings | -.1122 (.0074) 0 | base | -.0335 (.0027) 0 | -.0134 (.0013) 0 | -.0048 (.0024) 1 | | -.0232 (.0026) 0 | | |
+| Head | -1.4051 (.0351) 0 | base | -.0543 (.0042) 0 | -.0397 (.0027) 0 | -.0408 (.0025) 0 | | -.0161 (.0025) 0 | | |
+| Norms | -.0337 (.0039) 0 | base | -.0025 (.0016) 2 | -.0011 (.0018) 2 | | | | | -.0010 (.0020) 2 |
 
-Normalized SGD and per-head Muon on query and key, and all other parts, have not run. Rerunning the same command continues from saved runs.
+Verdicts by the rule above, at 250 steps only. No part has a candidate, since no gain passes .005.
+
+- Value and output: the optimizer matters and Muon is best of those tried.
+- Query and key: any tuned optimizer works. Normalized SGD, RowNorm and per-head Muon win 5 of 5 worlds with gains under .005, which the 1,000-step run will check.
+- Feed-forward: Adam and normalized SGD lose over .004 and 2 errors; Lion and RowNorm stay inside .004. The optimizer matters a little and Muon is best of those tried.
+- Embeddings: the optimizer matters and Adam is best of those tried. RowNorm's loss of .0048 is exactly 2 errors, so it does not clear the rule.
+- Head: the optimizer matters and Adam is best of those tried.
+- Norms: any tuned optimizer works.
 
 ## Related results
 

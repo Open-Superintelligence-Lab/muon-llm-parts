@@ -3,12 +3,264 @@
 "base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
 "base_held": 4.3606,
 "rows": {
+"vo frozen": {
+"mean": -0.0475,
+"error": 0.0022,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=sgdm:0;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=sgdm:0"
+},
+"vo adam": {
+"mean": -0.0163,
+"error": 0.002,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=adam:0.00756:b1=0.7;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=adam:0.00756:b1=0.7",
+"lr": 0.00756,
+"tune_edge": false
+},
+"vo sgdm": {
+"mean": -0.0336,
+"error": 0.0023,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=sgdm:0.12:beta=0.9;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=sgdm:0.12:beta=0.9",
+"lr": 0.12,
+"tune_edge": false
+},
+"vo lion": {
+"mean": -0.0156,
+"error": 0.0025,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=lion:0.002:beta=0.9;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=lion:0.002:beta=0.9",
+"lr": 0.002,
+"tune_edge": false
+},
+"vo rownorm": {
+"mean": -0.0181,
+"error": 0.0014,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=rownorm:0.008:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=rownorm:0.008:beta=0.8",
+"lr": 0.008,
+"tune_edge": false
+},
+"vo normsgd": {
+"mean": -0.0185,
+"error": 0.0028,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=normsgd:0.008:beta=0.95;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=normsgd:0.008:beta=0.95",
+"lr": 0.008,
+"tune_edge": false
+},
+"vo muonsplit": {
+"mean": -0.0068,
+"error": 0.0012,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muonsplit:0.02:beta=0.95;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muonsplit:0.02:beta=0.95",
+"lr": 0.02,
+"tune_edge": false
+},
+"qk frozen": {
+"mean": -0.0507,
+"error": 0.0024,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=sgdm:0;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=sgdm:0;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk adam": {
+"mean": 0.0017,
+"error": 0.0024,
+"wins": 2,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=adam:0.0768:b1=0.9;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=adam:0.0768:b1=0.9;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.0768,
+"tune_edge": false
+},
+"qk sgdm": {
+"mean": -0.0011,
+"error": 0.0021,
+"wins": 3,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=sgdm:3.048:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=sgdm:3.048:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 3.048,
+"tune_edge": false
+},
+"qk lion": {
+"mean": -0.0003,
+"error": 0.0016,
+"wins": 2,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=lion:0.0032:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=lion:0.0032:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.0032,
+"tune_edge": false
+},
+"qk rownorm": {
+"mean": 0.0041,
+"error": 0.0013,
+"wins": 5,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=rownorm:0.032:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=rownorm:0.032:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.032,
+"tune_edge": false
+},
+"qk normsgd": {
+"mean": 0.0043,
+"error": 0.0013,
+"wins": 5,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=normsgd:0.05079:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=normsgd:0.05079:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.05079,
+"tune_edge": false
+},
+"qk muonsplit": {
+"mean": 0.0024,
+"error": 0.0005,
+"wins": 5,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muonsplit:0.0504:beta=0.9;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muonsplit:0.0504:beta=0.9;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.0504,
+"tune_edge": false
+},
+"ffn frozen": {
+"mean": -0.0197,
+"error": 0.0013,
+"wins": 0,
+"spec": "down=sgdm:0;emb=adam:0.19:b1=0.7;gate=sgdm:0;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=sgdm:0;v=muon:0.051:beta=0.8"
+},
+"ffn adam": {
+"mean": -0.0051,
+"error": 0.0016,
+"wins": 0,
+"spec": "down=adam:0.003:b1=0.9;emb=adam:0.19:b1=0.7;gate=adam:0.003:b1=0.9;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=adam:0.003:b1=0.9;v=muon:0.051:beta=0.8",
+"lr": 0.003,
+"tune_edge": false
+},
+"ffn sgdm": {
+"mean": -0.0157,
+"error": 0.0034,
+"wins": 0,
+"spec": "down=sgdm:0.3:beta=0.8;emb=adam:0.19:b1=0.7;gate=sgdm:0.3:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=sgdm:0.3:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.3,
+"tune_edge": false
+},
+"ffn lion": {
+"mean": -0.0031,
+"error": 0.0021,
+"wins": 1,
+"spec": "down=lion:0.002:beta=0.8;emb=adam:0.19:b1=0.7;gate=lion:0.002:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=lion:0.002:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.002,
+"tune_edge": false
+},
+"ffn rownorm": {
+"mean": -0.0039,
+"error": 0.0022,
+"wins": 1,
+"spec": "down=rownorm:0.008:beta=0.95;emb=adam:0.19:b1=0.7;gate=rownorm:0.008:beta=0.95;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=rownorm:0.008:beta=0.95;v=muon:0.051:beta=0.8",
+"lr": 0.008,
+"tune_edge": false
+},
+"ffn normsgd": {
+"mean": -0.0059,
+"error": 0.0014,
+"wins": 0,
+"spec": "down=normsgd:0.005:beta=0.9;emb=adam:0.19:b1=0.7;gate=normsgd:0.005:beta=0.9;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=normsgd:0.005:beta=0.9;v=muon:0.051:beta=0.8",
+"lr": 0.005,
+"tune_edge": false
+},
+"emb frozen": {
+"mean": -0.1122,
+"error": 0.0074,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=sgdm:0;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"emb muon": {
+"mean": -0.0232,
+"error": 0.0026,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=muon:0.08:beta=0.9;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.08,
+"tune_edge": false
+},
+"emb sgdm": {
+"mean": -0.0335,
+"error": 0.0027,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=sgdm:7.68:beta=0.8;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 7.68,
+"tune_edge": false
+},
+"emb lion": {
+"mean": -0.0134,
+"error": 0.0013,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=lion:0.032:beta=0.9;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.032,
+"tune_edge": false
+},
+"emb rownorm": {
+"mean": -0.0048,
+"error": 0.0024,
+"wins": 1,
+"spec": "down=muon:0.051:beta=0.8;emb=rownorm:0.32:beta=0.8;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.32,
+"tune_edge": false
+},
+"head frozen": {
+"mean": -1.4051,
+"error": 0.0351,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=sgdm:0;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"head muon": {
+"mean": -0.0161,
+"error": 0.0025,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=muon:0.0504:beta=0.8;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.0504,
+"tune_edge": false
+},
+"head sgdm": {
+"mean": -0.0543,
+"error": 0.0042,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=sgdm:1.2:beta=0.9;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 1.2,
+"tune_edge": false
+},
+"head lion": {
+"mean": -0.0397,
+"error": 0.0027,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=lion:0.0127:beta=0.95;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.0127,
+"tune_edge": false
+},
+"head rownorm": {
+"mean": -0.0408,
+"error": 0.0025,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=rownorm:0.02:beta=0.95;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.02,
+"tune_edge": false
+},
+"norm frozen": {
+"mean": -0.0337,
+"error": 0.0039,
+"wins": 0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=sgdm:0;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"norm sgdm": {
+"mean": -0.0025,
+"error": 0.0016,
+"wins": 2,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=sgdm:0.3:beta=0.8;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.3,
+"tune_edge": false
+},
 "norm lion": {
 "mean": -0.0011,
 "error": 0.0018,
 "wins": 2,
 "spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=lion:0.008:beta=0.8;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
 "lr": 0.008,
+"tune_edge": false
+},
+"norm norm1d": {
+"mean": -0.001,
+"error": 0.002,
+"wins": 2,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=norm1d:0.004:beta=0.95;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"lr": 0.004,
 "tune_edge": false
 }
 }
