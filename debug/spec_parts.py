@@ -8,7 +8,7 @@ import numpy as np
 import map_parts as mp
 import arms
 
-GROUPS = dict(vo=("v", "o"), qk=("q", "k"), ffn=("gate", "up", "down"), all=mp.MATS); KIND = dict(flat=dict(p=0), half=dict(p=.5), grad=dict(p=1), rev=dict(p=1, rev=1), rand=dict(rand=1)); ONLY_ALL = ("flat", "half")
+GROUPS = dict(vo=("v", "o"), qk=("q", "k"), ffn=("gate", "up", "down"), all=mp.MATS); KIND = dict(flat=dict(p=0), half=dict(p=.5), grad=dict(p=1), rev=dict(p=1, rev=1), rand=dict(rand=1), inv5=dict(p=-.5), inv=dict(p=-1)); ONLY_ALL = ("flat", "half")
 
 
 def changed(b, parts, knobs, f): return {m: dict(rule="x_muon_spec", lr=round(g["lr"] * f, 5), beta=g["beta"], **knobs) if m in parts else g for m, g in b.items()}

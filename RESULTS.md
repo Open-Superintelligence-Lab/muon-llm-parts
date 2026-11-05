@@ -204,6 +204,17 @@ Result at width 48, 250 steps, data in `results/spec/w48.jsonl`. Base 4.3606, ga
 
 Exact flat sizes on all seven give -.0011 (.0014) and square-root sizes (`p=.5`) give -.0134 (.0019). The prediction held for the gradient's shape and for random sizes, and failed for reversed sizes, which hurt every group and hurt query and key most. Random sizes match flat ones at this size, as Shumaylov et al. report on GPT-2. The groups differ: value and output need their weak directions at full size, while query and key do fine with the gradient's own shape and fail when the strong directions shrink.
 
+Shumaylov et al.'s inverted sizes are one over the singular value, which we tried next, data in the same file. Size = singular value to the power `p`, scaled to Muon's step size:
+
+| Group | `p=1` (gradient) | `p=0` (Muon) | `p=-.5` | `p=-1` (inverted) |
+| --- | --- | --- | --- | --- |
+| Value and output | -.0229 (.0020) | 0 | -.0036 (.0020) | -.0343 (.0018) |
+| Gate, up and down | -.0065 (.0013) | 0 | -.0015 (.0013) | -.0073 (.0013) |
+| Query and key | +.0029 (.0013) | 0 | -.0218 (.0014) | -.0469 (.0023) |
+| All seven | -.0245 (.0017) | -.0011 (.0014) | -.0245 (.0021) | -.0900 (.0034) |
+
+Inverted sizes do not work as well as Muon here, unlike the GPT-2 result in that paper's title. The groups want opposite sides of Muon: query and key lose nothing at `p=1` and lose .0218 at `p=-.5`, while value and output lose .0229 at `p=1` and only .0036 at `p=-.5`.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
