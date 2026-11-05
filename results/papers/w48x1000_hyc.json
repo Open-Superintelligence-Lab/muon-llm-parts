@@ -1,0 +1,126 @@
+{
+"tier": "5sx4",
+"base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8",
+"base_held": 4.1323,
+"rows": {
+"qk hyc eta=0": {
+"mean": -0.0029,
+"error": 0.0019,
+"wins": 2,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_hyc:0.01055:beta=0.95:eta=0;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_hyc:0.01055:beta=0.95:eta=0;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk hyc eta=.01": {
+"mean": -0.0052,
+"error": 0.002,
+"wins": 0,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_hyc:0.01055:beta=0.9:eta=0.01;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_hyc:0.01055:beta=0.9:eta=0.01;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk hyc eta=.03": {
+"mean": -0.0065,
+"error": 0.0024,
+"wins": 0,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_hyc:0.01055:beta=0.95:eta=0.03;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_hyc:0.01055:beta=0.95:eta=0.03;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk hyc eta=.01 c0=.3": {
+"mean": 0.0012,
+"error": 0.0016,
+"wins": 3,
+"f": 1.0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_hyc:0.04221:beta=0.9:c0=0.3:eta=0.01;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_hyc:0.04221:beta=0.9:c0=0.3:eta=0.01;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk hyc eta=.01 rho=.99": {
+"mean": -0.0034,
+"error": 0.0016,
+"wins": 1,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_hyc:0.01055:beta=0.9:eta=0.01:rho=0.99;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_hyc:0.01055:beta=0.9:eta=0.01:rho=0.99;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk hyc eta=.03 rho=.99": {
+"mean": -0.0035,
+"error": 0.0025,
+"wins": 2,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_hyc:0.01055:beta=0.95:eta=0.03:rho=0.99;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_hyc:0.01055:beta=0.95:eta=0.03:rho=0.99;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"vo hyc eta=0": {
+"mean": 0.0019,
+"error": 0.0009,
+"wins": 5,
+"f": 0.4,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_hyc:0.0204:beta=0.9:eta=0;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_hyc:0.0204:beta=0.9:eta=0"
+},
+"vo hyc eta=.01": {
+"mean": 0.0015,
+"error": 0.0014,
+"wins": 3,
+"f": 0.4,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_hyc:0.0204:beta=0.95:eta=0.01;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_hyc:0.0204:beta=0.95:eta=0.01"
+},
+"vo hyc eta=.03": {
+"mean": -0.0031,
+"error": 0.0014,
+"wins": 1,
+"f": 0.63,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_hyc:0.03213:beta=0.95:eta=0.03;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_hyc:0.03213:beta=0.95:eta=0.03"
+},
+"vo hyc eta=.01 c0=.3": {
+"mean": -0.0021,
+"error": 0.0018,
+"wins": 2,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_hyc:0.01275:beta=0.95:c0=0.3:eta=0.01;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_hyc:0.01275:beta=0.95:c0=0.3:eta=0.01"
+},
+"vo hyc eta=.01 rho=.99": {
+"mean": 0.0029,
+"error": 0.0015,
+"wins": 4,
+"f": 0.4,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_hyc:0.0204:beta=0.95:eta=0.01:rho=0.99;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_hyc:0.0204:beta=0.95:eta=0.01:rho=0.99"
+},
+"vo hyc eta=.03 rho=.99": {
+"mean": -0.0,
+"error": 0.0013,
+"wins": 2,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_hyc:0.01275:beta=0.95:eta=0.03:rho=0.99;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_hyc:0.01275:beta=0.95:eta=0.03:rho=0.99"
+},
+"ffn hyc eta=0": {
+"mean": 0.0008,
+"error": 0.0014,
+"wins": 3,
+"f": 1.0,
+"spec": "down=x_hyc:0.051:beta=0.9:eta=0;emb=adam:0.19:b1=0.7;gate=x_hyc:0.01032:beta=0.9:eta=0;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_hyc:0.01032:beta=0.9:eta=0;v=muon:0.051:beta=0.8"
+},
+"ffn hyc eta=.01": {
+"mean": -0.0005,
+"error": 0.0017,
+"wins": 4,
+"f": 0.63,
+"spec": "down=x_hyc:0.03213:beta=0.95:eta=0.01;emb=adam:0.19:b1=0.7;gate=x_hyc:0.006502:beta=0.95:eta=0.01;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_hyc:0.006502:beta=0.95:eta=0.01;v=muon:0.051:beta=0.8"
+},
+"ffn hyc eta=.03": {
+"mean": -0.0021,
+"error": 0.0013,
+"wins": 1,
+"f": 1.0,
+"spec": "down=x_hyc:0.051:beta=0.9:eta=0.03;emb=adam:0.19:b1=0.7;gate=x_hyc:0.01032:beta=0.9:eta=0.03;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_hyc:0.01032:beta=0.9:eta=0.03;v=muon:0.051:beta=0.8"
+},
+"ffn hyc eta=.01 c0=.3": {
+"mean": -0.0035,
+"error": 0.0016,
+"wins": 0,
+"f": 0.63,
+"spec": "down=x_hyc:0.03213:beta=0.8:c0=0.3:eta=0.01;emb=adam:0.19:b1=0.7;gate=x_hyc:0.006502:beta=0.8:c0=0.3:eta=0.01;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_hyc:0.006502:beta=0.8:c0=0.3:eta=0.01;v=muon:0.051:beta=0.8"
+},
+"ffn hyc eta=.01 rho=.99": {
+"mean": 0.0019,
+"error": 0.0017,
+"wins": 3,
+"f": 1.0,
+"spec": "down=x_hyc:0.051:beta=0.9:eta=0.01:rho=0.99;emb=adam:0.19:b1=0.7;gate=x_hyc:0.01032:beta=0.9:eta=0.01:rho=0.99;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_hyc:0.01032:beta=0.9:eta=0.01:rho=0.99;v=muon:0.051:beta=0.8"
+}
+}
+}

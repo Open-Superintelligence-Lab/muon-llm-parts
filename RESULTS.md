@@ -519,6 +519,28 @@ Joined at 1,000 steps, head-muon on q,k (+.0041 alone) with each v,o arm, no ret
 
 Verdict: nothing passes the win rule. These are small gains from many arms on worlds that have scored earlier searches. Kaggle job `papers-a` tests c on v,o and q,k, Kaon and step counts at width 128.
 
+## 2026-11-05: Learned spectrum exponent per matrix
+
+Question: can each matrix learn its own exponent c during training, instead of a hand-picked c or a hand schedule? Closest prior work: [DynMuon](https://arxiv.org/abs/2605.17109) schedules the exponent over training by hand, [Muon^p](https://arxiv.org/abs/2606.13867) and [Freon](https://arxiv.org/abs/2605.11181) fix it. I found no paper that learns it per matrix from the loss.
+
+Method, `optimizers/x_hyc.py`: update U S^(1-2c) V^T of the Nesterov momentum, resized to Muon's size. After each step c moves by eta times the cosine of the new gradient with d(update)/dc, the hypergradient. With rho > 0, d(update)/dc is summed over past steps with decay rho, so c is scored by its effect over about 1/(1-rho) steps. eta=0 is exact c=.5 and reproduces the earlier fixed arm (q,k -.0029 both times).
+
+Width 48, 1,000 steps, gain on worlds 5-9, lr and momentum tuned per arm on worlds 0,1:
+
+| Arm | q,k | v,o | FFN |
+|---|---|---|---|
+| eta=0 (fixed c=.5, control) | -.0029, 2/5 | +.0019, 5/5 | +.0008, 3/5 |
+| eta=.01, next step only | -.0052, 0/5 | +.0015, 3/5 | -.0005, 4/5 |
+| eta=.03, next step only | -.0065, 0/5 | -.0031, 1/5 | -.0021, 1/5 |
+| eta=.01, start c=.3 | +.0012, 3/5 | -.0021, 2/5 | -.0035, 0/5 |
+| eta=.01, rho=.99 | -.0034, 1/5 | +.0029, 4/5 | +.0019, 3/5 |
+| eta=.03, rho=.99 | -.0035, 2/5 | -.0000, 2/5 | +.0010, 2/5 |
+| best fixed c, for comparison | +.0034 at .2, 250 steps only | +.0030 at .7 | +.0012 at .6 |
+
+Where c goes (`debug/hyc_trace.py`, world 0). With the next-step signal, c rises from .5 on every part and every matrix: q,k to .71-.84, v,o to .87-.90, FFN to .87-.94. It rises on q,k too, where low c is better, so the next-step loss always asks for a flatter spectrum than the final loss wants. This is the short-horizon bias known from learning-rate hypergradients, here in the spectrum shape. With rho=.99, q,k first falls to .41-.49 over the first 200 steps and then climbs to .67-.75; v,o climbs to .82-.86. The longer horizon recovers the early q,k preference for low c.
+
+Verdict: no arm passes the win rule. With rho=.99 the learned exponent matches the best hand-picked c on v,o (+.0029 against +.0030) and beats it on FFN (+.0019 against +.0012, inside one error), without choosing c, but it still loses on q,k.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
