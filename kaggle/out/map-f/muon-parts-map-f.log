@@ -1,0 +1,25 @@
+[{"stream_name":"stderr","time":1.094384587,"data":"/kaggle/src/script.py:10: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.\n"}
+,{"stream_name":"stderr","time":1.094418095,"data":"  tarfile.open(fileobj=io.BytesIO(base64.b64decode(CODE))).extractall(C)\n"}
+,{"stream_name":"stdout","time":36.32712671,"data":"data ready 35 s\n"}
+,{"stream_name":"stdout","time":36.364897949,"data":"GPU 0: Tesla T4 (UUID: GPU-a8d0be47-f10b-5740-aabd-b343bef21522)\n"}
+,{"stream_name":"stdout","time":36.36492145,"data":"GPU 1: Tesla T4 (UUID: GPU-984b9cc7-6c92-8f08-46ec-ecf280e96693)\n"}
+,{"stream_name":"stdout","time":36.364927265,"data":"\n"}
+,{"stream_name":"stdout","time":36.365132962,"data":"== w512 hours left 11.29\n"}
+,{"stream_name":"stdout","time":47.770914888,"data":"w512 tuning Muon\n"}
+,{"stream_name":"stdout","time":2898.061468333,"data":"  all Muon lrs x: 1 4.0398 of 3\n"}
+,{"stream_name":"stdout","time":2898.061567659,"data":"base down=muon:0.0255:beta=0.9;emb=adam:0.0475:b1=0.7;gate=muon:0.00819:beta=0.9;head=adam:0.012:b1=0.3:b2=0.999;k=muon:0.0335:beta=0.9;norm=adam:0.00475:b2=0.9;o=muon:0.01606:beta=0.9;q=muon:0.0335:beta=0.9;up=muon:0.00819:beta=0.9;v=muon:0.01606:beta=0.9 4.0398\n"}
+,{"stream_name":"stdout","time":8163.281355479,"data":"  Adam on vo, lr: 0.00064 4.0808 of 5\n"}
+,{"stream_name":"stdout","time":10943.774377631,"data":"  Adam on qk, lr: 0.01 4.0454 of 3\n"}
+,{"stream_name":"stdout","time":21601.069035679,"data":"w512 base held-out 4.0445\n"}
+,{"stream_name":"stdout","time":21601.072896684,"data":"vo: -0.0476 error 0.0001 wins 0/3\n"}
+,{"stream_name":"stdout","time":21601.073248966,"data":"qk: -0.0091 error 0.0006 wins 0/3\n"}
+,{"stream_name":"stdout","time":21601.074462788,"data":"ffn: -0.2108 error 0.0013 wins 0/3\n"}
+,{"stream_name":"stdout","time":21601.07448739,"data":"split: +0.0021 error 0.0021 wins 2/3\n"}
+,{"stream_name":"stdout","time":21605.492684055,"data":"w512 done with code 0 at 360 min\n"}
+,{"stream_name":"stderr","time":21607.683020267,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":21607.683060798,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":21608.007090039,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":21608.007117303,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":21608.884882576,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":21609.966428127,"data":"[NbConvertApp] Writing 728092 bytes to __results__.html\n"}
+]

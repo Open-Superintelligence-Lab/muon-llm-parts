@@ -298,7 +298,7 @@ The cost of moving value and output to Adam roughly doubles with each doubling o
 
 At width 64, moving all seven to Adam costs .0433 at 500 steps, .0119 at 2,000 and .0041 at 8,000. The gain shrinks with training length and no group stands out at 8,000 steps.
 
-Kaggle refused the next job on 2026-11-05 with "Maximum weekly GPU quota of 30.00 hours reached", so map-e (the add design at width 128) and width 512 wait for the weekly reset. On the same day they were pushed as private jobs on a second Kaggle account, `jensen404`. The width 128 job failed with no internet (`Could not resolve host: huggingface.co`) because that account has no phone verification. After the phone was verified the same day, map-e and map-f (width 512) were pushed again as version 2 and both are running.
+Kaggle refused the next job on 2026-11-05 with "Maximum weekly GPU quota of 30.00 hours reached", so map-e (the add design at width 128) and width 512 wait for the weekly reset. On the same day they were pushed as private jobs on a second Kaggle account, `jensen404`. The width 128 job failed with no internet (`Could not resolve host: huggingface.co`) because that account has no phone verification. After the phone was verified the same day, map-e and map-f (width 512) were pushed again as version 2; both finished and are logged below.
 
 ## 2026-11-05: Each group gets its own step shape, prediction before running
 
@@ -664,6 +664,33 @@ Matching the top step would predict a best-lr ratio near 6 between c=.5 and c=.7
 | .50 1 1 1 | -.0014 (.0009) | 4/10 |
 
 Reading: two parts. (1) A flat step about a third of Muon's (.32) gives +.0014, the same as Muon walked down to x.35. (2) On top of that, giving the weakest quarter of directions 2-3x the step of the top quarter, with the middle quarters kept small, adds about .0015, to +.003 with 9-10/10 wins. Raising the middle quarters to .7-1 removes the gain or loses. The weakest quarter holds under 1% of the momentum's squared size (earlier table), so v,o gains from moving directions the gradient barely pushes, but only the weakest ones and only by 2-3x. Each step is one to two errors; the whole +.003 against Muon's best +.0013 is about two errors. Not yet tested at width 128.
+
+## 2026-11-06: Kaggle map at width 512, 2,000 steps (job map-f)
+
+`kaggle/out/map-f`, width 512, 8 layers (29M weights), 2,000 steps, 6 GPU hours on two T4s, 3 held-out worlds. Muon tuned to momentum .9 (one walk), base held-out 4.0445. Each group moved to Adam at its own tuned Adam lr.
+
+| Moved to Adam | Gap | Wins of 3 |
+| --- | --- | --- |
+| Gate, up and down | -.2108 (.0013) | 0 |
+| Value and output | -.0476 (.0001) | 0 |
+| Query and key | -.0091 (.0006) | 0 |
+| Muon per head on query and key (not Adam) | +.0021 (.0021) | 2 |
+
+At width 512 every group needs Muon, and the order is the same as at width 48: FFN most, then value and output, then query and key. The FFN cost (.21) is about 40 times its width-128 size; Adam's FFN lr was walked only to .01, so part of it may be an untuned Adam, but value and output (Adam lr .00064, walked over 5 values) still lose .048.
+
+## 2026-11-06: Kaggle add design at width 128 (job map-e)
+
+`kaggle/out/map-e`, width 128, 6 layers, 2,000 steps. Starts from all Adam (4.2895) and gives Muon to one group; all Muon is 4.2629.
+
+| Muon on | Loss | Against all Muon | Against all Adam |
+| --- | --- | --- | --- |
+| Query and key only | 4.2904 | -.0276 (.0021) | -.0009 |
+| Value and output only | 4.2737 | -.0108 (.0029) | +.0158 |
+| FFN only | 4.2841 | -.0212 (.0007) | +.0054 |
+| Value, output and FFN | 4.2607 | +.0022 (.0016) | +.0288 |
+| Value, output and FFN, lrs walked again | 4.2573 | +.0056 (.0014) | +.0322 |
+
+Muon on value and output alone recovers 60% of the all-Muon gain, FFN alone 20%, query and key nothing. With Muon on value, output and FFN and Adam on query and key, the model beats all Muon by .0056. This matches width 48: query and key do not need Muon.
 
 ## Related results
 
