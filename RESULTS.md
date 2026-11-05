@@ -541,6 +541,35 @@ Where c goes (`debug/hyc_trace.py`, world 0). With the next-step signal, c rises
 
 Verdict: no arm passes the win rule. With rho=.99 the learned exponent matches the best hand-picked c on v,o (+.0029 against +.0030) and beats it on FFN (+.0019 against +.0012, inside one error), without choosing c, but it still loses on q,k.
 
+## 2026-11-05: Does the next gradient repeat each update direction?
+
+Question: v,o gains from boosting small singular directions (c=.7), q,k loses. Are small directions signal in v,o and noise in q,k? `debug/spectrum_probe.py` takes the SVD of each matrix's momentum every 10 steps and reads the raw gradient 1 and 20 steps later along each direction, z = u^T G v / |G| * sqrt(rows*cols). Noise gives z near 0 with spread 1; z > 0 means the gradient still pushes the same way. Width 48, 1,000 steps, world 0, every hidden matrix on exact polar (c=.5) at its tuned lr.
+
+Mean z by quarter of the spectrum, top singular values first:
+
+| Part | lag 1, steps 0-300 | lag 1, steps 600+ | lag 20, steps 0-300 | lag 20, steps 600+ | share of |d|^2 |
+|---|---|---|---|---|---|
+| q,k | -.08 -.09 -.13 -.11 | -.04 -.00 -.02 -.03 | +.00 +.04 -.01 -.01 | -.00 -.10 +.00 -.05 | .92 .06 .01 .00 |
+| v,o | -.19 -.21 -.17 -.16 | -.05 -.02 -.08 -.10 | +.05 +.09 -.01 +.02 | -.08 -.05 -.06 -.04 | .94 .05 .01 .00 |
+| FFN | -.26 -.31 -.22 -.16 | -.11 -.16 -.14 -.15 | -.05 +.01 +.03 -.03 | -.04 -.06 -.02 -.08 | .83 .13 .04 .01 |
+
+Every part and every quarter overshoots a little after one step (z about -.1 to -.3) and is near 0 after 20 steps. The quarters do not differ, and v,o at c=.3 and c=.7 give the same table within .1. At batch 16 x 48 tokens, the next gradient along any update direction is mostly noise, so this one-step probe does not show why parts prefer different c. The hypothesis is not supported by this measurement.
+
+Confound found in the stored runs: each arm's tuned lr gives a different relative update size on v,o (trainer's opt.rel): exact polar .015, c=.7 .024, c=.8 .037, Muon .027. `debug/c_lr_grid.py` maps gain over c x lr to separate shape from step size.
+
+Result of `debug/c_lr_grid.py` on v,o (width 48, 1,000 steps, worlds 5-9, momentum .9, gain over tuned Muon; lr is a multiple of Muon's tuned v,o lr, and every c has the same update size at the same lr):
+
+| c | lr x.25 | x.35 | x.5 | x.7 | x1 | x1.4 | x2 |
+|---|---|---|---|---|---|---|---|
+| .3 | -.0061 | -.0069 | -.0075 | -.0076 | -.0133 | | |
+| .4 | -.0025 | -.0030 | -.0026 | -.0044 | -.0062 | | |
+| .5 | -.0007 | +.0017 | +.0022 | +.0009 | -.0027 | | |
+| .6 | -.0032 | +.0010 | +.0031 | +.0025 | +.0012 | -.0025 | -.0042 |
+| .7 | -.0092 | -.0045 | +.0004 | +.0022 | +.0034 | +.0022 | +.0010 |
+| .8 | -.0240 | -.0172 | -.0094 | -.0055 | -.0029 | -.0018 | -.0027 |
+
+Errors are about .0015. Reading: the best gain is about the same for c=.5, .6 and .7 (+.0022, +.0031, +.0034, within one error), but the best lr doubles from c=.5 to c=.7. Below .5 and at .8, every lr loses. So on v,o the exponent mostly moves the best step size; it gives a flat ridge of equal loss from .5 to .7, not a better optimum. Likely reason, not measured: at a fixed update size, a larger c puts more of the update into small singular directions and less into the top ones, so the top directions need a larger lr to move as far.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
