@@ -147,6 +147,19 @@ At width 64, value and output go from -.0473 at step 250 to -.0043 at step 2,000
 
 Removing from all Muon at this size: value and output -.0136 (.0031), gate, up and down -.0026 (.0022), query and key +.0011 (.0014), all seven -.0145 (.0016), per-head +.0032 (.0013). Muon on value and output alone matches all Muon here. At width 48 with 250 steps it falls short by .0066 (.0020), at width 32 with 1,000 steps by .0032 (.0023), and in Wang et al.'s gated table by .175 of .371.
 
+## 2026-11-05: Why Muon helps: its weak directions, width 48, 250 steps
+
+Prediction written before running: removing weak directions from Muon's step hurts value and output far more than query and key. `debug/weak_parts.py`, data in `results/weak/w48.jsonl`. `optimizers/x_muon_shape.py` splits the step into its strongest quarter of directions and the weak rest. "Removed" drops the weak rest. "Scrambled" keeps its size and pairs each weak left direction with the wrong right direction, so it loses the gradient's information. The lr factor is chosen on worlds 0 and 1, and gaps are on worlds 5 to 9 from whole-matrix Muon.
+
+| Group | Weak removed | Weak scrambled | Moved to Adam |
+| --- | --- | --- | --- |
+| Value and output | -.0112 (.0011) | -.0069 (.0016) | -.0198 (.0031) |
+| Gate, up and down | -.0055 (.0016) | -.0074 (.0009) | -.0065 (.0027) |
+| Query and key | +.0011 (.0008) | -.0006 (.0018) | +.0023 (.0012) |
+| All seven | -.0141 (.0005) | -.0184 (.0022) | -.0199 (.0028) |
+
+Exact orthogonalization by SVD on all seven gives -.0011 (.0014), so the shape code alone costs nothing. The prediction holds for query and key, which lose nothing, but feed-forward matrices also lose about as much as they do on Adam. Scrambling hurts about as much as removing, so the weak directions help through the information they carry and not only through their size. At all seven, removing weak directions accounts for .0141 of the .0199 that Adam costs.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
