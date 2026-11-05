@@ -300,6 +300,21 @@ At width 64, moving all seven to Adam costs .0433 at 500 steps, .0119 at 2,000 a
 
 Kaggle refused the next job on 2026-11-05 with "Maximum weekly GPU quota of 30.00 hours reached", so map-e (the add design at width 128) and width 512 wait for the weekly reset.
 
+## 2026-11-05: Each group gets its own step shape, prediction before running
+
+`debug/pick_shape.py` picks a power `p` and lr factor per group on worlds 0 and 1, with `p` from .1, .25, .5, 1 on query and key and from -.25, -.1, .1 on the other two groups, and keeps a group's pick only if it beats the baseline on the tune worlds. Prediction: at width 48 the joint optimizer beats whole-matrix Muon by less than the .005 win line at both 250 and 1,000 steps.
+
+Result at width 48, 250 steps, data in `results/spec/pick_w48.jsonl`. Base 4.3606.
+
+| Group | Picked `p` | lr factor | Gap | Wins of 5 |
+| --- | --- | --- | --- | --- |
+| Query and key | 1 | .63 | +.0029 (.0013) | 4 |
+| Value and output | -.1 | 1 | +.0013 (.0011) | 3 |
+| Gate, up and down | .1 | 1 | -.0006 (.0017) | 3 |
+| All three together | | | +.0052 (.0008) | 5 |
+
+The prediction failed at this size: the joint optimizer passes the .005 line, though worlds 5 to 9 have now scored many candidates, so it needs other lengths, a larger width and the sealed worlds before it counts. The sealed gate needs Vuk's word and has not been used.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
