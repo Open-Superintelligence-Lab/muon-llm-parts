@@ -174,6 +174,19 @@ Prediction written before running: removing weak directions from Muon's step hur
 
 Exact orthogonalization by SVD on all seven gives -.0011 (.0014), so the shape code alone costs nothing. The prediction holds for query and key, which lose nothing, but feed-forward matrices also lose about as much as they do on Adam. Scrambling hurts about as much as removing, so the weak directions help through the information they carry and not only through their size. At all seven, removing weak directions accounts for .0141 of the .0199 that Adam costs.
 
+### The same test at 1,000 steps
+
+`debug/weak_parts.py 5sx4`, data in `results/weak/w48x1000.jsonl`. Base 4.1323, all Adam 4.1463, so moving everything to Adam costs .0140.
+
+| Group | Weak removed | Weak scrambled | Moved to Adam |
+| --- | --- | --- | --- |
+| Value and output | -.0152 (.0017) | -.0122 (.0016) | -.0136 |
+| Gate, up and down | -.0103 (.0008) | -.0113 (.0012) | -.0026 |
+| Query and key | -.0019 (.0013) | -.0032 (.0008) | +.0011 |
+| All seven | -.0282 (.0011) | -.0275 (.0024) | -.0145 |
+
+Exact orthogonalization on all seven gives -.0005 (.0011). Removing the weak directions costs about twice what moving to Adam costs, so a Muon step without them is worse than Adam, which keeps them. The feed-forward row found lr x4 alone while the all-seven row uses one shared factor, x1, so the all-seven cost is an upper bound until each group gets its own factor. Query and key still lose the least.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
