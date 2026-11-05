@@ -215,6 +215,19 @@ Shumaylov et al.'s inverted sizes are one over the singular value, which we trie
 
 Inverted sizes do not work as well as Muon here, unlike the GPT-2 result in that paper's title. The groups want opposite sides of Muon: query and key lose nothing at `p=1` and lose .0218 at `p=-.5`, while value and output lose .0229 at `p=1` and only .0036 at `p=-.5`.
 
+### Step shapes at 1,000 steps
+
+`debug/spec_parts.py 5sx4`, data in `results/spec/w48x1000.jsonl`. Base 4.1323. Flat sizes by SVD on all seven give -0.0005 (0.0011) and `p=.5` gives -0.0106 (0.0019).
+
+| Group | `p=1` (gradient) | Random sizes | `p=-.5` | `p=-1` (inverted) | Reversed sizes |
+| --- | --- | --- | --- | --- | --- |
+| Value and output | -0.0192 (0.0028) | +0.0004 (0.0009) | -0.0027 (0.0009) | -0.0315 (0.0017) | -0.0178 (0.0018) |
+| Gate, up and down | -0.0046 (0.0015) | -0.0010 (0.0008) | +0.0001 (0.0014) | -0.0043 (0.0013) | -0.0042 (0.0004) |
+| Query and key | +0.0001 (0.0015) | -0.0011 (0.0009) | -0.0079 (0.0017) | -0.0371 (0.0052) | -0.0309 (0.0034) |
+| All seven | -0.0236 (0.0021) | -0.0022 (0.0015) | -0.0106 (0.0027) | -0.0940 (0.0056) | -0.0673 (0.0021) |
+
+The pattern from 250 steps holds, with smaller gaps for query and key at `p=-.5`: value and output cannot take the gradient's shape, and query and key cannot take shapes that shrink strong directions. Random sizes stay within .0022 of Muon on every row.
+
 ## 2026-11-05: Kaggle map, width 64, 8,000 steps (job map-d)
 
 `kaggle/out/map-d`, 7.25 GPU hours, base held-out 4.3148. Whole-matrix Muon baseline, gaps on worlds 5 to 9.
