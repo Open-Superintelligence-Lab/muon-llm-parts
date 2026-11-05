@@ -1,0 +1,283 @@
+{
+"muon": {
+"loss": 4.3617,
+"parts": {
+"q": {
+"stable_rank": 11.17,
+"median_ratio": 0.365,
+"min_ratio": 0.0014,
+"top": 3.77
+},
+"k": {
+"stable_rank": 10.31,
+"median_ratio": 0.354,
+"min_ratio": 0.0031,
+"top": 3.985
+},
+"v": {
+"stable_rank": 12.98,
+"median_ratio": 0.399,
+"min_ratio": 0.0071,
+"top": 2.294
+},
+"o": {
+"stable_rank": 11.44,
+"median_ratio": 0.366,
+"min_ratio": 0.0097,
+"top": 2.298
+},
+"gate": {
+"stable_rank": 17.4,
+"median_ratio": 0.536,
+"min_ratio": 0.2212,
+"top": 2.402
+},
+"up": {
+"stable_rank": 18.26,
+"median_ratio": 0.562,
+"min_ratio": 0.2286,
+"top": 2.408
+},
+"down": {
+"stable_rank": 11.02,
+"median_ratio": 0.421,
+"min_ratio": 0.1804,
+"top": 2.899
+}
+}
+},
+"grad_all": {
+"loss": 4.3795,
+"parts": {
+"q": {
+"stable_rank": 4.46,
+"median_ratio": 0.179,
+"min_ratio": 0.005,
+"top": 3.497
+},
+"k": {
+"stable_rank": 4.98,
+"median_ratio": 0.192,
+"min_ratio": 0.002,
+"top": 3.396
+},
+"v": {
+"stable_rank": 8.32,
+"median_ratio": 0.291,
+"min_ratio": 0.0025,
+"top": 1.839
+},
+"o": {
+"stable_rank": 4.6,
+"median_ratio": 0.188,
+"min_ratio": 0.0047,
+"top": 2.54
+},
+"gate": {
+"stable_rank": 15.5,
+"median_ratio": 0.512,
+"min_ratio": 0.2222,
+"top": 1.877
+},
+"up": {
+"stable_rank": 16.46,
+"median_ratio": 0.531,
+"min_ratio": 0.2466,
+"top": 1.838
+},
+"down": {
+"stable_rank": 3.9,
+"median_ratio": 0.207,
+"min_ratio": 0.0899,
+"top": 3.004
+}
+}
+},
+"grad_vo": {
+"loss": 4.3803,
+"parts": {
+"q": {
+"stable_rank": 11.04,
+"median_ratio": 0.374,
+"min_ratio": 0.0022,
+"top": 3.768
+},
+"k": {
+"stable_rank": 9.9,
+"median_ratio": 0.347,
+"min_ratio": 0.0064,
+"top": 4.136
+},
+"v": {
+"stable_rank": 8.48,
+"median_ratio": 0.282,
+"min_ratio": 0.0039,
+"top": 1.876
+},
+"o": {
+"stable_rank": 4.63,
+"median_ratio": 0.185,
+"min_ratio": 0.0031,
+"top": 2.615
+},
+"gate": {
+"stable_rank": 18.43,
+"median_ratio": 0.576,
+"min_ratio": 0.2422,
+"top": 2.319
+},
+"up": {
+"stable_rank": 19.5,
+"median_ratio": 0.584,
+"min_ratio": 0.2452,
+"top": 2.331
+},
+"down": {
+"stable_rank": 10.94,
+"median_ratio": 0.416,
+"min_ratio": 0.1679,
+"top": 2.873
+}
+}
+},
+"grad_qk": {
+"loss": 4.3583,
+"parts": {
+"q": {
+"stable_rank": 4.32,
+"median_ratio": 0.159,
+"min_ratio": 0.0018,
+"top": 5.354
+},
+"k": {
+"stable_rank": 4.51,
+"median_ratio": 0.156,
+"min_ratio": 0.0011,
+"top": 5.216
+},
+"v": {
+"stable_rank": 13.65,
+"median_ratio": 0.414,
+"min_ratio": 0.0023,
+"top": 2.229
+},
+"o": {
+"stable_rank": 12.05,
+"median_ratio": 0.375,
+"min_ratio": 0.0057,
+"top": 2.253
+},
+"gate": {
+"stable_rank": 17.95,
+"median_ratio": 0.568,
+"min_ratio": 0.2193,
+"top": 2.373
+},
+"up": {
+"stable_rank": 18.88,
+"median_ratio": 0.577,
+"min_ratio": 0.2524,
+"top": 2.373
+},
+"down": {
+"stable_rank": 11.51,
+"median_ratio": 0.427,
+"min_ratio": 0.168,
+"top": 2.845
+}
+}
+},
+"adam": {
+"loss": 4.3872,
+"parts": {
+"q": {
+"stable_rank": 6.26,
+"median_ratio": 0.23,
+"min_ratio": 0.0025,
+"top": 2.749
+},
+"k": {
+"stable_rank": 6.33,
+"median_ratio": 0.233,
+"min_ratio": 0.0027,
+"top": 2.727
+},
+"v": {
+"stable_rank": 9.38,
+"median_ratio": 0.292,
+"min_ratio": 0.0073,
+"top": 1.937
+},
+"o": {
+"stable_rank": 5.91,
+"median_ratio": 0.216,
+"min_ratio": 0.004,
+"top": 2.433
+},
+"gate": {
+"stable_rank": 10.71,
+"median_ratio": 0.395,
+"min_ratio": 0.1677,
+"top": 3.009
+},
+"up": {
+"stable_rank": 14.46,
+"median_ratio": 0.462,
+"min_ratio": 0.1951,
+"top": 2.526
+},
+"down": {
+"stable_rank": 4.31,
+"median_ratio": 0.205,
+"min_ratio": 0.0847,
+"top": 4.026
+}
+}
+},
+"init": {
+"parts": {
+"q": {
+"stable_rank": 12.64,
+"median_ratio": 0.398,
+"min_ratio": 0.0063,
+"top": 1.116
+},
+"k": {
+"stable_rank": 13.15,
+"median_ratio": 0.404,
+"min_ratio": 0.0031,
+"top": 1.092
+},
+"v": {
+"stable_rank": 12.85,
+"median_ratio": 0.414,
+"min_ratio": 0.0064,
+"top": 1.12
+},
+"o": {
+"stable_rank": 13.04,
+"median_ratio": 0.423,
+"min_ratio": 0.0067,
+"top": 1.111
+},
+"gate": {
+"stable_rank": 19.71,
+"median_ratio": 0.595,
+"min_ratio": 0.2675,
+"top": 1.475
+},
+"up": {
+"stable_rank": 20.09,
+"median_ratio": 0.606,
+"min_ratio": 0.2726,
+"top": 1.468
+},
+"down": {
+"stable_rank": 19.3,
+"median_ratio": 0.587,
+"min_ratio": 0.2619,
+"top": 0.916
+}
+}
+}
+}

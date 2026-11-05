@@ -200,11 +200,13 @@ All seven & $-.0236$ (.0021) & $-.0022$ (.0015) & $-.0106$ (.0027) & $-.0940$ (.
 \label{tab:shape}
 \end{table}
 
-\paragraph{Two explanations that failed.} We predicted that QK-norm causes query and key's indifference, since it removes their overall scale. Without QK-norm, moving query and key to Adam still gains .0023 (.0014) and removing their weak directions still gains .0010 (.0012), and value and output keep their costs, so QK-norm does not explain it.
+\paragraph{Three explanations that failed.} We predicted that QK-norm causes query and key's indifference, since it removes their overall scale. Without QK-norm, moving query and key to Adam still gains .0023 (.0014) and removing their weak directions still gains .0010 (.0012), and value and output keep their costs, so QK-norm does not explain it.
 
 We also predicted that Muon's step lowers the loss on unseen data faster than the gradient's shape does on value and output. We measured the cosine between a candidate step and the gradient of the next unseen batch at the same weights, in one training run. In every group the gradient's shape scores about three to five times higher than Muon's step, for example .2356 against .0504 on value and output at 250 steps, and the weak directions alone score almost nothing, .0023. So the help from weak directions is not a one-step drop in unseen loss. Value and output do have the most concentrated gradients, with .965 of the squared singular values in the strongest quarter against .925 for query and key and .876 for feed-forward, but feed-forward loses more than query and key from the gradient's shape, so concentration does not order the costs either. Why the groups differ remains open.
 
-No variant here passes our win line of .005 on all 5 worlds. The largest gains are the gradient's shape on query and key at $+.0029$ and per-head Muon on query and key.
+We then predicted that weak-direction steps keep value and output healthy by holding up the stable rank of the weights, the squared Frobenius norm over the squared largest singular value. In one training run at 1,000 steps, the gradient's shape does lower value's stable rank from 13.72 to 8.11 and output's from 12.00 to 5.15. But it lowers query's from 10.05 to 2.89 and key's from 7.90 to 3.45 with no loss cost, so low stable rank alone does not explain the cost on value and output.
+
+We also gave each group its own step shape, choosing the exponent and learning rate on tune worlds. Together these gain $+.0052$ (.0008), 5 of 5 worlds, at 250 steps, but only $+.0028$ (.0011), 4 of 5 worlds, at 1,000 steps, so we treat this as a short-training effect. Worlds 5 to 9 have also scored many candidates by now, so even the 250-step number is not a clean test. No variant here passes our win line of .005 on all 5 worlds at both lengths.
 
 \section{Related work}
 

@@ -315,6 +315,52 @@ Result at width 48, 250 steps, data in `results/spec/pick_w48.jsonl`. Base 4.360
 
 The prediction failed at this size: the joint optimizer passes the .005 line, though worlds 5 to 9 have now scored many candidates, so it needs other lengths, a larger width and the sealed worlds before it counts. The sealed gate needs Vuk's word and has not been used.
 
+Result at width 48, 1,000 steps, data in `results/spec/pick_w48x1000.jsonl`. Base 4.1323.
+
+| Group | Picked `p` | lr factor | Gap | Wins of 5 |
+| --- | --- | --- | --- | --- |
+| Query and key | .25 | 2.54 | +.0002 (.0018) | 3 |
+| Value and output | -.25 | 1 | +.0014 (.0009) | 3 |
+| Gate, up and down | .1 | 1 | +.0002 (.0010) | 3 |
+| All three together | | | +.0028 (.0011) | 4 |
+
+The gain falls below .005 at 1,000 steps and the query-and-key pick moves from `p=1` to `p=.25`, so this is a short-training effect and we drop the candidate. No sealed world was used.
+
+## 2026-11-05: Do weak directions keep the weights healthy, prediction before running
+
+`debug/weights.py` trains once per setting on world 0 and reads each group's weight matrices at the end. Stable rank is squared Frobenius norm over squared largest singular value. Prediction at width 48, 1,000 steps: value and output end with a clearly lower stable rank under the gradient's shape than under Muon, at least 20% lower, and query and key differ by under 10%.
+
+Result at width 48, 1,000 steps, world 0, one run per setting, data in `results/spec/weights_w48x1000.json` (250 steps in `weights_w48.json`). Stable rank averaged over layers; a fresh matrix starts near 13 for q, k, v, o and near 20 for gate, up, down.
+
+| Setting | Loss | v | o | q | k | gate | up | down |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Muon | 4.1325 | 13.72 | 12.00 | 10.05 | 7.90 | 18.13 | 18.86 | 10.78 |
+| Gradient's shape on v, o | 4.1489 | 8.11 | 5.15 | 8.83 | 7.64 | 17.63 | 19.21 | 10.39 |
+| Gradient's shape on q, k | 4.1307 | 13.45 | 12.27 | 2.89 | 3.45 | 17.49 | 18.58 | 10.90 |
+| Gradient's shape on all | 4.1545 | 8.53 | 5.95 | 3.56 | 3.28 | 14.63 | 15.50 | 3.98 |
+| Adam on all | 4.1492 | 8.52 | 6.77 | 6.47 | 5.57 | 10.28 | 12.40 | 4.65 |
+
+The first half of the prediction held: v fell 41% and o fell 57%. The second half failed: q fell 71% and k fell 56%, and the loss did not get worse. Muon does keep the stable rank near its starting value, but query and key lose more rank than value and output at no cost, so low stable rank alone does not explain the cost on value and output. It can still matter only if value and output need rank in a way query and key do not, which this test cannot separate.
+
+## 2026-11-05: When do value and output need Muon, prediction before running
+
+`optimizers/x_muon_switch.py` changes step shape once during training, on v and o only, using each shape's own tuned lr. `debug/switch_parts.py` runs gradient's shape then Muon, and Muon then gradient's shape, switching at 1/4, 1/2 and 3/4 of training, on worlds 5-9 at width 48, 1,000 steps. Gradient's shape throughout costs .0192.
+
+Prediction: the cost comes mostly from late steps, not from lasting damage to the weights. Switching to Muon at 1/2 costs under .006, and switching to the gradient's shape at 1/2 costs over .010. If the first number is over .010, early steps do lasting damage, and the weights explanation comes back.
+
+Result at width 48, 250 steps, worlds 5-9, data in `results/spec/switch_w48.jsonl`. Base 4.3606. Gradient's shape throughout costs .0229 (.0020). Negative means worse than Muon.
+
+| Gradient's shape used during | Gap | Wins of 5 |
+| --- | --- | --- |
+| First 1/4 | -.0098 (.0030) | 0 |
+| First 1/2 | -.0170 (.0020) | 0 |
+| First 3/4 | -.0209 (.0019) | 0 |
+| Last 3/4 | -.0107 (.0019) | 0 |
+| Last 1/2 | -.0060 (.0015) | 0 |
+| Last 1/4 | -.0037 (.0015) | 1 |
+
+At 250 steps the prediction fails: early steps cost more than late ones. The prediction was written for 1,000 steps, and that run was stopped partway, so `results/spec/switch_w48x1000.jsonl` is incomplete and has no result yet. Whether the learning rate falls late in training, which could explain this alone, has not been checked.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
