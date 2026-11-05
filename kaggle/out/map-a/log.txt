@@ -1,0 +1,60 @@
+data ready 23 s
+GPU 0: Tesla T4 (UUID: GPU-8df421ce-4ee9-7302-e634-68fd431ee9dc)
+GPU 1: Tesla T4 (UUID: GPU-2e646f46-18b9-ae8e-16d0-32c44777ecd8)
+
+== w64x500 hours left 11.29
+w64x500 tuning Muon
+  all Muon lrs x: 1 4.6513 of 3
+  all Adam lrs x: 2 4.6502 of 4
+  qk lr x: 1 4.6449 of 3
+  vo lr x: 1 4.6449 of 3
+  gu lr x: 1 4.6449 of 3
+  down lr x: 1 4.6449 of 3
+base down=muon:0.051:beta=0.8;emb=adam:0.38:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.096:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.038:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8 4.6449
+  Adam on vo, lr: 0.01 4.6783 of 3
+  Adam on qk, lr: 0.025 4.6416 of 4
+  Adam on ffn, lr: 0.01 4.6547 of 3
+  per-head q,k, lr x: 2 4.6397 of 3
+w64x500 base held-out 4.6453
+vo: -0.0366 error 0.0036 wins 0/5
+v: -0.0105 error 0.0031 wins 0/5
+o: -0.0136 error 0.0027 wins 0/5
+qk: +0.0022 error 0.0032 wins 3/5
+q: +0.0010 error 0.0019 wins 4/5
+k: +0.0009 error 0.0025 wins 3/5
+ffn: -0.0064 error 0.0028 wins 1/5
+gate: -0.0017 error 0.0033 wins 3/5
+up: -0.0016 error 0.0028 wins 3/5
+down: -0.0018 error 0.0033 wins 2/5
+qkffn: -0.0061 error 0.0036 wins 2/5
+all: -0.0433 error 0.0035 wins 0/5
+split: +0.0045 error 0.0023 wins 4/5
+w64x500 done with code 0 at 28 min
+== w64 hours left 10.83
+w64 tuning Muon
+  all Muon lrs x: 1 4.4345 of 3
+  all Adam lrs x: 0.5 4.4332 of 4
+  qk lr x: 1 4.4284 of 3
+  vo lr x: 0.63 4.4270 of 4
+  gu lr x: 1.6 4.4257 of 4
+  down lr x: 1 4.4257 of 3
+base down=muon:0.051:beta=0.8;emb=adam:0.095:b1=0.7;gate=muon:0.0416:beta=0.8;head=adam:0.024:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.0095:b2=0.9;o=muon:0.03213:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.0416:beta=0.8;v=muon:0.03213:beta=0.8 4.4257
+  Adam on vo, lr: 0.01 4.4438 of 3
+  Adam on qk, lr: 0.0625 4.4277 of 5
+  Adam on ffn, lr: 0.01 4.4278 of 3
+  per-head q,k, lr x: 2 4.4261 of 3
+w64 base held-out 4.4258
+vo: -0.0135 error 0.0026 wins 0/5
+v: -0.0076 error 0.0033 wins 0/5
+o: -0.0058 error 0.0017 wins 0/5
+qk: -0.0002 error 0.0019 wins 2/5
+q: -0.0026 error 0.0028 wins 2/5
+k: -0.0045 error 0.0019 wins 1/5
+ffn: -0.0022 error 0.0022 wins 1/5
+gate: -0.0010 error 0.0019 wins 2/5
+up: -0.0009 error 0.0011 wins 2/5
+down: -0.0014 error 0.0015 wins 2/5
+qkffn: -0.0027 error 0.0011 wins 1/5
+all: -0.0119 error 0.0017 wins 0/5
+split: +0.0000 error 0.0021 wins 2/5
+w64 done with code 0 at 142 min

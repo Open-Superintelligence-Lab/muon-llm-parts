@@ -13,8 +13,6 @@ Ported from the papers, with what was adapted:
 - sgdm: heavy ball. normsgd: Muon's Nesterov direction scaled to Muon's Frobenius size sqrt(m), with no orthogonalization.
 - softmuon: not from a paper, written here. It keeps singular values raised to a power p, so it runs from Muon (p 0) to normsgd (p 1).
 
-Controls: freeze never moves. blind takes a random direction with Muon's Frobenius size, so it must lose to everything that reads gradients.
-
 `down` and `ed` weights have their neurons in columns, so row rules run on their transpose (2605.18106, SwiGLU section). The `t` knob
 sets this, and arms.py sets it from the module name.
 """
@@ -207,18 +205,18 @@ def mm_stiefel(w, g, st, lr, k): w.copy_(manifold_step(w, nesterov(st, w, g, k.g
 def mm_dgram(w, g, st, lr, k): w.copy_(manifold_step(w, nesterov(st, w, g, k.get("beta", .95)), lr, "dgram", k.get("K", 20)))
 
 
-def freeze(w, g, st, lr, k): pass
-
-
-def blind(w, g, st, lr, k):
-    d = torch.randn_like(w); w.add_(d / (d.norm() + 1e-7) * w.shape[0] ** 0.5, alpha=-lr)
-
-
 RULES = dict(adam=adam, muon=muon, muonsplit=muonsplit, muontangent=muontangent, muonsphere=muonsphere, muonhistory=muonhistory, muonfixed=muonfixed, muonbrake=muonbrake, muonfade=muonfade, muongate=muongate, adamtangent=adamtangent, rownorm=rownorm, routernorm=routernorm, polar=polar, leftpolar=leftpolar, hybrid=hybrid, lion=lion, sgdm=sgdm, normsgd=normsgd, softmuon=softmuon, norm1d=norm1d,
-             mm_stiefel=mm_stiefel, mm_dgram=mm_dgram, freeze=freeze, blind=blind)
+             mm_stiefel=mm_stiefel, mm_dgram=mm_dgram)
 ONLY_2D = {"muon", "muonsplit", "muontangent", "muonsphere", "muonhistory", "muonfixed", "muonbrake", "muonfade", "muongate", "adamtangent", "rownorm", "routernorm", "polar", "leftpolar", "hybrid", "normsgd", "softmuon", "mm_stiefel", "mm_dgram"}
 ONLY_1D = {"norm1d"}
 MANIFOLD = {"mm_stiefel": "stiefel", "mm_dgram": "dgram"}
+
+
+def rule_of(name):
+    """Names starting with x_ are invented optimizers, and they load only through sandbox.py."""
+    if name.startswith("x_"):
+        import sandbox; return sandbox.load(name)
+    return RULES[name]
 
 
 class ModuleOpt:
@@ -235,7 +233,7 @@ class ModuleOpt:
     @torch.no_grad()
     def step(s, sc=1.0, measure=False):
         for m, g in s.groups.items():
-            f = RULES[g["rule"]]; lr = g["lr"] * sc; top = bot = 0.0
+            f = rule_of(g["rule"]); lr = g["lr"] * sc; top = bot = 0.0
             for w in g["params"]:
                 if w.grad is None: continue
                 old = w.clone() if measure else None

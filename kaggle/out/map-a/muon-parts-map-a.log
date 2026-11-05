@@ -1,0 +1,69 @@
+[{"stream_name":"stderr","time":0.957733995,"data":"/kaggle/src/script.py:8: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.\n"}
+,{"stream_name":"stderr","time":0.9577943,"data":"  tarfile.open(fileobj=io.BytesIO(base64.b64decode(CODE))).extractall(C)\n"}
+,{"stream_name":"stdout","time":24.23793488,"data":"data ready 23 s\n"}
+,{"stream_name":"stdout","time":24.275859814,"data":"GPU 0: Tesla T4 (UUID: GPU-8df421ce-4ee9-7302-e634-68fd431ee9dc)\n"}
+,{"stream_name":"stdout","time":24.275882991,"data":"GPU 1: Tesla T4 (UUID: GPU-2e646f46-18b9-ae8e-16d0-32c44777ecd8)\n"}
+,{"stream_name":"stdout","time":24.275887849,"data":"\n"}
+,{"stream_name":"stdout","time":24.276033277,"data":"== w64x500 hours left 11.29\n"}
+,{"stream_name":"stdout","time":32.701590344,"data":"w64x500 tuning Muon\n"}
+,{"stream_name":"stdout","time":131.313931406,"data":"  all Muon lrs x: 1 4.6513 of 3\n"}
+,{"stream_name":"stdout","time":222.075843809,"data":"  all Adam lrs x: 2 4.6502 of 4\n"}
+,{"stream_name":"stdout","time":357.209963844,"data":"  qk lr x: 1 4.6449 of 3\n"}
+,{"stream_name":"stdout","time":401.695885113,"data":"  vo lr x: 1 4.6449 of 3\n"}
+,{"stream_name":"stdout","time":448.689015515,"data":"  gu lr x: 1 4.6449 of 3\n"}
+,{"stream_name":"stdout","time":494.276120671,"data":"  down lr x: 1 4.6449 of 3\n"}
+,{"stream_name":"stdout","time":494.276443905,"data":"base down=muon:0.051:beta=0.8;emb=adam:0.38:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.096:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.038:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8 4.6449\n"}
+,{"stream_name":"stdout","time":579.03405429,"data":"  Adam on vo, lr: 0.01 4.6783 of 3\n"}
+,{"stream_name":"stdout","time":704.611695107,"data":"  Adam on qk, lr: 0.025 4.6416 of 4\n"}
+,{"stream_name":"stdout","time":788.50136189,"data":"  Adam on ffn, lr: 0.01 4.6547 of 3\n"}
+,{"stream_name":"stdout","time":894.088764129,"data":"  per-head q,k, lr x: 2 4.6397 of 3\n"}
+,{"stream_name":"stdout","time":1697.372456528,"data":"w64x500 base held-out 4.6453\n"}
+,{"stream_name":"stdout","time":1697.375789273,"data":"vo: -0.0366 error 0.0036 wins 0/5\n"}
+,{"stream_name":"stdout","time":1697.376147923,"data":"v: -0.0105 error 0.0031 wins 0/5\n"}
+,{"stream_name":"stdout","time":1697.376627167,"data":"o: -0.0136 error 0.0027 wins 0/5\n"}
+,{"stream_name":"stdout","time":1697.37706717,"data":"qk: +0.0022 error 0.0032 wins 3/5\n"}
+,{"stream_name":"stdout","time":1697.377525237,"data":"q: +0.0010 error 0.0019 wins 4/5\n"}
+,{"stream_name":"stdout","time":1697.377881354,"data":"k: +0.0009 error 0.0025 wins 3/5\n"}
+,{"stream_name":"stdout","time":1697.378271852,"data":"ffn: -0.0064 error 0.0028 wins 1/5\n"}
+,{"stream_name":"stdout","time":1697.378661484,"data":"gate: -0.0017 error 0.0033 wins 3/5\n"}
+,{"stream_name":"stdout","time":1697.379004556,"data":"up: -0.0016 error 0.0028 wins 3/5\n"}
+,{"stream_name":"stdout","time":1697.379342867,"data":"down: -0.0018 error 0.0033 wins 2/5\n"}
+,{"stream_name":"stdout","time":1697.379723486,"data":"qkffn: -0.0061 error 0.0036 wins 2/5\n"}
+,{"stream_name":"stdout","time":1697.380061012,"data":"all: -0.0433 error 0.0035 wins 0/5\n"}
+,{"stream_name":"stdout","time":1697.380508342,"data":"split: +0.0045 error 0.0023 wins 4/5\n"}
+,{"stream_name":"stdout","time":1701.843381442,"data":"w64x500 done with code 0 at 28 min\n"}
+,{"stream_name":"stdout","time":1701.843453805,"data":"== w64 hours left 10.83\n"}
+,{"stream_name":"stdout","time":1703.451607673,"data":"w64 tuning Muon\n"}
+,{"stream_name":"stdout","time":2047.686469479,"data":"  all Muon lrs x: 1 4.4345 of 3\n"}
+,{"stream_name":"stdout","time":2385.508799894,"data":"  all Adam lrs x: 0.5 4.4332 of 4\n"}
+,{"stream_name":"stdout","time":2897.681358818,"data":"  qk lr x: 1 4.4284 of 3\n"}
+,{"stream_name":"stdout","time":3232.571887315,"data":"  vo lr x: 0.63 4.4270 of 4\n"}
+,{"stream_name":"stdout","time":3569.424492394,"data":"  gu lr x: 1.6 4.4257 of 4\n"}
+,{"stream_name":"stdout","time":3749.884549412,"data":"  down lr x: 1 4.4257 of 3\n"}
+,{"stream_name":"stdout","time":3749.884744476,"data":"base down=muon:0.051:beta=0.8;emb=adam:0.095:b1=0.7;gate=muon:0.0416:beta=0.8;head=adam:0.024:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.0095:b2=0.9;o=muon:0.03213:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.0416:beta=0.8;v=muon:0.03213:beta=0.8 4.4257\n"}
+,{"stream_name":"stdout","time":4077.116429669,"data":"  Adam on vo, lr: 0.01 4.4438 of 3\n"}
+,{"stream_name":"stdout","time":4708.30625322,"data":"  Adam on qk, lr: 0.0625 4.4277 of 5\n"}
+,{"stream_name":"stdout","time":5020.825471619,"data":"  Adam on ffn, lr: 0.01 4.4278 of 3\n"}
+,{"stream_name":"stdout","time":5427.63162531,"data":"  per-head q,k, lr x: 2 4.4261 of 3\n"}
+,{"stream_name":"stdout","time":8511.481345493,"data":"w64 base held-out 4.4258\n"}
+,{"stream_name":"stdout","time":8511.481722506,"data":"vo: -0.0135 error 0.0026 wins 0/5\n"}
+,{"stream_name":"stdout","time":8511.482066303,"data":"v: -0.0076 error 0.0033 wins 0/5\n"}
+,{"stream_name":"stdout","time":8511.482487423,"data":"o: -0.0058 error 0.0017 wins 0/5\n"}
+,{"stream_name":"stdout","time":8511.482847074,"data":"qk: -0.0002 error 0.0019 wins 2/5\n"}
+,{"stream_name":"stdout","time":8511.483246194,"data":"q: -0.0026 error 0.0028 wins 2/5\n"}
+,{"stream_name":"stdout","time":8511.48367124,"data":"k: -0.0045 error 0.0019 wins 1/5\n"}
+,{"stream_name":"stdout","time":8511.484093633,"data":"ffn: -0.0022 error 0.0022 wins 1/5\n"}
+,{"stream_name":"stdout","time":8511.484545509,"data":"gate: -0.0010 error 0.0019 wins 2/5\n"}
+,{"stream_name":"stdout","time":8511.484955135,"data":"up: -0.0009 error 0.0011 wins 2/5\n"}
+,{"stream_name":"stdout","time":8511.485337743,"data":"down: -0.0014 error 0.0015 wins 2/5\n"}
+,{"stream_name":"stdout","time":8511.485743155,"data":"qkffn: -0.0027 error 0.0011 wins 1/5\n"}
+,{"stream_name":"stdout","time":8511.486091727,"data":"all: -0.0119 error 0.0017 wins 0/5\n"}
+,{"stream_name":"stdout","time":8511.486496129,"data":"split: +0.0000 error 0.0021 wins 2/5\n"}
+,{"stream_name":"stdout","time":8512.907742798,"data":"w64 done with code 0 at 142 min\n"}
+,{"stream_name":"stderr","time":8515.130812559,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":8515.130844748,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":8515.468377984,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":8515.468402026,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":8516.32157148,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":8517.435281539,"data":"[NbConvertApp] Writing 726288 bytes to __results__.html\n"}
+]

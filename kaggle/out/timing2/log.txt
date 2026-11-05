@@ -1,0 +1,16 @@
+data ready 31 s
+GPU 0: Tesla T4 (UUID: GPU-f040d9eb-9d06-48ed-5c13-3e6833aaddd9)
+GPU 1: Tesla T4 (UUID: GPU-fc087701-d2a9-5905-add1-d5515a6dee4a)
+
+== w64 hours left 11.29
+w64 seconds for 4 runs at once, 200 steps 31.4 [(0.10975, 21.95, 1.1), (0.1085, 21.7, 1.11), (0.11342, 22.68, 1.09), (0.11365, 22.73, 1.09)]
+w64 done with code 0 at 1 min
+== w128 hours left 11.28
+w128 seconds for 4 runs at once, 200 steps 47.2 [(0.18699, 37.4, 2.68), (0.18743, 37.49, 2.69), (0.18918, 37.84, 2.58), (0.19156, 38.31, 2.42)]
+w128 done with code 0 at 2 min
+== w256 hours left 11.26
+w256 seconds for 4 runs at once, 200 steps 91.2 [(0.37967, 75.93, 5.46), (0.38084, 76.17, 5.47), (0.39015, 78.03, 5.56), (0.39114, 78.23, 5.55)]
+w256 done with code 0 at 4 min
+== w512 hours left 11.24
+w512 seconds for 4 runs at once, 200 steps 310.4 [(1.34064, 268.13, 18.34), (1.34242, 268.48, 18.39), (1.3877, 277.54, 19.24), (1.3879, 277.58, 19.29)]
+w512 done with code 0 at 9 min

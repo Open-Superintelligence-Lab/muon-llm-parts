@@ -1,0 +1,41 @@
+[{"stream_name":"stderr","time":0.814779123,"data":"/kaggle/src/script.py:8: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.\n"}
+,{"stream_name":"stderr","time":0.814824458,"data":"  tarfile.open(fileobj=io.BytesIO(base64.b64decode(CODE))).extractall(C)\n"}
+,{"stream_name":"stdout","time":21.142575795,"data":"data ready 20 s\n"}
+,{"stream_name":"stdout","time":21.182090272,"data":"GPU 0: Tesla T4 (UUID: GPU-f49134ca-36b3-bac0-8e2a-41e594c8882d)\n"}
+,{"stream_name":"stdout","time":21.182119305,"data":"GPU 1: Tesla T4 (UUID: GPU-653185b9-55b1-9980-dbb9-53d7a29b77ed)\n"}
+,{"stream_name":"stdout","time":21.182124837,"data":"\n"}
+,{"stream_name":"stdout","time":21.182349414,"data":"== w128 hours left 11.29\n"}
+,{"stream_name":"stdout","time":28.198110963,"data":"w128 tuning Muon\n"}
+,{"stream_name":"stdout","time":801.951306296,"data":"  all Muon lrs x: 1 4.2594 of 3\n"}
+,{"stream_name":"stdout","time":1197.650795173,"data":"  all Adam lrs x: 1 4.2594 of 3\n"}
+,{"stream_name":"stdout","time":2365.974781188,"data":"  qk lr x: 1 4.2561 of 3\n"}
+,{"stream_name":"stdout","time":3143.062835794,"data":"  vo lr x: 0.63 4.2546 of 4\n"}
+,{"stream_name":"stdout","time":3533.775847765,"data":"  gu lr x: 1 4.2546 of 3\n"}
+,{"stream_name":"stdout","time":4308.503406862,"data":"  down lr x: 0.63 4.2539 of 4\n"}
+,{"stream_name":"stdout","time":4308.503561921,"data":"base down=muon:0.03213:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.03213:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.03213:beta=0.8 4.2539\n"}
+,{"stream_name":"stdout","time":5431.669965637,"data":"  Adam on vo, lr: 0.004 4.2783 of 4\n"}
+,{"stream_name":"stdout","time":6183.7238355,"data":"  Adam on qk, lr: 0.01 4.2540 of 3\n"}
+,{"stream_name":"stdout","time":6902.358531748,"data":"  Adam on ffn, lr: 0.01 4.2652 of 3\n"}
+,{"stream_name":"stdout","time":8298.146132502,"data":"  per-head q,k, lr x: 1 4.2505 of 4\n"}
+,{"stream_name":"stdout","time":15313.583750373,"data":"w128 base held-out 4.2629\n"}
+,{"stream_name":"stdout","time":15313.586929963,"data":"vo: -0.0202 error 0.0018 wins 0/5\n"}
+,{"stream_name":"stdout","time":15313.587417021,"data":"v: -0.0069 error 0.0005 wins 0/5\n"}
+,{"stream_name":"stdout","time":15313.587855251,"data":"o: -0.0103 error 0.0018 wins 0/5\n"}
+,{"stream_name":"stdout","time":15313.58826321,"data":"qk: +0.0056 error 0.0014 wins 4/5\n"}
+,{"stream_name":"stdout","time":15313.588721177,"data":"q: +0.0063 error 0.0012 wins 5/5\n"}
+,{"stream_name":"stdout","time":15313.589175659,"data":"k: +0.0024 error 0.0012 wins 4/5\n"}
+,{"stream_name":"stdout","time":15313.589706675,"data":"ffn: -0.0053 error 0.0015 wins 0/5\n"}
+,{"stream_name":"stdout","time":15313.590196117,"data":"gate: +0.0016 error 0.0021 wins 4/5\n"}
+,{"stream_name":"stdout","time":15313.590691797,"data":"up: +0.0017 error 0.0014 wins 3/5\n"}
+,{"stream_name":"stdout","time":15313.591108913,"data":"down: -0.0007 error 0.0006 wins 2/5\n"}
+,{"stream_name":"stdout","time":15313.591525572,"data":"qkffn: -0.0084 error 0.0013 wins 0/5\n"}
+,{"stream_name":"stdout","time":15313.591935788,"data":"all: -0.0511 error 0.0029 wins 0/5\n"}
+,{"stream_name":"stdout","time":15313.592368596,"data":"split: +0.0052 error 0.0008 wins 5/5\n"}
+,{"stream_name":"stdout","time":15317.725690662,"data":"w128 done with code 0 at 255 min\n"}
+,{"stream_name":"stderr","time":15319.888474172,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":15319.888504829,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":15320.207051066,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":15320.20707496,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":15321.074084797,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":15322.143515248,"data":"[NbConvertApp] Writing 726231 bytes to __results__.html\n"}
+]

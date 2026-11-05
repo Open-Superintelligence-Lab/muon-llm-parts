@@ -47,7 +47,7 @@ with stage("each rule takes its published step"):
     torch.manual_seed(0); w0 = torch.randn(32, 12); g = torch.randn(32, 12); lr = .01
     def step(rule, shape_w=w0, grad=g, **k):
         w = shape_w.clone(); rules.RULES[rule](w, grad, {}, lr, k); return (w - shape_w) / -lr
-    for r in ("muon", "normsgd", "blind"):
+    for r in ("muon", "normsgd"):
         n = float(step(r).norm()); assert abs(n - 32 ** .5) / 32 ** .5 < .25, f"{r}: Frobenius {n}, wanted about {32 ** .5}"
     d = step("muon"); s = torch.linalg.svdvals(d); assert (s - 32 ** .5 / 12 ** .5).abs().max() < 1.2, f"muon singular values {s}"
     assert (step("rownorm").norm(dim=1) - 1).abs().max() < 1e-4, "rownorm rows should have norm 1"
@@ -87,7 +87,6 @@ with stage("each rule takes its published step"):
     wr = torch.randn(32, 8); gr = torch.randn(32, 8); z = step("routernorm", shape_w=wr, grad=gr); assert z.mean(0).abs().max() < 1 and float((z.sum(1)).abs().max()) < 1e3
     assert (step("lion").abs() - 1).abs().max() < 1e-3, "lion should be a sign"
     w1 = torch.randn(12); assert float(step("norm1d", shape_w=w1, grad=torch.randn(12)).norm()) > 0
-    assert (step("freeze") == 0).all(), "freeze moved"
     w = w0.clone(); st = {}
     for _ in range(3): rules.adam(w, g, st, lr, {})
     assert (w - w0).abs().max() > 0 and st["t"] == 3
@@ -108,7 +107,7 @@ with stage("repeat: same setting, same scores; jitter differs"):
 with stage("every arm trains on the dense model"):
     for name in arms.ARMS:
         if name in ("stiefel", "hetero", "hetero-inv", "dgram"): continue
-        r = env.train(args(results=out, steps=6), arms.parse(name), W, out); assert r["finite"] or name == "blind", name
+        r = env.train(args(results=out, steps=6), arms.parse(name), W, out); assert r["finite"], name
 
 with stage("manifold arms train and weights stay on the manifold"):
     for name in ("stiefel", "hetero", "hetero-inv", "dgram"):

@@ -1,0 +1,19 @@
+data ready 26 s
+GPU 0: Tesla T4 (UUID: GPU-2e4c9b23-76af-e400-7718-bc3c52e513b2)
+GPU 1: Tesla T4 (UUID: GPU-3304ac2c-aae1-3e0f-6a4e-e6a00ecb9c97)
+
+== dbg hours left 11.29
+dbg seconds for one run 7.6 {'train_s': 2.24, 's_per_step': 0.1122, 'eval_s': 0.0}
+dbg done with code 0 at 1 min
+== w64 hours left 11.29
+w64 seconds for one run 75.6 {'train_s': 72.44, 's_per_step': 0.03622, 'eval_s': 0.37}
+w64 done with code 0 at 2 min
+== w128 hours left 11.27
+w128 seconds for one run 104.9 {'train_s': 101.41, 's_per_step': 0.05071, 'eval_s': 0.56}
+w128 done with code 0 at 4 min
+== w256 hours left 11.24
+w256 seconds for one run 111.3 {'train_s': 106.86, 's_per_step': 0.05343, 'eval_s': 1.24}
+w256 done with code 0 at 6 min
+== w512 hours left 11.2
+w512 seconds for one run 368.8 {'train_s': 359.11, 's_per_step': 0.17955, 'eval_s': 4.28}
+w512 done with code 0 at 12 min

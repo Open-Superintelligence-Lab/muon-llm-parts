@@ -10,9 +10,9 @@ so a finished setting is never rerun; per-item scores go to runs/. A search row 
 """
 import argparse, collections, fcntl, glob, hashlib, json, os, signal, subprocess, time
 import numpy as np, tiktoken, torch, torch.nn as nn, torch.nn.functional as F
-import arms, evals, rules
+import arms, evals, rules, sandbox
 
-HERE = os.path.dirname(os.path.abspath(__file__)); DATA = os.path.join(HERE, "data"); RUNS = os.path.join(HERE, "runs")
+HERE = os.path.dirname(os.path.abspath(__file__)); DATA = os.path.join(HERE, "data"); RUNS = os.environ.get("RUNS_DIR", os.path.join(HERE, "runs"))
 FW = os.environ.get("FWDIR", os.path.join(DATA, "web")); PR = os.path.join(DATA, "pararel")
 EOT, FACTSHARE, COPIES, STRIDE, TEST_VERSION = 50256, 0.1, (2, 8, 32), 4_000_000, 3  # worlds start STRIDE tokens apart, so their training text never overlaps; TEST_VERSION is in each row's key, so rows from an older test are never reused
 TIERS = {
@@ -60,7 +60,7 @@ class World:
     """Everything that depends only on the tier and world number: vocabulary, training rows, held-out rows, fact items."""
     def __init__(s, c, steps, world=0):
         s.c = c; s.world = world; s.enc = tiktoken.get_encoding("gpt2"); rng = np.random.default_rng(world)
-        shard = np.memmap(os.path.join(FW, "fineweb_train_000001.bin"), dtype=np.uint16, mode="r", offset=1024)
+        shard = np.memmap(os.path.join(FW, f"fineweb_train_{world + 1:06d}.bin" if c.get("own_shard") else "fineweb_train_000001.bin"), dtype=np.uint16, mode="r", offset=1024)  # own_shard: each world reads its own 100M-token file, for runs too long to share one
         cp = os.path.join(DATA, "counts.npy")
         if not os.path.exists(cp): os.makedirs(DATA, exist_ok=True); np.save(cp, np.bincount(np.asarray(shard[:20_000_000]), minlength=65536))
         counts = np.load(cp); s.counts = counts
@@ -71,7 +71,7 @@ class World:
         s.facts = s.pick_facts(rng, kept, int(tokens * FACTSHARE))
         doc = lambda f: np.array([EOT] + s.E(f["S"][rng.integers(len(f["S"]))].replace("[X]", f["s"]).replace("[Y]", f["o"])), np.int64)
         early = [doc(f) for f in s.facts if f["early"] for _ in range(f["copies"])]; docs = [doc(f) for f in s.facts if not f["early"] for _ in range(f["copies"])]
-        nfact = sum(map(len, docs + early)); nweb = tokens + 2 * c["L"] - nfact; start = world * max(STRIDE, nweb)
+        nfact = sum(map(len, docs + early)); nweb = tokens + 2 * c["L"] - nfact; start = 0 if c.get("own_shard") else world * max(STRIDE, nweb)
         if start + nweb > len(shard): raise SystemExit(f"world {world} needs {start + nweb} web tokens, the shard has {len(shard)}")
         web = np.asarray(shard[start:start + nweb]).astype(np.int64); cut = np.flatnonzero(web == EOT)
         wdocs = np.split(web, cut[1:]) if len(cut) > 1 else [web]
@@ -163,6 +163,8 @@ class LM(nn.Module):
 def key_of(a, spec):
     """One setting, one row: what changes the result, and nothing else."""
     d = dict(version=TEST_VERSION, config=TIERS[a.tier], spec=arms.show(spec), tier=a.tier, steps=a.steps, world=a.world, jitter=a.jitter, lr_mult=a.lr_mult, qknorm=a.qknorm, tied=a.tied, moe=a.moe, leak=a.leak, double=a.double, evals=a.evals)
+    code = {g["rule"]: sandbox.code_hash(g["rule"]) for g in spec.values() if g["rule"].startswith("x_")}
+    if code: d["code"] = code  # an optimizer file changed after tuning is a different setting
     return hashlib.sha1(json.dumps(d, sort_keys=True).encode()).hexdigest()[:16]
 
 
@@ -191,11 +193,11 @@ def train(a, spec, W=None, out=None):
     out = out or os.path.join(HERE, a.results); key = key_of(a, spec)
     torch.set_num_threads(a.threads); torch.manual_seed(a.world); t0 = time.time(); c = dict(TIERS[a.tier])
     steps = a.steps or c["steps"]; budget = steps * (2 if a.double else 1)
-    W = W or World(c, budget, a.world); model = LM(c, W.V, a.qknorm, a.tied, a.moe)
+    W = W or World(c, budget, a.world); model = LM(c, W.V, a.qknorm, a.tied, a.moe).to(a.device)
     weights = collections.Counter(); n_named = list(model.named_parameters())
     for n, w in n_named: weights[arms.module_of(n, w)] += w.numel()
     jit = {m: dict(g, lr=g["lr"] * a.lr_mult * (1 + 1e-3 * a.jitter)) for m, g in spec.items()}
-    opt = rules.ModuleOpt(arms.groups(jit, n_named)); X = torch.as_tensor(W.look[W.rows]); LK = torch.as_tensor(W.look[W.val]); ctx = evals.Ctx(model, W, c, "cpu")
+    opt = rules.ModuleOpt(arms.groups(jit, n_named)); X = torch.as_tensor(W.look[W.rows]); LK = torch.as_tensor(W.look[W.val]); ctx = evals.Ctx(model, W, c, a.device)
     marks = sorted({int(steps * (i + 1) / c["marks"]) for i in range(c["marks"])}); curve = []; train_s = 0.0; losses = []; ok = True; tune = W.tune[:64]
     t1 = time.time()
     for step in range(steps + 1):
@@ -204,8 +206,8 @@ def train(a, spec, W=None, out=None):
         if step == steps: break
         sc = min((step + 1) / 20, 1.0, (steps - step) / (0.3 * steps)); batches = 2 if a.double else 1
         for j in range(batches):
-            idx = ((step * batches + j) * c["batch"] + np.arange(c["batch"])) % len(X); x = X[idx]
-            if a.leak: x = x.clone(); x[:c["batch"] // 2] = LK[(step * c["batch"] + np.arange(c["batch"] // 2)) % len(LK)]
+            idx = ((step * batches + j) * c["batch"] + np.arange(c["batch"])) % len(X); x = X[idx].to(a.device)
+            if a.leak: x = x.clone(); x[:c["batch"] // 2] = LK[(step * c["batch"] + np.arange(c["batch"] // 2)) % len(LK)].to(a.device)
             loss = F.cross_entropy(model(x)[:, :-1].flatten(0, 1), x[:, 1:].flatten(), ignore_index=W.unk); (loss / batches).backward()
         if not torch.isfinite(loss): ok = False; break
         losses.append(float(loss.detach())); opt.step(sc, measure=step % 10 == 0); model.zero_grad(set_to_none=True)
@@ -226,12 +228,12 @@ def train(a, spec, W=None, out=None):
             mats = [w for w in g["params"] if w.ndim == 2]
             if mats: res["opt"]["sigma_max"][m] = round(max(float(torch.linalg.matrix_norm(w.detach(), 2)) for w in mats), 3)
         for b in model.blocks: b.peak = 0.0
-        with torch.no_grad(): model(torch.as_tensor(W.look[W.val[:8]]))
+        with torch.no_grad(): model(torch.as_tensor(W.look[W.val[:8]]).to(a.device))
         res["opt"]["peak_attention_logit"] = round(max(b.peak for b in model.blocks), 3)
         for b in model.blocks: b.peak = None
         os.makedirs(RUNS, exist_ok=True); np.savez_compressed(os.path.join(RUNS, key + ".npz"), **{k: np.asarray(v, np.float32) for k, v in s.items()})
         if a.final:
-            hid = evals.run_all(evals.Ctx(model, W, c, "cpu", final=True), "full"); np.savez_compressed(os.path.join(RUNS, "final_" + key + ".npz"), **{k: np.asarray(v, np.float32) for k, v in hid.items()})
+            hid = evals.run_all(evals.Ctx(model, W, c, a.device, final=True), "full"); np.savez_compressed(os.path.join(RUNS, "final_" + key + ".npz"), **{k: np.asarray(v, np.float32) for k, v in hid.items()})
             with open(os.path.join(HERE, os.environ.get("FINAL_RESULTS", "final_results.jsonl")), "a") as f: f.write(json.dumps(dict(key=key, spec=res["spec"], tier=a.tier, world=a.world, scores={k: round(float(np.mean(v)), 4) if len(v) else None for k, v in hid.items()})) + "\n")
     else:
         res["scores"] = {}; res["opt"] = dict(unstable=True, why="not finite")
@@ -247,7 +249,7 @@ def parser():
     p.add_argument("--no-qknorm", dest="qknorm", action="store_false"); p.add_argument("--tied", action="store_true"); p.add_argument("--moe", type=int, default=0)
     p.add_argument("--leak", action="store_true"); p.add_argument("--double", action="store_true"); p.add_argument("--final", action="store_true")
     p.add_argument("--tag", default=""); p.add_argument("--threads", type=int, default=1); p.add_argument("--max-seconds", type=float, default=0); p.add_argument("--kill-after", type=int, default=0)
-    p.add_argument("--results", default="results.jsonl"); p.add_argument("--force", action="store_true")
+    p.add_argument("--results", default="results.jsonl"); p.add_argument("--force", action="store_true"); p.add_argument("--device", default="cpu")
     return p
 
 

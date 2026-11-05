@@ -1,12 +1,114 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
-\usepackage{graphicx,booktabs,amsmath,amssymb,hyperref}
 \usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
 % Move to the ICML 2027 style file when it is released.
+
 \title{How Muon Influences Each Part of an LLM}
 \author{Vuk Rosi\'c}
 \date{}
+
 \begin{document}
 \maketitle
+
+\begin{abstract}
+Muon trains the hidden matrices of an LLM with an orthogonalized update and leaves the embedding, the output head and the normalization scales to Adam. We ask which of those matrices actually need Muon. Starting from a tuned Muon baseline, we give one matrix, or one group of matrices, to Adam, choose every learning rate on separate tune worlds, and score the change on held-out worlds that use different training and validation text. At width 48 and 250 steps, giving the value and output matrices to Adam costs .0209 in validation loss (error .0015), which is more than the .0152 that the two cost separately, while giving any single feed-forward matrix to Adam costs nothing measurable. Giving query alone to Adam costs .0019 (.0013) and key alone costs .0011 (.0006).
+\end{abstract}
+
 \section{Introduction}
+
+Muon~\cite{muon} replaces each hidden matrix's update with the nearest matrix that has all singular values equal to one. It is now used to train large models, yet an LLM holds several kinds of matrix that do different jobs: query, key, value and output matrices in attention, and gate, up and down matrices in a gated feed-forward layer. A practitioner who wants to change Muon, or to save its cost, needs to know which of these matrices carry its benefit.
+
+Wang et al.~\cite{wang2025tail} answered the first version of this question. They start from Adam everywhere and add Muon to one group at a time at 160M parameters and 10,000 steps. Muon on the value and output matrices plus the feed-forward layer nearly matches Muon everywhere, and Muon on query and key alone adds little to Adam. Our results agree with that ranking.
+
+This paper asks three questions that their design leaves open.
+
+\begin{enumerate}
+\item What does each matrix lose when it alone leaves a tuned Muon baseline? Adding Muon to Adam and removing it from Muon are different questions when matrices interact. In their gated table, Muon on any one feed-forward matrix lowers the loss by about .09 to .10 from Adam everywhere, while leaving one feed-forward matrix out of the full Muon set of value, output and feed-forward matrices costs .017 to .052.
+\item Does the map survive tuning? Wang et al.\ keep the Muon learning rate fixed across their ablations and treat the remaining gap as possibly due to it. We retune the learning rate of every change on tune worlds and score it on other worlds.
+\item How does the map move with width and with training length? Their numeric tables are at one size and one length.
+\end{enumerate}
+
+\section{Setup}
+
+\paragraph{Model.} A transformer with RoPE, RMSNorm, normalized queries and keys, and a gated SiLU feed-forward layer, with no biases. A block with width $d$ holds $d\times d$ matrices $Q$, $K$, $V$ and $O$, $h\times d$ matrices gate and up, and a $d\times h$ matrix down, with $h=\lfloor 8d/3\rfloor$.
+
+\paragraph{Worlds.} A world fixes the training text, the validation rows and the order of the data. Two worlds share no training or validation tokens. Worlds 0 to 4 choose settings, and worlds 5 to 9 report them. Five further worlds are sealed behind a separate program for later design claims and were not read for this paper.
+
+\paragraph{Baseline.} Muon on the seven hidden matrix kinds and Adam on the embedding, head and normalization scales. In the small-model table, query and key use per-head Muon and the baseline's learning rate and momentum for each part are tuned together by coordinate descent on the mean of worlds 0 to 4. In the larger-model table, query and key use whole-matrix Muon, as in Wang et al., and the per-head version is a separate row.
+
+\paragraph{The change.} One matrix kind, or a group of them, moves to Adam, and everything else stays as in the baseline. Adam's learning rate for the moved matrices is chosen on the tune worlds. We report the paired gap on held-out worlds, baseline loss minus changed loss, so a negative gap means Muon was better. The error is the standard error of the five per-world gaps.
+
+\section{Results at small size}
+
+Table~\ref{tab:small} gives the map at width 48 with 2 layers and 250 steps, and at width 32 with 2 layers and 1,000 steps.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Moved to Adam & Width 48, 250 steps & Width 32, 1,000 steps \\
+\midrule
+Value and output & $-.0209$ (.0015) & $-.0136$ (.0022) \\
+Output & $-.0076$ (.0017) & $-.0040$ (.0020) \\
+Value & $-.0076$ (.0027) & $-.0021$ (.0015) \\
+Query & $-.0019$ (.0013) & $-.0006$ (.0013) \\
+Key & $-.0011$ (.0006) & $-.0002$ (.0018) \\
+Gate & $.0000$ (.0008) & $+.0014$ (.0007) \\
+Up & $+.0003$ (.0012) & $+.0013$ (.0016) \\
+Down & $-.0001$ (.0015) & $+.0004$ (.0013) \\
+Query and key & $-.0034$ (.0014) & $-.0028$ (.0024) \\
+Gate, up and down & $-.0041$ (.0010) & $+.0012$ (.0015) \\
+Query, key, gate, up and down & $-.0065$ (.0018) & $-.0029$ (.0009) \\
+All seven & $-.0271$ (.0020) & $-.0176$ (.0016) \\
+\bottomrule
+\end{tabular}
+\caption{Validation loss gap on held-out worlds 5 to 9, Muon baseline with per-head query and key minus the change, with the standard error in brackets. Negative means Muon was better. At width 32 Adam's learning rate for the single-matrix rows is the best of two values chosen on tune worlds, which slightly favours Adam, and the joint rows use .01.}
+\label{tab:small}
+\end{table}
+
+Three things stand out at this size.
+
+Value and output interact. At 250 steps, moving both costs .0209, while moving each alone costs .0076, a sum of .0152. The excess of .0057 is about 1.6 standard errors of the difference if the three gaps are treated as independent, so the interaction needs the larger runs below to confirm it.
+
+Each feed-forward matrix alone is free to move. All three together cost .0041 at 250 steps, but they cost nothing at 1,000 steps at width 32, where the gap is $+.0012$ (.0015). Value and output carry most of what is left at 1,000 steps: moving the other five costs .0029 (.0009) and moving all seven costs .0176 (.0016).
+
+Tuning Adam's first momentum at .5, .7 or .95 did not rescue the value or output matrix on the tune worlds, where the gaps stayed between $-.0073$ and $-.0083$ for each alone and between $-.0173$ and $-.0203$ for both.
+
+\paragraph{Per-head Muon.} Orthogonalizing query and key per head rather than as whole matrices, as Kimi K3, GLM-5 and others do~\cite{perhead}, improved a five-world tuned row by .0095 (error .0024) on the held-out worlds, winning all 5, when both arms were tuned on worlds 0 to 4. The whole-matrix query and key setting inside an otherwise per-head tuned row scored $-.0046$ (.0020) at its best learning rate, so the split alone accounts for about half of that gap and the rest comes from retuning.
+
+\paragraph{Variants of the update.} We also tested changes to the update against a tuned per-head row at the same size. None reached a gap of .005. Exact orthogonalization by SVD gave $+.0021$ (.0016). Raising singular values to a power hurt as the power grew, with $p=.25$ at $-.0049$ (.0016) and $p=.5$ at $-.0174$ (.0023). Removing the weak directions from the update cost $-.0170$ (.0009). Longer momentum on weak directions gave $-.0006$ to $-.0083$.
+
+\section{Results across size and length}
+
+We repeat the map on GPUs with $V=4000$, 64 rows of 128 tokens per step and each world reading its own 100M-token file, so only width, depth and length change. Width 64 has 4 layers and 4 heads and 0.71M weights, width 128 has 6 layers and 8 heads and 2.2M weights, and width 256 has 6 layers and 8 heads and 6.8M weights.
+
+The design is cheaper than at small size because of the GPU budget. The baseline is tuned on worlds 0 and 1: a shared factor for all Muon learning rates, a shared factor for all Adam learning rates, one shared Muon momentum out of .8, .9 and .95, and then each Muon group's learning rate. Adam's learning rate is chosen on the same worlds for value and output together, for query and key together, and for the three feed-forward matrices together, and single matrices and joint moves inherit it with no tuning of their own. Query and key use whole-matrix Muon in the baseline here. Scores come from worlds 5 to 9.
+
+% MAPTABLE
+
+
+\section{Related work}
+
+Wang et al.~\cite{wang2025tail} is the closest work, as described above. Compositional Muon~\cite{compositional} treats $QK^\top$ and $OV$ as composed circuits, with query and key handled per head with a half split, value per head and output as one matrix, and reports gains at 340M and 1B. Muon has also been ablated in vision transformers~\cite{muonvit}, where the largest difference is reported in query, key and value, which differs from the LLM ranking. CMuon~\cite{cmuon} ablates chunking across feed-forward, query-key-value and AdaLN matrices. Spectral Allocation~\cite{spectral} measures how often each matrix's update directions agree with gradients on unseen batches at one checkpoint, and reports that the weak directions of query and key agree least while feed-forward matrices stay aligned across almost the whole spectrum.
+
+\section{Limits}
+
+The results in this draft's small-model table are from models with far fewer weights than those trained in practice, trained for far fewer tokens. A map at this size can be wrong at 160M, which is why the scale check matters. All losses here are validation loss on next-token prediction, and we did not measure downstream tasks.
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+\bibitem{muon} K.~Jordan et al. Muon: An optimizer for hidden layers in neural networks. Blog post, 2024.
+\bibitem{wang2025tail} S.~Wang, F.~Zhang, J.~Li, C.~Du, C.~Du, T.~Pang, Z.~Yang, M.~Hong, V.~Y.~F.~Tan. Muon outperforms Adam in tail-end associative memory learning. arXiv:2509.26030, 2025.
+\bibitem{perhead} When and why grouping attention heads accelerates Muon optimization. arXiv:2605.08933, 2026.
+\bibitem{compositional} Keigwin, Yang, Pai, Zhang, DeWulf. Towards compositional steepest descent. Tilde Research blog post, 2026.
+\bibitem{muonvit} Muon in vision transformers. arXiv:2605.24770, 2026.
+\bibitem{cmuon} CMuon. arXiv:2608.02502, 2026.
+\bibitem{spectral} X.~Wu, W.~Yu, et al. Spectral allocation: Why Muon outperforms Adam, and how to improve Muon. arXiv:2608.25990, 2026.
+\end{thebibliography}
+
 \end{document}

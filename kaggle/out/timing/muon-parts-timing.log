@@ -1,0 +1,28 @@
+[{"stream_name":"stderr","time":1.078322414,"data":"/kaggle/src/script.py:8: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.\n"}
+,{"stream_name":"stderr","time":1.078399908,"data":"  tarfile.open(fileobj=io.BytesIO(base64.b64decode(CODE))).extractall(C)\n"}
+,{"stream_name":"stdout","time":27.267389032,"data":"data ready 26 s\n"}
+,{"stream_name":"stdout","time":27.304842316,"data":"GPU 0: Tesla T4 (UUID: GPU-2e4c9b23-76af-e400-7718-bc3c52e513b2)\n"}
+,{"stream_name":"stdout","time":27.304864367,"data":"GPU 1: Tesla T4 (UUID: GPU-3304ac2c-aae1-3e0f-6a4e-e6a00ecb9c97)\n"}
+,{"stream_name":"stdout","time":27.30486885,"data":"\n"}
+,{"stream_name":"stdout","time":27.305028982,"data":"== dbg hours left 11.29\n"}
+,{"stream_name":"stdout","time":42.786417378,"data":"dbg seconds for one run 7.6 {'train_s': 2.24, 's_per_step': 0.1122, 'eval_s': 0.0}\n"}
+,{"stream_name":"stdout","time":46.043463205,"data":"dbg done with code 0 at 1 min\n"}
+,{"stream_name":"stdout","time":46.043496016,"data":"== w64 hours left 11.29\n"}
+,{"stream_name":"stdout","time":123.259449827,"data":"w64 seconds for one run 75.6 {'train_s': 72.44, 's_per_step': 0.03622, 'eval_s': 0.37}\n"}
+,{"stream_name":"stdout","time":124.11190753,"data":"w64 done with code 0 at 2 min\n"}
+,{"stream_name":"stdout","time":124.111938819,"data":"== w128 hours left 11.27\n"}
+,{"stream_name":"stdout","time":230.53218143,"data":"w128 seconds for one run 104.9 {'train_s': 101.41, 's_per_step': 0.05071, 'eval_s': 0.56}\n"}
+,{"stream_name":"stdout","time":231.424193426,"data":"w128 done with code 0 at 4 min\n"}
+,{"stream_name":"stdout","time":231.424232839,"data":"== w256 hours left 11.24\n"}
+,{"stream_name":"stdout","time":344.339673093,"data":"w256 seconds for one run 111.3 {'train_s': 106.86, 's_per_step': 0.05343, 'eval_s': 1.24}\n"}
+,{"stream_name":"stdout","time":345.220665743,"data":"w256 done with code 0 at 6 min\n"}
+,{"stream_name":"stdout","time":345.22069677,"data":"== w512 hours left 11.2\n"}
+,{"stream_name":"stdout","time":715.665812672,"data":"w512 seconds for one run 368.8 {'train_s': 359.11, 's_per_step': 0.17955, 'eval_s': 4.28}\n"}
+,{"stream_name":"stdout","time":716.551474398,"data":"w512 done with code 0 at 12 min\n"}
+,{"stream_name":"stderr","time":718.662266064,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":718.662295631,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":718.961623686,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":718.961653524,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":719.773670417,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":720.816762011,"data":"[NbConvertApp] Writing 726542 bytes to __results__.html\n"}
+]

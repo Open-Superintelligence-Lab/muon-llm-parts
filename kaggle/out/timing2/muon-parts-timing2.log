@@ -1,0 +1,25 @@
+[{"stream_name":"stderr","time":1.287504798,"data":"/kaggle/src/script.py:8: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.\n"}
+,{"stream_name":"stderr","time":1.2875666350000001,"data":"  tarfile.open(fileobj=io.BytesIO(base64.b64decode(CODE))).extractall(C)\n"}
+,{"stream_name":"stdout","time":32.159320981,"data":"data ready 31 s\n"}
+,{"stream_name":"stdout","time":32.198655485,"data":"GPU 0: Tesla T4 (UUID: GPU-f040d9eb-9d06-48ed-5c13-3e6833aaddd9)\n"}
+,{"stream_name":"stdout","time":32.198683916,"data":"GPU 1: Tesla T4 (UUID: GPU-fc087701-d2a9-5905-add1-d5515a6dee4a)\n"}
+,{"stream_name":"stdout","time":32.198689219,"data":"\n"}
+,{"stream_name":"stdout","time":32.198891535,"data":"== w64 hours left 11.29\n"}
+,{"stream_name":"stdout","time":74.27461511,"data":"w64 seconds for 4 runs at once, 200 steps 31.4 [(0.10975, 21.95, 1.1), (0.1085, 21.7, 1.11), (0.11342, 22.68, 1.09), (0.11365, 22.73, 1.09)]\n"}
+,{"stream_name":"stdout","time":82.334307452,"data":"w64 done with code 0 at 1 min\n"}
+,{"stream_name":"stdout","time":82.334339644,"data":"== w128 hours left 11.28\n"}
+,{"stream_name":"stdout","time":131.401208565,"data":"w128 seconds for 4 runs at once, 200 steps 47.2 [(0.18699, 37.4, 2.68), (0.18743, 37.49, 2.69), (0.18918, 37.84, 2.58), (0.19156, 38.31, 2.42)]\n"}
+,{"stream_name":"stdout","time":132.991412522,"data":"w128 done with code 0 at 2 min\n"}
+,{"stream_name":"stdout","time":132.991442735,"data":"== w256 hours left 11.26\n"}
+,{"stream_name":"stdout","time":226.052848252,"data":"w256 seconds for 4 runs at once, 200 steps 91.2 [(0.37967, 75.93, 5.46), (0.38084, 76.17, 5.47), (0.39015, 78.03, 5.56), (0.39114, 78.23, 5.55)]\n"}
+,{"stream_name":"stdout","time":227.73043755,"data":"w256 done with code 0 at 4 min\n"}
+,{"stream_name":"stdout","time":227.730472071,"data":"== w512 hours left 11.24\n"}
+,{"stream_name":"stdout","time":540.015977093,"data":"w512 seconds for 4 runs at once, 200 steps 310.4 [(1.34064, 268.13, 18.34), (1.34242, 268.48, 18.39), (1.3877, 277.54, 19.24), (1.3879, 277.58, 19.29)]\n"}
+,{"stream_name":"stdout","time":541.718509579,"data":"w512 done with code 0 at 9 min\n"}
+,{"stream_name":"stderr","time":544.195627464,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":544.19566355,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":544.541950561,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":544.541976538,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":545.481998898,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":546.673454891,"data":"[NbConvertApp] Writing 726432 bytes to __results__.html\n"}
+]

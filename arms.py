@@ -4,18 +4,18 @@
 Baselines, with lrs only as starting points because search.py tunes every arm on tune rows with the same grid:
 - all-adam: the standard baseline everywhere.
 - muon: Muon on hidden matrices, Adam on embedding, head and norm scales (Muon's own recipe).
+- muon-split: muon with Per-Head Muon on query and key (Kimi K3, GLM-5, 2605.08933). `h` is the head count, 4 by default, so a tier with other head counts must set it.
 - sym, sym-hybrid-all: 2605.18106, RowNorm or hybrid on embedding and head, Muon on attention, hybrid on SwiGLU; routers get routernorm.
 - stiefel, hetero, hetero-inv, dgram: 2606.13276, Stiefel or DGram on attention and MLP, Adam on the rest.
 - rownorm-all, lion-all, normsgd-all: one rule on every matrix.
-- frozen-mlp, frozen-hidden, blind: controls. frozen-hidden never trains a hidden matrix, so it shows how much of the score hidden training can move at a tier.
-No arm uses weight decay and momentum is fixed by each rule, because these tiers are too short for decay to matter. A spec can set both.
+No arm uses weight decay, because these tiers are too short for decay to matter. search.py tunes momentum per module for every arm; a spec can set both.
 Not ported: NorMuon, RS-MR, SOAP, because each needs extra state and tuning we have not matched to its authors' code.
 """
 import json, re
 
 MODULES = ("emb", "head", "qk", "vo", "gu", "down", "norm")
 MOE = ("router", "exp", "ed")
-LRS = dict(adam=.003, muon=.02, muonsplit=.02, muontangent=.02, muonsphere=.02, muonhistory=.02, muonfixed=.02, muonbrake=.02, muonfade=.02, muongate=.02, adamtangent=.003, rownorm=.02, routernorm=.002, polar=.0005, leftpolar=.0005, hybrid=.02, lion=.0005, sgdm=.3, normsgd=.02, softmuon=.02, norm1d=.01, mm_stiefel=.02, mm_dgram=.02, freeze=0, blind=.02)
+LRS = dict(adam=.003, muon=.02, muonsplit=.02, muontangent=.02, muonsphere=.02, muonhistory=.02, muonfixed=.02, muonbrake=.02, muonfade=.02, muongate=.02, adamtangent=.003, rownorm=.02, routernorm=.002, polar=.0005, leftpolar=.0005, hybrid=.02, lion=.0005, sgdm=.3, normsgd=.02, softmuon=.02, norm1d=.01, mm_stiefel=.02, mm_dgram=.02)
 ROWS_IN_COLUMNS = {"down", "ed"}
 
 
@@ -32,7 +32,7 @@ def parse(text):
     if text in ARMS: return ARMS[text]()
     out = {}
     for part in filter(None, text.split(";")):
-        m, _, rest = part.partition("="); bits = rest.split(":"); out[m] = dict(rule=bits[0], lr=float(bits[1]) if len(bits) > 1 and bits[1] else LRS[bits[0]])
+        m, _, rest = part.partition("="); bits = rest.split(":"); out[m] = dict(rule=bits[0], lr=float(bits[1]) if len(bits) > 1 and bits[1] else LRS.get(bits[0], .02))
         for b in bits[2:]:
             k, v = b.split("="); out[m][k] = float(v)
     return out
@@ -55,6 +55,7 @@ def base(emb="adam", head="adam", att="muon", mlp="muon", router="rownorm", **lr
 ARMS = {
     "all-adam": lambda: base(att="adam", mlp="adam", router="adam"),
     "muon": lambda: base(router="adam"),
+    "muon-split": lambda: dict(base(router="adam"), qk=dict(rule="muonsplit", lr=LRS["muonsplit"])),  # Per-Head Muon on query and key, Muon on the other hidden matrices
     "muon-all": lambda: base(emb="muon", head="muon", router="adam"),  # Muon on every matrix; norm scales are vectors, which Muon can't orthogonalize, so they stay on Adam
     "sym": lambda: base(emb="rownorm", head="rownorm", mlp="hybrid", router="routernorm"),
     "sym-rownorm": lambda: base(emb="rownorm", head="rownorm", router="routernorm"),
@@ -66,9 +67,6 @@ ARMS = {
     "rownorm-all": lambda: base(emb="rownorm", head="rownorm", att="rownorm", mlp="rownorm"),
     "lion-all": lambda: base(emb="lion", head="lion", att="lion", mlp="lion", router="lion"),
     "normsgd-all": lambda: base(emb="normsgd", head="normsgd", att="normsgd", mlp="normsgd", router="normsgd"),
-    "frozen-mlp": lambda: base(mlp="freeze", router="adam"),
-    "frozen-hidden": lambda: base(att="freeze", mlp="freeze", router="adam"),
-    "blind": lambda: dict(base(emb="blind", head="blind", att="blind", mlp="blind", router="blind"), norm=dict(rule="blind", lr=LRS["blind"])),
 }
 
 
