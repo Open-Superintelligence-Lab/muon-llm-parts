@@ -397,6 +397,28 @@ Verdicts by the rule above, at 250 steps only. No part has a candidate, since no
 - Head: the optimizer matters and Adam is best of those tried.
 - Norms: any tuned optimizer works.
 
+The same panel at 1,000 steps, data in `results/panel/w48x1000.jsonl`, summary in `results/panel/w48x1000_out.json`. Base 4.1323. No tuned setting landed on the edge of its grid at either length.
+
+| Part | Frozen | Adam | SGD with momentum | Lion | RowNorm | Normalized SGD | Muon | Per-head Muon | norm1d |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Value, output | -.0613 (.0017) 0 | -.0143 (.0025) 0 | -.0352 (.0030) 0 | -.0120 (.0019) 0 | -.0141 (.0021) 0 | -.0141 (.0017) 0 | base | -.0039 (.0020) 0 | |
+| Query, key | -.0449 (.0051) 0 | +.0002 (.0016) 3 | -.0021 (.0014) 2 | +.0015 (.0010) 4 | +.0008 (.0015) 3 | -.0003 (.0006) 2 | base | +.0019 (.0009) 5 | |
+| Feed-forward | -.0272 (.0007) 0 | -.0039 (.0014) 1 | -.0121 (.0008) 0 | -.0019 (.0013) 3 | -.0024 (.0006) 0 | -.0050 (.0012) 0 | base | | |
+| Embeddings | -.0925 (.0031) 0 | base | -.0158 (.0022) 0 | -.0068 (.0009) 0 | -.0004 (.0007) 1 | | -.0096 (.0016) 0 | | |
+| Head | -1.4511 (.0311) 0 | base | -.0206 (.0020) 0 | -.0155 (.0021) 0 | -.0137 (.0020) 0 | | -.0109 (.0018) 0 | | |
+| Norms | -.0293 (.0016) 0 | base | -.0027 (.0016) 2 | +.0011 (.0011) 3 | | | | | +.0005 (.0011) 3 |
+
+Verdicts at both lengths. No optimizer passes the win rule on any part.
+
+- Query and key: any tuned optimizer works. The 5 of 5 wins for RowNorm and normalized SGD at 250 steps did not hold at 1,000. Per-head Muon wins 5 of 5 at both lengths with gains of .0024 and .0019, under the .005 line.
+- Norms: any tuned optimizer works.
+- Value and output: the optimizer matters and whole-matrix Muon is best of those tried. Every other rule loses over .012 at 1,000 steps, and per-head Muon loses .0039.
+- Head: the optimizer matters and Adam is best of those tried.
+- Embeddings: the optimizer matters. Adam and RowNorm tie at 1,000 steps; the rest lose over .006.
+- Feed-forward: the optimizer matters a little. Lion, RowNorm and Adam stay inside .004 of Muon at 1,000 steps; normalized SGD and SGD with momentum lose more.
+
+Limits: this is one model size, width 48, at two short lengths. Earlier map results show the size and length can change the answer, so these verdicts need a larger run.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
