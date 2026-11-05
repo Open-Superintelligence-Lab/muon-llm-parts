@@ -228,6 +228,25 @@ Inverted sizes do not work as well as Muon here, unlike the GPT-2 result in that
 
 The pattern from 250 steps holds, with smaller gaps for query and key at `p=-.5`: value and output cannot take the gradient's shape, and query and key cannot take shapes that shrink strong directions. Random sizes stay within .0022 of Muon on every row.
 
+## 2026-11-05: Why the groups differ, prediction before running
+
+`debug/spectrum.py` measures one training run at each step: the cosine between a candidate step and the gradient of the next, unseen batch at the same weights. Prediction: on value and output the flat Muon step has a higher cosine than the gradient's shape, and the weak directions alone have a clearly positive cosine. On query and key the two shapes are about equal and the strong directions carry most of the cosine.
+
+Result, data in `results/spec/probe_w48.json` and `probe_w48x1000.json`. Whole-run means, one run:
+
+| Group | Steps | Muon step | Gradient's shape | Strong only | Weak only | Squared values in strong quarter |
+| --- | --- | --- | --- | --- | --- | --- |
+| Value and output | 250 | .0504 | .2356 | .0968 | .0023 | .965 |
+| Query and key | 250 | .0326 | .1025 | .0602 | .0029 | .925 |
+| Gate, up and down | 250 | .0559 | .1579 | .0977 | .0081 | .876 |
+| Value and output | 1,000 | .0220 | .1007 | .0431 | .0005 | .948 |
+| Query and key | 1,000 | .0162 | .0498 | .0318 | .0003 | .930 |
+| Gate, up and down | 1,000 | .0294 | .0782 | .0534 | .0031 | .841 |
+
+The prediction failed. In every group the gradient's shape lowers the next unseen batch's loss about three to five times faster than Muon's step, and the weak directions alone do almost nothing for it, yet the gradient's shape trains worse on value and output. So the help from weak directions is not a one-step drop in unseen loss, and this measure does not separate query and key from the others.
+
+The best lr for the gradient's shape was x.4 of Muon's on value and output at 250 steps and x.63 at 1,000, and on query and key x.63 and x1.6.
+
 ## 2026-11-05: Kaggle map, width 64, 8,000 steps (job map-d)
 
 `kaggle/out/map-d`, 7.25 GPU hours, base held-out 4.3148. Whole-matrix Muon baseline, gaps on worlds 5 to 9.

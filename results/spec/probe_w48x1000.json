@@ -1,0 +1,104 @@
+{
+"tier": "5sx4",
+"world": 0,
+"base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8",
+"every": 10,
+"rows": {
+"vo first 20%": {
+"flat": 0.0449,
+"grad": 0.2293,
+"top": 0.0881,
+"weak": 0.0009,
+"energy": 0.969,
+"samples": 76
+},
+"vo middle": {
+"flat": 0.0224,
+"grad": 0.0983,
+"top": 0.0448,
+"weak": -0.0,
+"energy": 0.9486,
+"samples": 200
+},
+"vo last 30%": {
+"flat": 0.0069,
+"grad": 0.0234,
+"top": 0.0118,
+"weak": 0.0011,
+"energy": 0.9332,
+"samples": 120
+},
+"vo whole run": {
+"flat": 0.022,
+"grad": 0.1007,
+"top": 0.0431,
+"weak": 0.0005,
+"energy": 0.9478,
+"samples": 396
+},
+"qk first 20%": {
+"flat": 0.0328,
+"grad": 0.1045,
+"top": 0.0638,
+"weak": 0.0011,
+"energy": 0.9237,
+"samples": 76
+},
+"qk middle": {
+"flat": 0.0157,
+"grad": 0.0448,
+"top": 0.0303,
+"weak": 0.0007,
+"energy": 0.9301,
+"samples": 200
+},
+"qk last 30%": {
+"flat": 0.0065,
+"grad": 0.0233,
+"top": 0.0143,
+"weak": -0.0007,
+"energy": 0.9325,
+"samples": 120
+},
+"qk whole run": {
+"flat": 0.0162,
+"grad": 0.0498,
+"top": 0.0318,
+"weak": 0.0003,
+"energy": 0.9296,
+"samples": 396
+},
+"ffn first 20%": {
+"flat": 0.0613,
+"grad": 0.1792,
+"top": 0.1083,
+"weak": 0.0083,
+"energy": 0.8854,
+"samples": 114
+},
+"ffn middle": {
+"flat": 0.0291,
+"grad": 0.0711,
+"top": 0.0533,
+"weak": 0.0028,
+"energy": 0.8426,
+"samples": 300
+},
+"ffn last 30%": {
+"flat": 0.0097,
+"grad": 0.026,
+"top": 0.0187,
+"weak": 0.0004,
+"energy": 0.8117,
+"samples": 180
+},
+"ffn whole run": {
+"flat": 0.0294,
+"grad": 0.0782,
+"top": 0.0534,
+"weak": 0.0031,
+"energy": 0.8414,
+"samples": 594
+}
+}
+}
