@@ -187,6 +187,23 @@ Exact orthogonalization by SVD on all seven gives -.0011 (.0014), so the shape c
 
 Exact orthogonalization on all seven gives -.0005 (.0011). Removing the weak directions costs about twice what moving to Adam costs, so a Muon step without them is worse than Adam, which keeps them. The feed-forward row found lr x4 alone while the all-seven row uses one shared factor, x1, so the all-seven cost is an upper bound until each group gets its own factor. Query and key still lose the least.
 
+## 2026-11-05: Which step shapes each group accepts, prediction before running
+
+Shumaylov et al. (2605.11181) report that on GPT-2 a Muon step with random singular values matches Muon, for the whole model. Their result and our weak-direction test both say the singular directions matter more than their exact sizes. Nobody has split this by group that we could find. `debug/spec_parts.py` keeps Muon's singular directions and changes only their sizes, in one group at a time, each step scaled to Muon's size: gradient's own shape (`p=1`), reversed sizes, random sizes.
+
+Prediction: on value, output and feed-forward, the gradient's own shape loses at least .005 and random and reversed sizes lose less than half of that. On query and key, no shape changes the loss by more than .004.
+
+Result at width 48, 250 steps, data in `results/spec/w48.jsonl`. Base 4.3606, gaps from whole-matrix Muon on worlds 5 to 9, lr factor chosen on worlds 0 and 1.
+
+| Group | Gradient's own shape | Random sizes | Reversed sizes |
+| --- | --- | --- | --- |
+| Value and output | -.0229 (.0020) | -.0018 (.0014) | -.0245 (.0022) |
+| Gate, up and down | -.0065 (.0013) | -.0024 (.0007) | -.0084 (.0020) |
+| Query and key | +.0029 (.0013) | -.0031 (.0009) | -.0445 (.0023) |
+| All seven | -.0245 (.0017) | -.0025 (.0015) | -.0837 (.0027) |
+
+Exact flat sizes on all seven give -.0011 (.0014) and square-root sizes (`p=.5`) give -.0134 (.0019). The prediction held for the gradient's shape and for random sizes, and failed for reversed sizes, which hurt every group and hurt query and key most. Random sizes match flat ones at this size, as Shumaylov et al. report on GPT-2. The groups differ: value and output need their weak directions at full size, while query and key do fine with the gradient's own shape and fail when the strong directions shrink.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
