@@ -147,6 +147,20 @@ At width 64, value and output go from -.0473 at step 250 to -.0043 at step 2,000
 
 Removing from all Muon at this size: value and output -.0136 (.0031), gate, up and down -.0026 (.0022), query and key +.0011 (.0014), all seven -.0145 (.0016), per-head +.0032 (.0013). Muon on value and output alone matches all Muon here. At width 48 with 250 steps it falls short by .0066 (.0020), at width 32 with 1,000 steps by .0032 (.0023), and in Wang et al.'s gated table by .175 of .371.
 
+## 2026-11-05: Muon on value and output alone, width 48, 4,000 steps
+
+`debug/map_parts.py 5sx16 --add-only`, data in `results/add/w48x4000.jsonl` and `w48x4000_out.jsonl`. All Muon 3.9826, all Adam 3.9965, so the whole gap is .0139. Gaps are from all Muon on worlds 5 to 9.
+
+| Muon on | Gap from all Muon | Gain over all Adam |
+| --- | --- | --- |
+| Query and key | -.0134 (.0007) | +.0005 |
+| Value and output | -.0041 (.0014) | +.0098 |
+| Gate, up and down | -.0106 (.0008) | +.0033 |
+| Value, output, gate, up, down | -.0025 (.0006) | +.0114 |
+| The same, Adam lr on query and key .01, other Muon lrs x.63 | -.0007 (.0004) | +.0132 |
+
+Muon on value and output alone matched all Muon at 1,000 steps (-.0001) but not at 4,000 (-.0041), so that match was not stable with length. The three group gains add to .0136 against a whole gap of .0139, so the groups still act close to additively. Query and key give +.0005, which is nothing.
+
 ## 2026-11-05: Why Muon helps: its weak directions, width 48, 250 steps
 
 Prediction written before running: removing weak directions from Muon's step hurts value and output far more than query and key. `debug/weak_parts.py`, data in `results/weak/w48.jsonl`. `optimizers/x_muon_shape.py` splits the step into its strongest quarter of directions and the weak rest. "Removed" drops the weak rest. "Scrambled" keeps its size and pairs each weak left direction with the wrong right direction, so it loses the gradient's information. The lr factor is chosen on worlds 0 and 1, and gaps are on worlds 5 to 9 from whole-matrix Muon.
