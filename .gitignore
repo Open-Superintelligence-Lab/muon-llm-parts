@@ -14,3 +14,4 @@ paper/*.pdf
 final_results.jsonl
 data
 results/random/*.jsonl
+results/papers/*.jsonl

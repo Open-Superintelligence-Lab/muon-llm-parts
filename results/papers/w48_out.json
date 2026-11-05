@@ -1,0 +1,231 @@
+{
+"tier": "5s",
+"base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8",
+"base_held": 4.3606,
+"rows": {
+"qk kaon": {
+"mean": -0.0029,
+"error": 0.0014,
+"wins": 1,
+"f": 1.0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_kaon:0.067:beta=0.9;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_kaon:0.067:beta=0.9;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk freon c=1/4": {
+"mean": 0.0032,
+"error": 0.0014,
+"wins": 5,
+"f": 0.63,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.04221:beta=0.8:p3=0.5:shape=2;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_rand:0.04221:beta=0.8:p3=0.5:shape=2;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk freon c=2/3": {
+"mean": -0.0132,
+"error": 0.0009,
+"wins": 0,
+"f": 0.63,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.04221:beta=0.8:p3=-0.3333:shape=2;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_rand:0.04221:beta=0.8:p3=-0.3333:shape=2;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk freon c=3/4": {
+"mean": -0.0198,
+"error": 0.0009,
+"wins": 0,
+"f": 1.0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.067:beta=0.9:p3=-0.5:shape=2;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_rand:0.067:beta=0.9:p3=-0.5:shape=2;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk freon c=1": {
+"mean": -0.0494,
+"error": 0.0022,
+"wins": 0,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.01675:beta=0.95:p3=-1:shape=2;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_rand:0.01675:beta=0.95:p3=-1:shape=2;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk dion3 f=.25": {
+"mean": -0.0056,
+"error": 0.0011,
+"wins": 0,
+"f": 0.63,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_dion3:0.04221:beta=0.8:f=0.25;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_dion3:0.04221:beta=0.8:f=0.25;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk dion3 f=.5": {
+"mean": -0.0063,
+"error": 0.0005,
+"wins": 0,
+"f": 0.4,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_dion3:0.0268:beta=0.8:f=0.5;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_dion3:0.0268:beta=0.8:f=0.5;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk dion3 f=1": {
+"mean": -0.0053,
+"error": 0.0009,
+"wins": 0,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_dion3:0.01675:beta=0.8:f=1;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_dion3:0.01675:beta=0.8:f=1;up=muon:0.026:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"vo kaon": {
+"mean": 0.0001,
+"error": 0.0027,
+"wins": 3,
+"f": 1.0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_kaon:0.051:beta=0.9;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_kaon:0.051:beta=0.9"
+},
+"vo freon c=1/4": {
+"mean": -0.0107,
+"error": 0.0016,
+"wins": 0,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.01275:beta=0.9:p3=0.5:shape=2;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_rand:0.01275:beta=0.9:p3=0.5:shape=2"
+},
+"vo freon c=2/3": {
+"mean": 0.0002,
+"error": 0.0018,
+"wins": 2,
+"f": 0.3969,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.02024:beta=0.95:p3=-0.3333:shape=2;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_rand:0.02024:beta=0.95:p3=-0.3333:shape=2"
+},
+"vo freon c=3/4": {
+"mean": 0.0004,
+"error": 0.0014,
+"wins": 4,
+"f": 1.0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.051:beta=0.95:p3=-0.5:shape=2;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_rand:0.051:beta=0.95:p3=-0.5:shape=2"
+},
+"vo freon c=1": {
+"mean": -0.0325,
+"error": 0.0014,
+"wins": 0,
+"f": 4.0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.204:beta=0.95:p3=-1:shape=2;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_rand:0.204:beta=0.95:p3=-1:shape=2"
+},
+"vo dion3 f=.25": {
+"mean": -0.0136,
+"error": 0.0019,
+"wins": 0,
+"f": 0.63,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_dion3:0.03213:beta=0.9:f=0.25;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_dion3:0.03213:beta=0.9:f=0.25"
+},
+"vo dion3 f=.5": {
+"mean": -0.0062,
+"error": 0.0016,
+"wins": 0,
+"f": 0.4,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_dion3:0.0204:beta=0.9:f=0.5;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_dion3:0.0204:beta=0.9:f=0.5"
+},
+"vo dion3 f=1": {
+"mean": 0.0001,
+"error": 0.0009,
+"wins": 2,
+"f": 0.4,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_dion3:0.0204:beta=0.95:f=1;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_dion3:0.0204:beta=0.95:f=1"
+},
+"ffn kaon": {
+"mean": -0.0014,
+"error": 0.001,
+"wins": 2,
+"f": 0.63,
+"spec": "down=x_kaon:0.03213:beta=0.95;emb=adam:0.19:b1=0.7;gate=x_kaon:0.01638:beta=0.95;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=x_kaon:0.01638:beta=0.95;v=muon:0.051:beta=0.8"
+},
+"ffn freon c=1/4": {
+"mean": -0.0015,
+"error": 0.0013,
+"wins": 1,
+"f": 0.25,
+"spec": "down=x_rand:0.01275:beta=0.9:p3=0.5:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.0065:beta=0.9:p3=0.5:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=x_rand:0.0065:beta=0.9:p3=0.5:shape=2;v=muon:0.051:beta=0.8"
+},
+"ffn freon c=2/3": {
+"mean": -0.0035,
+"error": 0.0016,
+"wins": 1,
+"f": 0.25,
+"spec": "down=x_rand:0.01275:beta=0.9:p3=-0.3333:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.0065:beta=0.9:p3=-0.3333:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=x_rand:0.0065:beta=0.9:p3=-0.3333:shape=2;v=muon:0.051:beta=0.8"
+},
+"ffn freon c=3/4": {
+"mean": -0.0016,
+"error": 0.0015,
+"wins": 2,
+"f": 0.25,
+"spec": "down=x_rand:0.01275:beta=0.95:p3=-0.5:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.0065:beta=0.95:p3=-0.5:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=x_rand:0.0065:beta=0.95:p3=-0.5:shape=2;v=muon:0.051:beta=0.8"
+},
+"ffn freon c=1": {
+"mean": -0.0085,
+"error": 0.0013,
+"wins": 0,
+"f": 0.25,
+"spec": "down=x_rand:0.01275:beta=0.95:p3=-1:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.0065:beta=0.95:p3=-1:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=x_rand:0.0065:beta=0.95:p3=-1:shape=2;v=muon:0.051:beta=0.8"
+},
+"ffn dion3 f=.25": {
+"mean": -0.0044,
+"error": 0.0014,
+"wins": 1,
+"f": 0.6349,
+"spec": "down=x_dion3:0.03238:beta=0.9:f=0.25;emb=adam:0.19:b1=0.7;gate=x_dion3:0.01651:beta=0.9:f=0.25;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=x_dion3:0.01651:beta=0.9:f=0.25;v=muon:0.051:beta=0.8"
+},
+"ffn dion3 f=.5": {
+"mean": -0.0024,
+"error": 0.0008,
+"wins": 0,
+"f": 0.4,
+"spec": "down=x_dion3:0.0204:beta=0.8:f=0.5;emb=adam:0.19:b1=0.7;gate=x_dion3:0.0104:beta=0.8:f=0.5;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=x_dion3:0.0104:beta=0.8:f=0.5;v=muon:0.051:beta=0.8"
+},
+"ffn dion3 f=1": {
+"mean": 0.0001,
+"error": 0.0008,
+"wins": 3,
+"f": 0.25,
+"spec": "down=x_dion3:0.01275:beta=0.95:f=1;emb=adam:0.19:b1=0.7;gate=x_dion3:0.0065:beta=0.95:f=1;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.067:beta=0.8;up=x_dion3:0.0065:beta=0.95:f=1;v=muon:0.051:beta=0.8"
+},
+"all kaon": {
+"mean": -0.0079,
+"error": 0.0018,
+"wins": 0,
+"f": 0.63,
+"spec": "down=x_kaon:0.03213:beta=0.9;emb=adam:0.19:b1=0.7;gate=x_kaon:0.01638:beta=0.9;head=adam:0.048:b1=0.3:b2=0.999;k=x_kaon:0.04221:beta=0.9;norm=adam:0.019:b2=0.9;o=x_kaon:0.03213:beta=0.9;q=x_kaon:0.04221:beta=0.9;up=x_kaon:0.01638:beta=0.9;v=x_kaon:0.03213:beta=0.9"
+},
+"all freon c=1/4": {
+"mean": -0.0112,
+"error": 0.0017,
+"wins": 0,
+"f": 0.25,
+"spec": "down=x_rand:0.01275:beta=0.9:p3=0.5:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.0065:beta=0.9:p3=0.5:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.01675:beta=0.9:p3=0.5:shape=2;norm=adam:0.019:b2=0.9;o=x_rand:0.01275:beta=0.9:p3=0.5:shape=2;q=x_rand:0.01675:beta=0.9:p3=0.5:shape=2;up=x_rand:0.0065:beta=0.9:p3=0.5:shape=2;v=x_rand:0.01275:beta=0.9:p3=0.5:shape=2"
+},
+"all freon c=2/3": {
+"mean": -0.013,
+"error": 0.0021,
+"wins": 0,
+"f": 0.63,
+"spec": "down=x_rand:0.03213:beta=0.9:p3=-0.3333:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.01638:beta=0.9:p3=-0.3333:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.04221:beta=0.9:p3=-0.3333:shape=2;norm=adam:0.019:b2=0.9;o=x_rand:0.03213:beta=0.9:p3=-0.3333:shape=2;q=x_rand:0.04221:beta=0.9:p3=-0.3333:shape=2;up=x_rand:0.01638:beta=0.9:p3=-0.3333:shape=2;v=x_rand:0.03213:beta=0.9:p3=-0.3333:shape=2"
+},
+"all freon c=3/4": {
+"mean": -0.0348,
+"error": 0.0011,
+"wins": 0,
+"f": 0.63,
+"spec": "down=x_rand:0.03213:beta=0.95:p3=-0.5:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.01638:beta=0.95:p3=-0.5:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.04221:beta=0.95:p3=-0.5:shape=2;norm=adam:0.019:b2=0.9;o=x_rand:0.03213:beta=0.95:p3=-0.5:shape=2;q=x_rand:0.04221:beta=0.95:p3=-0.5:shape=2;up=x_rand:0.01638:beta=0.95:p3=-0.5:shape=2;v=x_rand:0.03213:beta=0.95:p3=-0.5:shape=2"
+},
+"all freon c=1": {
+"mean": -0.0927,
+"error": 0.0026,
+"wins": 0,
+"f": 0.63,
+"spec": "down=x_rand:0.03213:beta=0.9:p3=-1:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.01638:beta=0.9:p3=-1:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.04221:beta=0.9:p3=-1:shape=2;norm=adam:0.019:b2=0.9;o=x_rand:0.03213:beta=0.9:p3=-1:shape=2;q=x_rand:0.04221:beta=0.9:p3=-1:shape=2;up=x_rand:0.01638:beta=0.9:p3=-1:shape=2;v=x_rand:0.03213:beta=0.9:p3=-1:shape=2"
+},
+"all dion3 f=.25": {
+"mean": -0.0189,
+"error": 0.0025,
+"wins": 0,
+"f": 0.63,
+"spec": "down=x_dion3:0.03213:beta=0.8:f=0.25;emb=adam:0.19:b1=0.7;gate=x_dion3:0.01638:beta=0.8:f=0.25;head=adam:0.048:b1=0.3:b2=0.999;k=x_dion3:0.04221:beta=0.8:f=0.25;norm=adam:0.019:b2=0.9;o=x_dion3:0.03213:beta=0.8:f=0.25;q=x_dion3:0.04221:beta=0.8:f=0.25;up=x_dion3:0.01638:beta=0.8:f=0.25;v=x_dion3:0.03213:beta=0.8:f=0.25"
+},
+"all dion3 f=.5": {
+"mean": -0.0147,
+"error": 0.0019,
+"wins": 0,
+"f": 0.4,
+"spec": "down=x_dion3:0.0204:beta=0.8:f=0.5;emb=adam:0.19:b1=0.7;gate=x_dion3:0.0104:beta=0.8:f=0.5;head=adam:0.048:b1=0.3:b2=0.999;k=x_dion3:0.0268:beta=0.8:f=0.5;norm=adam:0.019:b2=0.9;o=x_dion3:0.0204:beta=0.8:f=0.5;q=x_dion3:0.0268:beta=0.8:f=0.5;up=x_dion3:0.0104:beta=0.8:f=0.5;v=x_dion3:0.0204:beta=0.8:f=0.5"
+},
+"all dion3 f=1": {
+"mean": -0.008,
+"error": 0.002,
+"wins": 0,
+"f": 0.4,
+"spec": "down=x_dion3:0.0204:beta=0.8:f=1;emb=adam:0.19:b1=0.7;gate=x_dion3:0.0104:beta=0.8:f=1;head=adam:0.048:b1=0.3:b2=0.999;k=x_dion3:0.0268:beta=0.8:f=1;norm=adam:0.019:b2=0.9;o=x_dion3:0.0204:beta=0.8:f=1;q=x_dion3:0.0268:beta=0.8:f=1;up=x_dion3:0.0104:beta=0.8:f=1;v=x_dion3:0.0204:beta=0.8:f=1"
+}
+}
+}

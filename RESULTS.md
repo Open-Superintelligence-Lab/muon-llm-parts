@@ -450,13 +450,40 @@ The q,k survivors at 1,000 steps, with lr retuned on worlds 0,1:
 | centre-cols + muon+adam + tangent | +.0044 | -.0017 error .0014, 1/5 |
 | adam-scale + raw | +.0034 | +.0006 error .0017, 3/5 |
 
-Published rules on q,k at 1,000 steps gain: MuonSplit +.0019, Lion +.0015, RowNorm +.0008, Adam +.0002. The prediction held: no candidate passes the win rule at both lengths. Worlds 5-9 are not clean for these picks, because all six candidates were chosen from a list after tune worlds only but these worlds have scored earlier searches too.
+Published rules on q,k at 1,000 steps gain: MuonSplit +.0019, Lion +.0015, RowNorm +.0008, Adam +.0002. The prediction held: no candidate passes the win rule at both lengths. These candidates were picked on worlds 0,1, but worlds 5-9 have also scored earlier searches, so they are not fully clean.
 
 What this says: a 250-step q,k gain mostly fades by 1,000 steps. A 250-step screen therefore picks fast starters, so the next search runs at 1,000 steps directly.
 
 ## 2026-11-05: Random search at 1,000 steps, prediction before running
 
 The same candidates, 100 each on q,k, v,o and FFN, screened at width 48, 1,000 steps, tier `5sx4`. Prediction: no candidate passes the win rule at 1,000 steps. V,o and FFN stay at or below Muon, and q,k tops out near +.003.
+
+## 2026-11-05: Random search at 1,000 steps, results
+
+The prediction held. Width 48, 1,000 steps, gain on worlds 5-9, 100 candidates on each part.
+
+| Part | Beat base on world 0 | Best on worlds 5-9 |
+|---|---|---|
+| q,k | 67 of 100 | head-muon +.0041 error .0011, 5/5 (published as MuonSplit) |
+| v,o | 9 of 100 | plain Muon +.0013 error .0008, 3/5, at a different momentum |
+| FFN | 23 of 100 | adam-scale + spectrum-clip +.0009 error .0009, 4/5 |
+
+## 2026-11-05: Kaon, Freon and Dion3 on each part
+
+Vuk asked about Dion3 (NorDion2, microsoft/dion, 2608.11612) and 2605.11181 (Kaon and Freon). Kaon follows Algorithm 2 of the paper. Dion3 follows `nordion2.py` without weight decay. Freon is the exact SVD form of (GG^T)^-c G, resized to Muon's Frobenius norm instead of the paper's normalization. Width 48, 250 steps, lr and momentum tuned on worlds 0,1 per arm, scored on worlds 5-9.
+
+| Arm | q,k | v,o | FFN | All hidden matrices |
+|---|---|---|---|---|
+| Kaon | -.0029, 1/5 | +.0001, 3/5 | -.0014, 2/5 | -.0079, 0/5 |
+| Freon c=1/4 | +.0032, 5/5 | -.0107, 0/5 | -.0015, 1/5 | -.0112, 0/5 |
+| Freon c=2/3 | -.0132, 0/5 | +.0002, 2/5 | -.0035, 1/5 | -.0130, 0/5 |
+| Freon c=3/4 | -.0198, 0/5 | +.0004, 4/5 | -.0016, 2/5 | -.0348, 0/5 |
+| Freon c=1 | -.0494, 0/5 | -.0325, 0/5 | -.0085, 0/5 | -.0927, 0/5 |
+| Dion3 fraction .25 | -.0056, 0/5 | -.0136, 0/5 | -.0044, 1/5 | -.0189, 0/5 |
+| Dion3 fraction .5 | -.0063, 0/5 | -.0062, 0/5 | -.0024, 0/5 | -.0147, 0/5 |
+| Dion3 fraction 1 | -.0053, 0/5 | +.0001, 2/5 | +.0001, 3/5 | -.0080, 0/5 |
+
+On all hidden matrices at this size, every arm loses to Muon, so this does not reproduce the paper's tie at 124M. The parts disagree: v,o tolerates c above 1/2 while q,k does not, and q,k gains at c=1/4 where v,o loses. Next: sweep c from 0 to .8 on each part.
 
 ## Related results
 
