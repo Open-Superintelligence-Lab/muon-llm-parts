@@ -692,6 +692,33 @@ At width 512 every group needs Muon, and the order is the same as at width 48: F
 
 Muon on value and output alone recovers 60% of the all-Muon gain, FFN alone 20%, query and key nothing. With Muon on value, output and FFN and Adam on query and key, the model beats all Muon by .0056. This matches width 48: query and key do not need Muon.
 
+Same tests on FFN (`results/papers/band_ffn.json`, 10 worlds, Muon's FFN lrs, momentum .95): exact polar 1,1,1,1 -.0012 (4/10); .5 flat +.0003; .7 flat +.0006 (8/10); .7 .7 .7 1.4 +.0015 (.0012, 5/10); .32 .40 .48 .71 +.0007; 1 1 1 2 -.0016. No shape beats tuned Muon on FFN by more than one error, so the band gain is specific to value and output.
+
+Does the weakest quarter carry direction, or only size? `x_band.py` with `flip4=1` gives each bottom-quarter direction a random sign every step, which keeps the step size and removes the direction (v,o, 10 worlds):
+
+| Quarter steps | Real signs | Random signs in quarter 4 |
+|---|---|---|
+| .32 .32 .32 1.0 | +.0027 (.0008) | -.0001 (.0006) |
+| .32 .40 .48 .71 | +.0032 (.0007) | -.0003 (.0007) |
+| .32 .32 .32 .71 | +.0022 (.0007) | -.0009 (.0007) |
+| .32 .32 .32 1.77 | +.0016 (.0011) | -.0003 (.0005) |
+| .32 .32 .32 .15 | +.0012 (.0006) | |
+| .32 .32 .32 0 | -.0000 (.0005) | |
+
+With random signs the gain is gone, and dropping the weakest quarter gives 0 against +.0014 for keeping it at the flat size. So the weakest momentum directions carry real direction information; the gain is not noise or rank upkeep. This disagrees with the one-step probe above, which saw no signal at lag 1 or 20 in single noisy gradients.
+
+Momentum (v,o, 10 worlds):
+
+| Momentum | .32 .40 .48 .71 | .32 flat | .50 flat | .20 .25 .30 .45 |
+|---|---|---|---|---|
+| .8 | -.0003 (.0008) | -.0013 | -.0006 | |
+| .9 | +.0014 (.0009) | +.0009 | +.0008 | |
+| .95 | +.0032 (.0007) | +.0014 | +.0006 | |
+| .97 | +.0017 (.0008) | +.0001 | | +.0026 (.0009) |
+| .98 | +.0001 (.0011) | -.0001 | | +.0016 (.0008) |
+
+The gain needs momentum .95 and a step about a third of Muon's; the ramp beats the flat step at every momentum except .9. Longer momentum averages the gradient over more steps, which fits weak directions being slow, consistent signal that needs averaging to show.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.

@@ -3,7 +3,7 @@ import base64, io, json, os, sys, tarfile
 HERE = os.path.dirname(os.path.abspath(__file__)); SRC = os.path.dirname(HERE); name, tier, base, seed, *runs = sys.argv[1:]
 buf = io.BytesIO()
 with tarfile.open(fileobj=buf, mode="w:gz") as t:
-    for f in ("env.py", "evals.py", "rules.py", "arms.py", "runq.py", "sandbox.py", "debug/map_parts.py", "debug/papers_parts.py", "optimizers/x_rand.py", "optimizers/x_kaon.py", "optimizers/x_dion3.py", "optimizers/x_nsteps.py"): t.add(os.path.join(SRC, f), f)
+    for f in ("env.py", "evals.py", "rules.py", "arms.py", "runq.py", "sandbox.py", "debug/map_parts.py", "debug/papers_parts.py", "optimizers/x_rand.py", "optimizers/x_kaon.py", "optimizers/x_dion3.py", "optimizers/x_nsteps.py", "optimizers/x_band.py", "optimizers/x_hyc.py"): t.add(os.path.join(SRC, f), f)
     for f in ("facts.json", "counts.npy"): t.add(os.path.realpath(os.path.join(SRC, "data", f)), "data/" + f)
     t.add(base, "base_out.jsonl")
 job = os.path.join(HERE, name); os.makedirs(job, exist_ok=True)
