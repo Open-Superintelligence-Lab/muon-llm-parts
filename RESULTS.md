@@ -133,6 +133,20 @@ From the saved curves, averaged over worlds 5 to 9. Curve values use only the fi
 
 At width 64, value and output go from -.0473 at step 250 to -.0043 at step 2,000. Much of Muon's gain at these lengths is early speed, and the 8,000-step run tests whether it keeps shrinking.
 
+## 2026-11-05: Muon on value and output alone, width 48, 1,000 steps
+
+`debug/map_parts.py 5sx4 --add`, data in `results/add/w48x1000.jsonl`. All Muon scores 4.1323 and all Adam 4.1463 on worlds 5 to 9, with Adam's shared lr at .01.
+
+| Muon on | Against all Muon | Against all Adam |
+| --- | --- | --- |
+| Value and output only | -.0001 (.0016) | +.0139 |
+| Query and key only | -.0166 (.0026) | -.0026 |
+| Gate, up and down only | -.0144 (.0030) | -.0005 |
+| Value, output, gate, up and down | -.0001 (.0006) | +.0139 |
+| The same, with other Muon lrs and Adam on query and key retuned | +.0011 (.0014) | +.0150 |
+
+Removing from all Muon at this size: value and output -.0136 (.0031), gate, up and down -.0026 (.0022), query and key +.0011 (.0014), all seven -.0145 (.0016), per-head +.0032 (.0013). Muon on value and output alone matches all Muon here. At width 48 with 250 steps it falls short by .0066 (.0020), at width 32 with 1,000 steps by .0032 (.0023), and in Wang et al.'s gated table by .175 of .371.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
