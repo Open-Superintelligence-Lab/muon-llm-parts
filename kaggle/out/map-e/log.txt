@@ -1,0 +1,23 @@
+data ready 28 s
+GPU 0: Tesla T4 (UUID: GPU-bb43b5c6-b7c8-9f84-8298-c917a26604bb)
+GPU 1: Tesla T4 (UUID: GPU-314d8872-6ec7-3d93-6e82-939b07108ebb)
+
+== w128 hours left 11.29
+w128 tuning Muon
+  all Muon lrs x: 1 4.2594 of 3
+  all Adam lrs x: 1 4.2594 of 3
+  qk lr x: 1 4.2561 of 3
+  vo lr x: 0.63 4.2546 of 4
+  gu lr x: 1 4.2546 of 3
+  down lr x: 0.63 4.2539 of 4
+base down=muon:0.03213:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.03213:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.03213:beta=0.8 4.2539
+  Adam on all, lr: 0.004 4.2847 of 4
+  Adam on qk, lr: 0.01 4.2540 of 3
+  other Muon lrs x: 1 4.2540 of 3
+w128 all Muon 4.2629, all Adam 4.2895
+qk: loss 4.2904, vs all Muon -0.0276 error 0.0021, vs all Adam -0.0009
+vo: loss 4.2737, vs all Muon -0.0108 error 0.0029, vs all Adam +0.0158
+ffn: loss 4.2841, vs all Muon -0.0212 error 0.0007, vs all Adam +0.0054
+voffn: loss 4.2607, vs all Muon +0.0022 error 0.0016, vs all Adam +0.0288
+voffn_retuned: loss 4.2573, vs all Muon +0.0056 error 0.0014, vs all Adam +0.0322
+w128 done with code 0 at 64 min

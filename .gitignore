@@ -13,3 +13,4 @@ paper/*.fdb_latexmk
 paper/*.pdf
 final_results.jsonl
 data
+results/random/*.jsonl

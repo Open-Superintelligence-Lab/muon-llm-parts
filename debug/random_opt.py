@@ -35,7 +35,7 @@ def label(k): return " + ".join(NAMES[s][int(k.get(s, 0))] for s in NAMES if k.g
 
 
 def main():
-    p = argparse.ArgumentParser(); p.add_argument("--n", type=int, default=100); p.add_argument("--results", required=True); p.add_argument("--out", required=True); p.add_argument("--par", type=int, default=8); p.add_argument("--hours", type=float, default=.13); p.add_argument("--parts", default=""); p.add_argument("--top2", type=int, default=20); p.add_argument("--top3", type=int, default=6); p.add_argument("--check", action="store_true"); a = p.parse_args()
+    p = argparse.ArgumentParser(); p.add_argument("--n", type=int, default=100); p.add_argument("--results", required=True); p.add_argument("--out", required=True); p.add_argument("--par", type=int, default=8); p.add_argument("--hours", type=float, default=.13); p.add_argument("--parts", default=""); p.add_argument("--top2", type=int, default=20); p.add_argument("--top3", type=int, default=6); p.add_argument("--long", default=""); p.add_argument("--check", action="store_true"); a = p.parse_args()
     mp.PATH = os.path.abspath(a.results); os.makedirs(os.path.dirname(mp.PATH), exist_ok=True); parts = a.parts.split(",") if a.parts else list(PARTS)
     last = lambda f: arms.parse([json.loads(l) for l in open(f) if "gaps" in l][-1]["base"]); B250, B1k = last("results/add/w48_out.jsonl"), last("results/add/w48x1000_out.jsonl"); tune, held = [0, 1], [5, 6, 7, 8, 9]; H = 4
     def make(b, part, k, f): return {m: dict(k, rule="x_rand", lr=sig(LR0.get(part, g["lr"]) * f), h=H) if m in PARTS[part] else g for m, g in b.items()}
