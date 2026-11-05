@@ -79,6 +79,20 @@ Limits of this design: settings are tuned on 2 worlds, single matrices and joint
 
 Width 256 (`map-c`) and width 64 at 8,000 steps (`map-d`) were still running when this was written.
 
+## 2026-11-05: Adding Muon to Adam with fixed lrs, width 48, 250 steps
+
+Wang et al.'s design on our model, with `debug/map_parts.py 5s --add`, data in `results/add/w48.jsonl`. Adam everywhere uses one lr chosen on worlds 0 and 1 (.01). Muon lrs stay at the whole-matrix baseline's. All Muon scores 4.3606 and all Adam scores 4.3871 on worlds 5 to 9.
+
+| Muon on | Against all Muon | Against all Adam |
+| --- | --- | --- |
+| Query and key only | -.0244 (.0027) | +.0021 |
+| Value and output only | -.0066 (.0020) | +.0199 |
+| Gate, up and down only | -.0188 (.0029) | +.0077 |
+| Value, output, gate, up and down, with Adam's shared lr .01 on query and key | -.0025 (.0009) | +.0239 |
+| The same, with Adam's lr on query and key chosen on its own (.025) | +.0023 (.0012) | +.0288 |
+
+Query and key on Adam cost .0025 at Adam's shared lr and gain .0023 at their own lr, so at this size the sign of the query and key cost depends on that one lr. The whole-matrix map at this size is in `results/add/w48_out.jsonl`: value and output -.0198 (.0031), query and key +.0023 (.0012), gate, up and down -.0065 (.0027), per-head +.0022 (.0014).
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
