@@ -1,0 +1,35 @@
+{
+"tier": "5sx4",
+"base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8",
+"base_held": 4.1323,
+"rows": {
+"ffn c=0.4": {
+"mean": -0.0006,
+"error": 0.0012,
+"wins": 2,
+"f": 0.63,
+"spec": "down=x_rand:0.03213:beta=0.9:p3=0.2:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.006502:beta=0.9:p3=0.2:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_rand:0.006502:beta=0.9:p3=0.2:shape=2;v=muon:0.051:beta=0.8"
+},
+"ffn c=0.5": {
+"mean": 0.0011,
+"error": 0.0013,
+"wins": 4,
+"f": 1.0,
+"spec": "down=x_rand:0.051:beta=0.9:p3=0:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.01032:beta=0.9:p3=0:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_rand:0.01032:beta=0.9:p3=0:shape=2;v=muon:0.051:beta=0.8"
+},
+"ffn c=0.6": {
+"mean": 0.0012,
+"error": 0.0007,
+"wins": 4,
+"f": 0.63,
+"spec": "down=x_rand:0.03213:beta=0.9:p3=-0.2:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.006502:beta=0.9:p3=-0.2:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_rand:0.006502:beta=0.9:p3=-0.2:shape=2;v=muon:0.051:beta=0.8"
+},
+"ffn c=0.7": {
+"mean": -0.0001,
+"error": 0.0013,
+"wins": 3,
+"f": 0.6349,
+"spec": "down=x_rand:0.03238:beta=0.9:p3=-0.4:shape=2;emb=adam:0.19:b1=0.7;gate=x_rand:0.006552:beta=0.9:p3=-0.4:shape=2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_rand:0.006552:beta=0.9:p3=-0.4:shape=2;v=muon:0.051:beta=0.8"
+}
+}
+}

@@ -58,6 +58,13 @@
 "wins": 1,
 "f": 1.0,
 "spec": "down=x_dion3:0.051:beta=0.8:f=0.5;emb=adam:0.19:b1=0.7;gate=x_dion3:0.01032:beta=0.8:f=0.5;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_dion3:0.01032:beta=0.8:f=0.5;v=muon:0.051:beta=0.8"
+},
+"ffn dion3 f=1": {
+"mean": 0.0012,
+"error": 0.0012,
+"wins": 3,
+"f": 1.0,
+"spec": "down=x_dion3:0.051:beta=0.8:f=1;emb=adam:0.19:b1=0.7;gate=x_dion3:0.01032:beta=0.8:f=1;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_dion3:0.01032:beta=0.8:f=1;v=muon:0.051:beta=0.8"
 }
 }
 }

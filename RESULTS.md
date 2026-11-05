@@ -500,7 +500,7 @@ Width 48, gain on worlds 5-9, lr and momentum tuned on worlds 0,1 per arm. Each 
 | .7 | -.0155, 0/5 | not run | +.0013, 4/5 | +.0030, 5/5 | -.0022, 2/5 |
 | .8 | -.0253, 0/5 | not run | -.0048, 1/5 | +.0007, 3/5 | -.0036, 1/5 |
 
-Each gain has an error near .0015. Below c=.5, v,o loses at both lengths. From c=.5 to .8 at 1,000 steps it sits between +.0007 and +.0030, with no clear peak. Q,k gains at low c only at 250 steps, so that gain is a fast start.
+Each gain has an error between .0005 and .0024. FFN at 1,000 steps: c=.4 -.0006 2/5, .5 +.0011 4/5, .6 +.0012 4/5, .7 -.0001 3/5. Below c=.5, v,o loses at both lengths. From c=.5 to .8 at 1,000 steps it sits between +.0007 and +.0030, with no clear peak. Q,k gains at low c only at 250 steps, so that gain is a fast start.
 
 Newton-Schulz steps on v,o at 1,000 steps: 1 -.0102, 2 -.0030, 3 +.0002, 4 +.0008, 5 +.0005 (control, retuned Muon), 7 +.0010, 10 +.0017, 20 +.0008. Three steps already match Muon, and more steps add nothing clear.
 
@@ -511,7 +511,7 @@ Published arms at 1,000 steps:
 | Kaon | -.0010, 2/5 | +.0021, 3/5 | -.0001, 4/5 |
 | Dion3 fraction .25 | -.0015, 2/5 | -.0078, 0/5 | -.0046, 0/5 |
 | Dion3 fraction .5 | -.0049, 0/5 | -.0036, 1/5 | -.0010, 1/5 |
-| Dion3 fraction 1 | -.0031, 2/5 | +.0021, 4/5 | not finished |
+| Dion3 fraction 1 | -.0031, 2/5 | +.0021, 4/5 | +.0012, 3/5 |
 
 Dion3 is built to cut step cost, and this bench does not score cost. Its README says larger models tolerate a smaller fraction, so these small runs do not test that claim.
 

@@ -1,0 +1,4174 @@
+{
+"n": 300,
+"base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8",
+"screen": {
+"vo": [
+{
+"i": 231,
+"k": {
+"shape": 0,
+"beta": 0.8,
+"pre": 3,
+"size": 2,
+"post": 1,
+"p4": 0.5,
+"p5": 0.0
+},
+"f": 1,
+"gain": 0.0034,
+"name": "global-norm + muon + agreement + lookahead"
+},
+{
+"i": 19,
+"k": {
+"shape": 24,
+"beta": 0.95,
+"pre": 9,
+"mom": 3,
+"p1": 1.0,
+"p2": 0.25
+},
+"f": 0.35,
+"gain": 0.0033,
+"name": "row-clip + two-speed + col-then-muon"
+},
+{
+"i": 256,
+"k": {
+"shape": 0,
+"beta": 0.95,
+"post": 1,
+"p5": 0.0
+},
+"f": 0.35,
+"gain": 0.0032,
+"name": "muon + lookahead"
+},
+{
+"i": 130,
+"k": {
+"shape": 21,
+"beta": 0.95,
+"pre": 7,
+"post": 1,
+"p1": 0.5,
+"p3": 0.25,
+"p5": 0.0
+},
+"f": 0.35,
+"gain": 0.0031,
+"name": "adam-scale + muon-keep-rows + lookahead"
+},
+{
+"i": 218,
+"k": {
+"shape": 2,
+"beta": 0.7,
+"pre": 2,
+"mom": 3,
+"p2": 0.75,
+"p3": -0.1
+},
+"f": 1,
+"gain": 0.0031,
+"name": "centre-cols + two-speed + soft-power"
+},
+{
+"i": 35,
+"k": {
+"shape": 12,
+"beta": 0.8,
+"mom": 7,
+"p2": 0.75,
+"p3": 0.25
+},
+"f": 0.35,
+"gain": 0.0025,
+"name": "sign-agree + low-rank"
+},
+{
+"i": 94,
+"k": {
+"shape": 24,
+"beta": 0.7
+},
+"f": 1,
+"gain": 0.0024,
+"name": "col-then-muon"
+},
+{
+"i": 155,
+"k": {
+"shape": 21,
+"beta": 0.7,
+"p3": 0.25
+},
+"f": 1,
+"gain": 0.0024,
+"name": "muon-keep-rows"
+},
+{
+"i": 68,
+"k": {
+"shape": 2,
+"beta": 0.8,
+"pre": 4,
+"mom": 4,
+"size": 2,
+"p2": 0.75,
+"p3": -0.25,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": 0.0022,
+"name": "row-norm + quasi-hyperbolic + soft-power + agreement"
+},
+{
+"i": 281,
+"k": {
+"shape": 0,
+"beta": 0.9
+},
+"f": 0.35,
+"gain": 0.0022,
+"name": "muon"
+},
+{
+"i": 168,
+"k": {
+"shape": 2,
+"beta": 0.95,
+"post": 4,
+"p3": -0.1,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": 0.0017,
+"name": "soft-power + ortho-pull"
+},
+{
+"i": 219,
+"k": {
+"shape": 24,
+"beta": 0.8,
+"mom": 7,
+"size": 1,
+"p2": 0.75,
+"p4": 1.0
+},
+"f": 1,
+"gain": 0.0017,
+"name": "sign-agree + col-then-muon + grad-size"
+},
+{
+"i": 92,
+"k": {
+"shape": 23,
+"beta": 0.8,
+"size": 9,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": 0.0016,
+"name": "row-then-muon + cycle"
+},
+{
+"i": 202,
+"k": {
+"shape": 17,
+"beta": 0.7,
+"mom": 4,
+"p2": 0.75,
+"p3": 0.1
+},
+"f": 1,
+"gain": 0.0016,
+"name": "quasi-hyperbolic + muon+adam"
+},
+{
+"i": 280,
+"k": {
+"shape": 21,
+"beta": 0.7,
+"pre": 2,
+"p3": 0.5
+},
+"f": 1,
+"gain": 0.0015,
+"name": "centre-cols + muon-keep-rows"
+},
+{
+"i": 156,
+"k": {
+"shape": 0,
+"beta": 0.8,
+"pre": 3
+},
+"f": 0.35,
+"gain": 0.0014,
+"name": "global-norm + muon"
+},
+{
+"i": 194,
+"k": {
+"shape": 24,
+"beta": 0.8,
+"mom": 4,
+"size": 9,
+"p2": 0.75,
+"p4": 0.25
+},
+"f": 0.35,
+"gain": 0.0013,
+"name": "quasi-hyperbolic + col-then-muon + cycle"
+},
+{
+"i": 67,
+"k": {
+"shape": 23,
+"beta": 0.7
+},
+"f": 1,
+"gain": 0.0012,
+"name": "row-then-muon"
+},
+{
+"i": 142,
+"k": {
+"shape": 23,
+"beta": 0.7,
+"mom": 1
+},
+"f": 0.35,
+"gain": 0.0011,
+"name": "heavy + row-then-muon"
+},
+{
+"i": 2,
+"k": {
+"shape": 17,
+"beta": 0.95,
+"mom": 3,
+"size": 2,
+"p2": 0.5,
+"p3": 0.1,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": 0.0009,
+"name": "two-speed + muon+adam + agreement"
+},
+{
+"i": 292,
+"k": {
+"shape": 23,
+"beta": 0.8,
+"pre": 2
+},
+"f": 1,
+"gain": 0.0009,
+"name": "centre-cols + row-then-muon"
+},
+{
+"i": 211,
+"k": {
+"shape": 18,
+"beta": 0.9,
+"size": 2,
+"p3": 0.67,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": 0.0007,
+"name": "few-ns + agreement"
+},
+{
+"i": 86,
+"k": {
+"shape": 18,
+"beta": 0.8,
+"pre": 2,
+"post": 6,
+"p3": 0.67,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": 0.0004,
+"name": "centre-cols + few-ns + centre"
+},
+{
+"i": 31,
+"k": {
+"shape": 0,
+"beta": 0.7,
+"size": 2,
+"p4": 0.5
+},
+"f": 1,
+"gain": 0.0003,
+"name": "muon + agreement"
+},
+{
+"i": 223,
+"k": {
+"shape": 15,
+"beta": 0.7,
+"mom": 1,
+"p3": 0.1
+},
+"f": 0.35,
+"gain": 0.0002,
+"name": "heavy + muon+sign"
+},
+{
+"i": 56,
+"k": {
+"shape": 0,
+"beta": 0.8
+},
+"f": 1,
+"gain": 0.0,
+"name": "muon"
+},
+{
+"i": 198,
+"k": {
+"shape": 15,
+"beta": 0.7,
+"pre": 4,
+"post": 6,
+"p3": 0.1,
+"p5": 0.1
+},
+"f": 1,
+"gain": -0.0001,
+"name": "row-norm + muon+sign + centre"
+},
+{
+"i": 69,
+"k": {
+"shape": 24,
+"beta": 0.9,
+"pre": 6,
+"p1": 0.5
+},
+"f": 0.35,
+"gain": -0.0002,
+"name": "sign-mix + col-then-muon"
+},
+{
+"i": 39,
+"k": {
+"shape": 13,
+"beta": 0.9,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0005,
+"name": "drop-top"
+},
+{
+"i": 193,
+"k": {
+"shape": 2,
+"beta": 0.8,
+"size": 7,
+"p3": -0.1
+},
+"f": 1,
+"gain": -0.0006,
+"name": "soft-power + tangent"
+},
+{
+"i": 42,
+"k": {
+"shape": 23,
+"beta": 0.8,
+"size": 4,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0007,
+"name": "row-then-muon + row-size"
+},
+{
+"i": 167,
+"k": {
+"shape": 23,
+"beta": 0.95
+},
+"f": 0.35,
+"gain": -0.0007,
+"name": "row-then-muon"
+},
+{
+"i": 200,
+"k": {
+"shape": 8,
+"beta": 0.95
+},
+"f": 0.35,
+"gain": -0.0007,
+"name": "qr"
+},
+{
+"i": 217,
+"k": {
+"shape": 23,
+"beta": 0.95
+},
+"f": 0.35,
+"gain": -0.0007,
+"name": "row-then-muon"
+},
+{
+"i": 114,
+"k": {
+"shape": 13,
+"beta": 0.8,
+"mom": 8,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0008,
+"name": "row-restart + drop-top"
+},
+{
+"i": 262,
+"k": {
+"shape": 11,
+"beta": 0.95,
+"pre": 9,
+"mom": 3,
+"p1": 0.5,
+"p2": 0.5,
+"p3": 0.75
+},
+"f": 0.35,
+"gain": -0.0008,
+"name": "row-clip + two-speed + spectrum-clip"
+},
+{
+"i": 48,
+"k": {
+"shape": 15,
+"beta": 0.8,
+"p3": 0.25
+},
+"f": 0.35,
+"gain": -0.0011,
+"name": "muon+sign"
+},
+{
+"i": 52,
+"k": {
+"shape": 17,
+"beta": 0.8,
+"pre": 8,
+"mom": 4,
+"post": 6,
+"p1": 0.5,
+"p2": 0.75,
+"p3": 0.1,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0013,
+"name": "clip + quasi-hyperbolic + muon+adam + centre"
+},
+{
+"i": 185,
+"k": {
+"shape": 12,
+"beta": 0.7,
+"pre": 1,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0013,
+"name": "centre-rows + low-rank"
+},
+{
+"i": 230,
+"k": {
+"shape": 21,
+"beta": 0.7,
+"pre": 7,
+"mom": 4,
+"p1": 0.25,
+"p2": 0.75,
+"p3": 1.0
+},
+"f": 1,
+"gain": -0.0013,
+"name": "adam-scale + quasi-hyperbolic + muon-keep-rows"
+},
+{
+"i": 105,
+"k": {
+"shape": 21,
+"beta": 0.95,
+"p3": 1.0
+},
+"f": 0.35,
+"gain": -0.0014,
+"name": "muon-keep-rows"
+},
+{
+"i": 269,
+"k": {
+"shape": 24,
+"beta": 0.95,
+"pre": 10,
+"mom": 3,
+"p1": 1.0,
+"p2": 0.75
+},
+"f": 1,
+"gain": -0.0014,
+"name": "grad-diff + two-speed + col-then-muon"
+},
+{
+"i": 144,
+"k": {
+"shape": 24,
+"beta": 0.8,
+"mom": 4,
+"size": 5,
+"post": 4,
+"p2": 0.75,
+"p4": 0.25,
+"p5": 0.01
+},
+"f": 1,
+"gain": -0.0015,
+"name": "quasi-hyperbolic + col-then-muon + fade + ortho-pull"
+},
+{
+"i": 88,
+"k": {
+"shape": 10,
+"beta": 0.8,
+"mom": 3,
+"p2": 0.75
+},
+"f": 1,
+"gain": -0.0016,
+"name": "two-speed + col-block-muon"
+},
+{
+"i": 164,
+"k": {
+"shape": 13,
+"beta": 0.7,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0016,
+"name": "drop-top"
+},
+{
+"i": 53,
+"k": {
+"shape": 22,
+"beta": 0.95,
+"size": 9,
+"p3": 0.1,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0018,
+"name": "muon-times-size + cycle"
+},
+{
+"i": 102,
+"k": {
+"shape": 17,
+"beta": 0.8,
+"pre": 7,
+"size": 3,
+"p1": 0.25,
+"p3": 0.1,
+"p4": -0.5
+},
+"f": 1,
+"gain": -0.0018,
+"name": "adam-scale + muon+adam + weight-size"
+},
+{
+"i": 115,
+"k": {
+"shape": 9,
+"beta": 0.7,
+"pre": 9,
+"size": 6,
+"p1": 0.25,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0018,
+"name": "row-clip + head-muon + grow"
+},
+{
+"i": 127,
+"k": {
+"shape": 17,
+"beta": 0.9,
+"post": 6,
+"p3": 0.25,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0018,
+"name": "muon+adam + centre"
+},
+{
+"i": 87,
+"k": {
+"shape": 11,
+"beta": 0.7,
+"mom": 4,
+"post": 4,
+"p2": 0.25,
+"p3": 0.5,
+"p5": 0.01
+},
+"f": 1,
+"gain": -0.0019,
+"name": "quasi-hyperbolic + spectrum-clip + ortho-pull"
+},
+{
+"i": 192,
+"k": {
+"shape": 23,
+"beta": 0.7,
+"pre": 10,
+"p1": 0.25
+},
+"f": 1,
+"gain": -0.0019,
+"name": "grad-diff + row-then-muon"
+},
+{
+"i": 89,
+"k": {
+"shape": 13,
+"beta": 0.7,
+"mom": 9,
+"p3": 0.25
+},
+"f": 0.35,
+"gain": -0.0023,
+"name": "after-shape + drop-top"
+},
+{
+"i": 15,
+"k": {
+"shape": 9,
+"beta": 0.8
+},
+"f": 0.35,
+"gain": -0.0024,
+"name": "head-muon"
+},
+{
+"i": 55,
+"k": {
+"shape": 21,
+"beta": 0.7,
+"pre": 4,
+"size": 7,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0024,
+"name": "row-norm + muon-keep-rows + tangent"
+},
+{
+"i": 177,
+"k": {
+"shape": 17,
+"beta": 0.95,
+"mom": 8,
+"post": 6,
+"p3": 0.25,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0024,
+"name": "row-restart + muon+adam + centre"
+},
+{
+"i": 212,
+"k": {
+"shape": 11,
+"beta": 0.8,
+"size": 9,
+"p3": 0.75,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0024,
+"name": "spectrum-clip + cycle"
+},
+{
+"i": 240,
+"k": {
+"shape": 9,
+"beta": 0.8
+},
+"f": 0.35,
+"gain": -0.0024,
+"name": "head-muon"
+},
+{
+"i": 237,
+"k": {
+"shape": 11,
+"beta": 0.9,
+"pre": 8,
+"mom": 8,
+"size": 1,
+"p1": 0.5,
+"p3": 0.5,
+"p4": 0.25
+},
+"f": 1,
+"gain": -0.0025,
+"name": "clip + row-restart + spectrum-clip + grad-size"
+},
+{
+"i": 44,
+"k": {
+"shape": 24,
+"beta": 0.95,
+"mom": 8,
+"size": 1,
+"p4": 0.5
+},
+"f": 1,
+"gain": -0.0026,
+"name": "row-restart + col-then-muon + grad-size"
+},
+{
+"i": 140,
+"k": {
+"shape": 9,
+"beta": 0.7,
+"pre": 8,
+"p1": 1.0
+},
+"f": 1,
+"gain": -0.0026,
+"name": "clip + head-muon"
+},
+{
+"i": 253,
+"k": {
+"shape": 22,
+"beta": 0.7,
+"pre": 9,
+"p1": 0.25,
+"p3": 0.1
+},
+"f": 1,
+"gain": -0.0026,
+"name": "row-clip + muon-times-size"
+},
+{
+"i": 152,
+"k": {
+"shape": 17,
+"beta": 0.8,
+"pre": 4,
+"mom": 1,
+"size": 3,
+"p3": 0.5,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0027,
+"name": "row-norm + heavy + muon+adam + weight-size"
+},
+{
+"i": 173,
+"k": {
+"shape": 15,
+"beta": 0.7,
+"pre": 2,
+"size": 3,
+"post": 1,
+"p3": 0.25,
+"p4": 0.5,
+"p5": 0.0
+},
+"f": 1,
+"gain": -0.0027,
+"name": "centre-cols + muon+sign + weight-size + lookahead"
+},
+{
+"i": 65,
+"k": {
+"shape": 9,
+"beta": 0.8,
+"pre": 10,
+"mom": 1,
+"post": 4,
+"p1": 0.5,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.0029,
+"name": "grad-diff + heavy + head-muon + ortho-pull"
+},
+{
+"i": 25,
+"k": {
+"shape": 8,
+"beta": 0.8,
+"pre": 10,
+"p1": 0.25
+},
+"f": 1,
+"gain": -0.003,
+"name": "grad-diff + qr"
+},
+{
+"i": 28,
+"k": {
+"shape": 22,
+"beta": 0.95,
+"pre": 6,
+"p1": 0.5,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.003,
+"name": "sign-mix + muon-times-size"
+},
+{
+"i": 290,
+"k": {
+"shape": 9,
+"beta": 0.8,
+"pre": 4,
+"size": 1,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.003,
+"name": "row-norm + head-muon + grad-size"
+},
+{
+"i": 40,
+"k": {
+"shape": 9,
+"beta": 0.7,
+"mom": 4,
+"p2": 0.5
+},
+"f": 1,
+"gain": -0.0031,
+"name": "quasi-hyperbolic + head-muon"
+},
+{
+"i": 179,
+"k": {
+"shape": 16,
+"beta": 0.8,
+"size": 3,
+"p3": 0.25,
+"p4": -0.5
+},
+"f": 1,
+"gain": -0.0031,
+"name": "muon+raw + weight-size"
+},
+{
+"i": 188,
+"k": {
+"shape": 10,
+"beta": 0.7,
+"size": 1,
+"post": 6,
+"p4": 0.5,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0031,
+"name": "col-block-muon + grad-size + centre"
+},
+{
+"i": 279,
+"k": {
+"shape": 16,
+"beta": 0.9,
+"mom": 7,
+"p2": 0.75,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0031,
+"name": "sign-agree + muon+raw"
+},
+{
+"i": 139,
+"k": {
+"shape": 13,
+"beta": 0.95,
+"pre": 8,
+"p1": 0.25,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0032,
+"name": "clip + drop-top"
+},
+{
+"i": 210,
+"k": {
+"shape": 12,
+"beta": 0.9,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0032,
+"name": "low-rank"
+},
+{
+"i": 17,
+"k": {
+"shape": 23,
+"beta": 0.8,
+"pre": 10,
+"size": 8,
+"p1": 1.0
+},
+"f": 1,
+"gain": -0.0033,
+"name": "grad-diff + row-then-muon + row-tangent"
+},
+{
+"i": 13,
+"k": {
+"shape": 10,
+"beta": 0.95,
+"pre": 3
+},
+"f": 0.35,
+"gain": -0.0034,
+"name": "global-norm + col-block-muon"
+},
+{
+"i": 154,
+"k": {
+"shape": 16,
+"beta": 0.8,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0034,
+"name": "muon+raw"
+},
+{
+"i": 248,
+"k": {
+"shape": 15,
+"beta": 0.8,
+"mom": 6,
+"p3": 0.1
+},
+"f": 1,
+"gain": -0.0034,
+"name": "restart + muon+sign"
+},
+{
+"i": 289,
+"k": {
+"shape": 13,
+"beta": 0.9,
+"pre": 5,
+"mom": 7,
+"p2": 0.5,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0034,
+"name": "col-norm + sign-agree + drop-top"
+},
+{
+"i": 264,
+"k": {
+"shape": 13,
+"beta": 0.95,
+"size": 4,
+"p3": 0.5,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0035,
+"name": "drop-top + row-size"
+},
+{
+"i": 150,
+"k": {
+"shape": 8,
+"beta": 0.9,
+"pre": 1,
+"post": 6,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0036,
+"name": "centre-rows + qr + centre"
+},
+{
+"i": 294,
+"k": {
+"shape": 24,
+"beta": 0.8,
+"pre": 3,
+"size": 8
+},
+"f": 1,
+"gain": -0.0036,
+"name": "global-norm + col-then-muon + row-tangent"
+},
+{
+"i": 23,
+"k": {
+"shape": 15,
+"beta": 0.95,
+"pre": 6,
+"p1": 0.5,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0037,
+"name": "sign-mix + muon+sign"
+},
+{
+"i": 205,
+"k": {
+"shape": 21,
+"beta": 0.9,
+"mom": 9,
+"p3": 0.25
+},
+"f": 0.35,
+"gain": -0.0038,
+"name": "after-shape + muon-keep-rows"
+},
+{
+"i": 128,
+"k": {
+"shape": 22,
+"beta": 0.9,
+"mom": 8,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0039,
+"name": "row-restart + muon-times-size"
+},
+{
+"i": 165,
+"k": {
+"shape": 9,
+"beta": 0.7,
+"pre": 1
+},
+"f": 1,
+"gain": -0.004,
+"name": "centre-rows + head-muon"
+},
+{
+"i": 263,
+"k": {
+"shape": 10,
+"beta": 0.8,
+"mom": 7,
+"size": 2,
+"p2": 0.25,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.004,
+"name": "sign-agree + col-block-muon + agreement"
+},
+{
+"i": 229,
+"k": {
+"shape": 16,
+"beta": 0.95,
+"size": 3,
+"p3": 0.25,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0041,
+"name": "muon+raw + weight-size"
+},
+{
+"i": 255,
+"k": {
+"shape": 21,
+"beta": 0.7,
+"pre": 8,
+"p1": 0.5,
+"p3": 0.5
+},
+"f": 1,
+"gain": -0.0041,
+"name": "clip + muon-keep-rows"
+},
+{
+"i": 36,
+"k": {
+"shape": 18,
+"beta": 0.8,
+"pre": 6,
+"mom": 6,
+"p1": 0.25,
+"p3": 0.67
+},
+"f": 1,
+"gain": -0.0043,
+"name": "sign-mix + restart + few-ns"
+},
+{
+"i": 250,
+"k": {
+"shape": 8,
+"beta": 0.7
+},
+"f": 1,
+"gain": -0.0045,
+"name": "qr"
+},
+{
+"i": 175,
+"k": {
+"shape": 8,
+"beta": 0.9,
+"pre": 10,
+"p1": 1.0
+},
+"f": 0.35,
+"gain": -0.0046,
+"name": "grad-diff + qr"
+},
+{
+"i": 275,
+"k": {
+"shape": 8,
+"beta": 0.8,
+"pre": 9,
+"p1": 0.5
+},
+"f": 1,
+"gain": -0.0046,
+"name": "row-clip + qr"
+},
+{
+"i": 73,
+"k": {
+"shape": 15,
+"beta": 0.9,
+"post": 1,
+"p3": 0.25,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.0048,
+"name": "muon+sign + lookahead"
+},
+{
+"i": 227,
+"k": {
+"shape": 17,
+"beta": 0.95,
+"mom": 5,
+"p2": 0.75,
+"p3": 0.1
+},
+"f": 2.8,
+"gain": -0.0049,
+"name": "pid + muon+adam"
+},
+{
+"i": 5,
+"k": {
+"shape": 21,
+"beta": 0.9,
+"pre": 7,
+"size": 5,
+"post": 4,
+"p1": 1.0,
+"p3": 0.25,
+"p4": 0.25,
+"p5": 0.1
+},
+"f": 1,
+"gain": -0.005,
+"name": "adam-scale + muon-keep-rows + fade + ortho-pull"
+},
+{
+"i": 214,
+"k": {
+"shape": 13,
+"beta": 0.9,
+"mom": 6,
+"size": 4,
+"p3": 0.0,
+"p4": 1.0
+},
+"f": 1,
+"gain": -0.005,
+"name": "restart + drop-top + row-size"
+},
+{
+"i": 273,
+"k": {
+"shape": 15,
+"beta": 0.7,
+"pre": 5,
+"size": 8,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.005,
+"name": "col-norm + muon+sign + row-tangent"
+},
+{
+"i": 119,
+"k": {
+"shape": 24,
+"beta": 0.95,
+"pre": 4,
+"mom": 8,
+"size": 7
+},
+"f": 1,
+"gain": -0.0051,
+"name": "row-norm + row-restart + col-then-muon + tangent"
+},
+{
+"i": 81,
+"k": {
+"shape": 0,
+"beta": 0.8,
+"size": 1,
+"post": 4,
+"p4": 1.0,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0052,
+"name": "muon + grad-size + ortho-pull"
+},
+{
+"i": 110,
+"k": {
+"shape": 12,
+"beta": 0.7,
+"post": 6,
+"p3": 0.5,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0053,
+"name": "low-rank + centre"
+},
+{
+"i": 204,
+"k": {
+"shape": 16,
+"beta": 0.7,
+"pre": 6,
+"size": 2,
+"p1": 0.5,
+"p3": 0.5,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0053,
+"name": "sign-mix + muon+raw + agreement"
+},
+{
+"i": 182,
+"k": {
+"shape": 3,
+"beta": 0.95,
+"pre": 5
+},
+"f": 0.35,
+"gain": -0.0056,
+"name": "col-norm + rownorm"
+},
+{
+"i": 113,
+"k": {
+"shape": 10,
+"beta": 0.95,
+"pre": 1,
+"post": 1,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.0059,
+"name": "centre-rows + col-block-muon + lookahead"
+},
+{
+"i": 6,
+"k": {
+"shape": 0,
+"beta": 0.9,
+"pre": 5,
+"mom": 6,
+"size": 5,
+"post": 3,
+"p4": 0.25,
+"p5": 0.01
+},
+"f": 2.8,
+"gain": -0.006,
+"name": "col-norm + restart + muon + fade + decay"
+},
+{
+"i": 239,
+"k": {
+"shape": 13,
+"beta": 0.7,
+"pre": 5,
+"mom": 8,
+"post": 1,
+"p3": 0.5,
+"p5": 0.0
+},
+"f": 1,
+"gain": -0.006,
+"name": "col-norm + row-restart + drop-top + lookahead"
+},
+{
+"i": 43,
+"k": {
+"shape": 2,
+"beta": 0.9,
+"mom": 9,
+"size": 3,
+"p3": -0.1,
+"p4": -0.5
+},
+"f": 0.35,
+"gain": -0.0061,
+"name": "after-shape + soft-power + weight-size"
+},
+{
+"i": 77,
+"k": {
+"shape": 17,
+"beta": 0.8,
+"pre": 2,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0061,
+"name": "centre-cols + muon+adam"
+},
+{
+"i": 125,
+"k": {
+"shape": 8,
+"beta": 0.7,
+"pre": 3,
+"size": 1,
+"p4": 1.0
+},
+"f": 1,
+"gain": -0.0061,
+"name": "global-norm + qr + grad-size"
+},
+{
+"i": 153,
+"k": {
+"shape": 22,
+"pre": 8,
+"mom": 2,
+"size": 8,
+"post": 4,
+"p1": 1.0,
+"p3": 0.1,
+"p5": 0.01
+},
+"f": 1,
+"gain": -0.0062,
+"name": "clip + none + muon-times-size + row-tangent + ortho-pull"
+},
+{
+"i": 80,
+"k": {
+"shape": 21,
+"beta": 0.95,
+"mom": 9,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0063,
+"name": "after-shape + muon-keep-rows"
+},
+{
+"i": 235,
+"k": {
+"shape": 12,
+"beta": 0.8,
+"size": 8,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0066,
+"name": "low-rank + row-tangent"
+},
+{
+"i": 238,
+"k": {
+"shape": 10,
+"beta": 0.7,
+"mom": 7,
+"size": 4,
+"p2": 0.25,
+"p4": 0.5
+},
+"f": 1,
+"gain": -0.0066,
+"name": "sign-agree + col-block-muon + row-size"
+},
+{
+"i": 112,
+"k": {
+"shape": 11,
+"beta": 0.95,
+"pre": 3,
+"post": 1,
+"p3": 0.9,
+"p5": 0.0
+},
+"f": 0.35,
+"gain": -0.0067,
+"name": "global-norm + spectrum-clip + lookahead"
+},
+{
+"i": 241,
+"k": {
+"shape": 14,
+"beta": 0.95,
+"mom": 5,
+"post": 3,
+"p2": 0.25,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.0068,
+"name": "pid + log-spectrum + decay"
+},
+{
+"i": 91,
+"k": {
+"shape": 14,
+"beta": 0.7,
+"mom": 6
+},
+"f": 1,
+"gain": -0.007,
+"name": "restart + log-spectrum"
+},
+{
+"i": 50,
+"k": {
+"shape": 8,
+"beta": 0.7,
+"pre": 7,
+"p1": 1.0
+},
+"f": 1,
+"gain": -0.0071,
+"name": "adam-scale + qr"
+},
+{
+"i": 38,
+"k": {
+"shape": 10,
+"beta": 0.95,
+"pre": 1,
+"mom": 5,
+"post": 3,
+"p2": 0.25,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.0072,
+"name": "centre-rows + pid + col-block-muon + decay"
+},
+{
+"i": 287,
+"k": {
+"shape": 11,
+"beta": 0.7,
+"p3": 0.9
+},
+"f": 0.35,
+"gain": -0.0072,
+"name": "spectrum-clip"
+},
+{
+"i": 61,
+"k": {
+"shape": 18,
+"beta": 0.8,
+"size": 6,
+"post": 6,
+"p3": 0.34,
+"p4": 0.25,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.0074,
+"name": "few-ns + grow + centre"
+},
+{
+"i": 66,
+"k": {
+"shape": 14,
+"beta": 0.7
+},
+"f": 0.35,
+"gain": -0.0074,
+"name": "log-spectrum"
+},
+{
+"i": 268,
+"k": {
+"shape": 2,
+"beta": 0.7,
+"pre": 5,
+"mom": 3,
+"p2": 0.75,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0074,
+"name": "col-norm + two-speed + soft-power"
+},
+{
+"i": 93,
+"k": {
+"shape": 2,
+"beta": 0.9,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0075,
+"name": "soft-power"
+},
+{
+"i": 30,
+"k": {
+"shape": 21,
+"beta": 0.95,
+"pre": 6,
+"size": 3,
+"post": 1,
+"p1": 1.0,
+"p3": 0.25,
+"p4": -0.5,
+"p5": 0.25
+},
+"f": 0.35,
+"gain": -0.0077,
+"name": "sign-mix + muon-keep-rows + weight-size + lookahead"
+},
+{
+"i": 258,
+"k": {
+"shape": 5,
+"beta": 0.8,
+"pre": 4,
+"mom": 4,
+"size": 2,
+"p2": 0.75,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0078,
+"name": "row-norm + quasi-hyperbolic + sinkhorn + agreement"
+},
+{
+"i": 129,
+"k": {
+"shape": 16,
+"mom": 2,
+"size": 7,
+"p3": 0.1
+},
+"f": 1,
+"gain": -0.0083,
+"name": "none + muon+raw + tangent"
+},
+{
+"i": 12,
+"k": {
+"shape": 11,
+"beta": 0.8,
+"pre": 7,
+"mom": 9,
+"size": 5,
+"p1": 0.5,
+"p3": 0.9,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0087,
+"name": "adam-scale + after-shape + spectrum-clip + fade"
+},
+{
+"i": 216,
+"k": {
+"shape": 14,
+"beta": 0.95
+},
+"f": 0.35,
+"gain": -0.0088,
+"name": "log-spectrum"
+},
+{
+"i": 295,
+"k": {
+"shape": 6,
+"beta": 0.8,
+"pre": 4
+},
+"f": 1,
+"gain": -0.0091,
+"name": "row-norm + sign"
+},
+{
+"i": 99,
+"k": {
+"shape": 19,
+"beta": 0.95,
+"size": 1,
+"p3": 0.5,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0092,
+"name": "rank-transform + grad-size"
+},
+{
+"i": 206,
+"k": {
+"shape": 0,
+"beta": 0.8,
+"pre": 6,
+"mom": 7,
+"post": 6,
+"p1": 1.0,
+"p2": 0.5,
+"p5": 0.1
+},
+"f": 1,
+"gain": -0.0094,
+"name": "sign-mix + sign-agree + muon + centre"
+},
+{
+"i": 208,
+"k": {
+"shape": 5,
+"beta": 0.95,
+"mom": 3,
+"p2": 0.5
+},
+"f": 0.35,
+"gain": -0.0094,
+"name": "two-speed + sinkhorn"
+},
+{
+"i": 148,
+"k": {
+"shape": 15,
+"beta": 0.7,
+"pre": 6,
+"size": 3,
+"p1": 0.5,
+"p3": 0.5,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0095,
+"name": "sign-mix + muon+sign + weight-size"
+},
+{
+"i": 298,
+"k": {
+"shape": 15,
+"beta": 0.95,
+"pre": 6,
+"size": 1,
+"post": 4,
+"p1": 0.25,
+"p3": 0.1,
+"p4": 1.0,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.0095,
+"name": "sign-mix + muon+sign + grad-size + ortho-pull"
+},
+{
+"i": 213,
+"k": {
+"shape": 10,
+"beta": 0.7,
+"size": 8
+},
+"f": 1,
+"gain": -0.0096,
+"name": "col-block-muon + row-tangent"
+},
+{
+"i": 261,
+"k": {
+"shape": 18,
+"beta": 0.95,
+"pre": 4,
+"p3": 0.0
+},
+"f": 0.35,
+"gain": -0.0097,
+"name": "row-norm + few-ns"
+},
+{
+"i": 166,
+"k": {
+"shape": 14,
+"beta": 0.7,
+"pre": 8,
+"mom": 1,
+"post": 4,
+"p1": 1.0,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0099,
+"name": "clip + heavy + log-spectrum + ortho-pull"
+},
+{
+"i": 247,
+"k": {
+"shape": 4,
+"beta": 0.9
+},
+"f": 0.35,
+"gain": -0.0099,
+"name": "colnorm"
+},
+{
+"i": 79,
+"k": {
+"shape": 16,
+"beta": 0.7,
+"mom": 6,
+"size": 9,
+"p3": 0.5,
+"p4": 0.5
+},
+"f": 1,
+"gain": -0.0103,
+"name": "restart + muon+raw + cycle"
+},
+{
+"i": 118,
+"k": {
+"shape": 2,
+"beta": 0.7,
+"mom": 9,
+"p3": 0.75
+},
+"f": 0.35,
+"gain": -0.0105,
+"name": "after-shape + soft-power"
+},
+{
+"i": 286,
+"k": {
+"shape": 18,
+"beta": 0.9,
+"pre": 6,
+"mom": 4,
+"post": 6,
+"p1": 0.5,
+"p2": 0.5,
+"p3": 0.0,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0106,
+"name": "sign-mix + quasi-hyperbolic + few-ns + centre"
+},
+{
+"i": 297,
+"k": {
+"shape": 4,
+"beta": 0.95,
+"pre": 5,
+"mom": 4,
+"p2": 0.75
+},
+"f": 0.35,
+"gain": -0.0106,
+"name": "col-norm + quasi-hyperbolic + colnorm"
+},
+{
+"i": 147,
+"k": {
+"shape": 4,
+"beta": 0.8
+},
+"f": 0.35,
+"gain": -0.011,
+"name": "colnorm"
+},
+{
+"i": 278,
+"k": {
+"shape": 22,
+"beta": 0.7,
+"pre": 10,
+"mom": 8,
+"p1": 0.5,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0111,
+"name": "grad-diff + row-restart + muon-times-size"
+},
+{
+"i": 225,
+"k": {
+"shape": 8,
+"beta": 0.7,
+"pre": 6,
+"mom": 4,
+"p1": 0.25,
+"p2": 0.5
+},
+"f": 1,
+"gain": -0.0112,
+"name": "sign-mix + quasi-hyperbolic + qr"
+},
+{
+"i": 71,
+"k": {
+"shape": 20,
+"beta": 0.8,
+"pre": 5,
+"p3": 0.25
+},
+"f": 0.35,
+"gain": -0.0113,
+"name": "col-norm + top-entries"
+},
+{
+"i": 117,
+"k": {
+"shape": 23,
+"beta": 0.8,
+"pre": 4,
+"mom": 6,
+"size": 5,
+"post": 1,
+"p4": 0.25,
+"p5": 1.0
+},
+"f": 2.8,
+"gain": -0.0114,
+"name": "row-norm + restart + row-then-muon + fade + lookahead"
+},
+{
+"i": 124,
+"k": {
+"shape": 19,
+"beta": 0.8,
+"size": 1,
+"p3": 0.25,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0115,
+"name": "rank-transform + grad-size"
+},
+{
+"i": 34,
+"k": {
+"shape": 1,
+"beta": 0.9,
+"pre": 7,
+"p1": 1.0
+},
+"f": 0.35,
+"gain": -0.0116,
+"name": "adam-scale + raw"
+},
+{
+"i": 83,
+"k": {
+"shape": 5,
+"beta": 0.9,
+"pre": 1,
+"mom": 3,
+"p2": 0.75
+},
+"f": 0.35,
+"gain": -0.0116,
+"name": "centre-rows + two-speed + sinkhorn"
+},
+{
+"i": 266,
+"k": {
+"shape": 14,
+"beta": 0.8,
+"pre": 1,
+"mom": 1,
+"size": 6,
+"p4": 0.25
+},
+"f": 0.35,
+"gain": -0.0117,
+"name": "centre-rows + heavy + log-spectrum + grow"
+},
+{
+"i": 291,
+"k": {
+"shape": 14,
+"beta": 0.8,
+"pre": 1,
+"size": 2,
+"post": 4,
+"p4": 0.5,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0117,
+"name": "centre-rows + log-spectrum + agreement + ortho-pull"
+},
+{
+"i": 122,
+"k": {
+"shape": 4,
+"beta": 0.8,
+"mom": 5,
+"post": 6,
+"p2": 0.75,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0118,
+"name": "pid + colnorm + centre"
+},
+{
+"i": 233,
+"k": {
+"shape": 5,
+"beta": 0.8,
+"pre": 1
+},
+"f": 0.35,
+"gain": -0.0118,
+"name": "centre-rows + sinkhorn"
+},
+{
+"i": 267,
+"k": {
+"shape": 23,
+"beta": 0.95,
+"pre": 10,
+"mom": 6,
+"p1": 0.5
+},
+"f": 1,
+"gain": -0.0118,
+"name": "grad-diff + restart + row-then-muon"
+},
+{
+"i": 172,
+"k": {
+"shape": 4,
+"beta": 0.8,
+"pre": 10,
+"size": 4,
+"p1": 0.5,
+"p4": -0.5
+},
+"f": 1,
+"gain": -0.0121,
+"name": "grad-diff + colnorm + row-size"
+},
+{
+"i": 203,
+"k": {
+"shape": 22,
+"beta": 0.7,
+"size": 6,
+"post": 6,
+"p3": 0.25,
+"p4": 0.0,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.0124,
+"name": "muon-times-size + grow + centre"
+},
+{
+"i": 27,
+"k": {
+"shape": 17,
+"beta": 0.95,
+"mom": 8,
+"post": 6,
+"p3": 0.5,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0125,
+"name": "row-restart + muon+adam + centre"
+},
+{
+"i": 18,
+"k": {
+"shape": 2,
+"beta": 0.8,
+"pre": 2,
+"post": 3,
+"p3": 0.75,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.0127,
+"name": "centre-cols + soft-power + decay"
+},
+{
+"i": 174,
+"k": {
+"shape": 19,
+"beta": 0.7,
+"mom": 4,
+"size": 3,
+"p2": 0.75,
+"p3": 1.0,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0127,
+"name": "quasi-hyperbolic + rank-transform + weight-size"
+},
+{
+"i": 183,
+"k": {
+"shape": 5,
+"beta": 0.7,
+"post": 3,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.013,
+"name": "sinkhorn + decay"
+},
+{
+"i": 22,
+"k": {
+"shape": 4,
+"beta": 0.7,
+"pre": 5
+},
+"f": 0.35,
+"gain": -0.0131,
+"name": "col-norm + colnorm"
+},
+{
+"i": 120,
+"k": {
+"shape": 6,
+"beta": 0.7,
+"mom": 7,
+"size": 1,
+"p2": 0.75,
+"p4": 0.25
+},
+"f": 1,
+"gain": -0.0131,
+"name": "sign-agree + sign + grad-size"
+},
+{
+"i": 75,
+"k": {
+"shape": 8,
+"mom": 2
+},
+"f": 1,
+"gain": -0.0134,
+"name": "none + qr"
+},
+{
+"i": 169,
+"k": {
+"shape": 24,
+"beta": 0.95,
+"pre": 3,
+"mom": 9,
+"size": 6,
+"post": 1,
+"p4": 0.25,
+"p5": 0.0
+},
+"f": 0.35,
+"gain": -0.0135,
+"name": "global-norm + after-shape + col-then-muon + grow + lookahead"
+},
+{
+"i": 176,
+"k": {
+"shape": 7,
+"beta": 0.9,
+"pre": 3,
+"size": 1,
+"post": 4,
+"p3": 0.5,
+"p4": 0.5,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.0135,
+"name": "global-norm + tanh + grad-size + ortho-pull"
+},
+{
+"i": 299,
+"k": {
+"shape": 19,
+"beta": 0.7,
+"p3": 0.25
+},
+"f": 1,
+"gain": -0.0135,
+"name": "rank-transform"
+},
+{
+"i": 207,
+"k": {
+"shape": 3,
+"beta": 0.8
+},
+"f": 0.35,
+"gain": -0.0136,
+"name": "rownorm"
+},
+{
+"i": 243,
+"k": {
+"shape": 2,
+"beta": 0.7,
+"pre": 9,
+"size": 9,
+"p1": 1.0,
+"p3": 0.75,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0136,
+"name": "row-clip + soft-power + cycle"
+},
+{
+"i": 137,
+"k": {
+"shape": 11,
+"beta": 0.7,
+"pre": 5,
+"post": 3,
+"p3": 0.75,
+"p5": 0.1
+},
+"f": 1,
+"gain": -0.0137,
+"name": "col-norm + spectrum-clip + decay"
+},
+{
+"i": 170,
+"k": {
+"shape": 6,
+"beta": 0.95,
+"pre": 3,
+"mom": 3,
+"p2": 0.75
+},
+"f": 1,
+"gain": -0.0138,
+"name": "global-norm + two-speed + sign"
+},
+{
+"i": 285,
+"k": {
+"shape": 12,
+"pre": 5,
+"mom": 2,
+"size": 7,
+"p3": 0.75
+},
+"f": 1,
+"gain": -0.0138,
+"name": "col-norm + none + low-rank + tangent"
+},
+{
+"i": 104,
+"k": {
+"shape": 16,
+"beta": 0.7,
+"post": 3,
+"p3": 0.25,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0139,
+"name": "muon+raw + decay"
+},
+{
+"i": 157,
+"k": {
+"shape": 3,
+"beta": 0.8,
+"pre": 10,
+"mom": 1,
+"p1": 0.5
+},
+"f": 0.35,
+"gain": -0.0141,
+"name": "grad-diff + heavy + rownorm"
+},
+{
+"i": 47,
+"k": {
+"shape": 4,
+"beta": 0.95
+},
+"f": 0.35,
+"gain": -0.0142,
+"name": "colnorm"
+},
+{
+"i": 54,
+"k": {
+"shape": 16,
+"beta": 0.8,
+"mom": 1,
+"post": 1,
+"p3": 0.5,
+"p5": 1.0
+},
+"f": 1,
+"gain": -0.0142,
+"name": "heavy + muon+raw + lookahead"
+},
+{
+"i": 197,
+"k": {
+"shape": 4,
+"beta": 0.7
+},
+"f": 1,
+"gain": -0.0143,
+"name": "colnorm"
+},
+{
+"i": 26,
+"k": {
+"shape": 7,
+"beta": 0.95,
+"p3": 0.1
+},
+"f": 0.35,
+"gain": -0.0144,
+"name": "tanh"
+},
+{
+"i": 131,
+"k": {
+"shape": 0,
+"beta": 0.8,
+"pre": 10,
+"size": 8,
+"post": 5,
+"p1": 0.5
+},
+"f": 0.35,
+"gain": -0.0144,
+"name": "grad-diff + muon + row-tangent + keep-rows"
+},
+{
+"i": 135,
+"k": {
+"shape": 12,
+"beta": 0.9,
+"size": 2,
+"p3": 0.75,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0145,
+"name": "low-rank + agreement"
+},
+{
+"i": 158,
+"k": {
+"shape": 5,
+"beta": 0.8,
+"pre": 8,
+"mom": 4,
+"size": 3,
+"post": 4,
+"p1": 0.5,
+"p2": 0.75,
+"p4": -0.5,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.0145,
+"name": "clip + quasi-hyperbolic + sinkhorn + weight-size + ortho-pull"
+},
+{
+"i": 232,
+"k": {
+"shape": 3,
+"beta": 0.95,
+"size": 5,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0146,
+"name": "rownorm + fade"
+},
+{
+"i": 95,
+"k": {
+"shape": 6,
+"mom": 2
+},
+"f": 1,
+"gain": -0.0147,
+"name": "none + sign"
+},
+{
+"i": 58,
+"k": {
+"shape": 5,
+"beta": 0.7,
+"mom": 3,
+"p2": 0.75
+},
+"f": 0.35,
+"gain": -0.015,
+"name": "two-speed + sinkhorn"
+},
+{
+"i": 201,
+"k": {
+"shape": 7,
+"beta": 0.9,
+"pre": 10,
+"p1": 0.25,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.015,
+"name": "grad-diff + tanh"
+},
+{
+"i": 162,
+"k": {
+"shape": 11,
+"beta": 0.8,
+"mom": 8,
+"size": 8,
+"post": 4,
+"p3": 0.9,
+"p5": 0.01
+},
+"f": 1,
+"gain": -0.0151,
+"name": "row-restart + spectrum-clip + row-tangent + ortho-pull"
+},
+{
+"i": 220,
+"k": {
+"shape": 6,
+"beta": 0.8,
+"pre": 2,
+"post": 4,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.0151,
+"name": "centre-cols + sign + ortho-pull"
+},
+{
+"i": 224,
+"k": {
+"shape": 19,
+"beta": 0.9,
+"p3": 1.0
+},
+"f": 0.35,
+"gain": -0.0152,
+"name": "rank-transform"
+},
+{
+"i": 184,
+"k": {
+"shape": 1,
+"beta": 0.95,
+"pre": 7,
+"p1": 0.25
+},
+"f": 0.35,
+"gain": -0.0153,
+"name": "adam-scale + raw"
+},
+{
+"i": 282,
+"k": {
+"shape": 3,
+"beta": 0.7,
+"pre": 2,
+"mom": 5,
+"size": 1,
+"p2": 0.75,
+"p4": 0.5
+},
+"f": 1,
+"gain": -0.0154,
+"name": "centre-cols + pid + rownorm + grad-size"
+},
+{
+"i": 133,
+"k": {
+"shape": 5,
+"beta": 0.95,
+"pre": 4,
+"mom": 7,
+"p2": 0.25
+},
+"f": 0.35,
+"gain": -0.0155,
+"name": "row-norm + sign-agree + sinkhorn"
+},
+{
+"i": 199,
+"k": {
+"shape": 19,
+"beta": 0.7,
+"pre": 5,
+"mom": 7,
+"size": 3,
+"p2": 0.25,
+"p3": 0.5,
+"p4": -0.5
+},
+"f": 1,
+"gain": -0.0155,
+"name": "col-norm + sign-agree + rank-transform + weight-size"
+},
+{
+"i": 10,
+"k": {
+"shape": 12,
+"beta": 0.7,
+"size": 4,
+"post": 5,
+"p3": 0.25,
+"p4": -0.5
+},
+"f": 0.35,
+"gain": -0.0157,
+"name": "low-rank + row-size + keep-rows"
+},
+{
+"i": 277,
+"k": {
+"shape": 17,
+"beta": 0.7,
+"mom": 1,
+"size": 6,
+"p3": 0.25,
+"p4": 0.0
+},
+"f": 0.35,
+"gain": -0.0157,
+"name": "heavy + muon+adam + grow"
+},
+{
+"i": 32,
+"k": {
+"shape": 3,
+"beta": 0.7,
+"post": 6,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0158,
+"name": "rownorm + centre"
+},
+{
+"i": 111,
+"k": {
+"shape": 18,
+"mom": 2,
+"p3": 0.0
+},
+"f": 1,
+"gain": -0.0158,
+"name": "none + few-ns"
+},
+{
+"i": 51,
+"k": {
+"shape": 7,
+"beta": 0.8,
+"p3": 1.0
+},
+"f": 0.35,
+"gain": -0.0159,
+"name": "tanh"
+},
+{
+"i": 149,
+"k": {
+"shape": 19,
+"beta": 0.9,
+"mom": 9,
+"post": 6,
+"p3": 0.5,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0159,
+"name": "after-shape + rank-transform + centre"
+},
+{
+"i": 222,
+"k": {
+"shape": 4,
+"beta": 0.8,
+"pre": 4,
+"size": 5,
+"post": 6,
+"p4": 0.25,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0161,
+"name": "row-norm + colnorm + fade + centre"
+},
+{
+"i": 98,
+"k": {
+"shape": 15,
+"beta": 0.8,
+"pre": 7,
+"mom": 9,
+"size": 5,
+"post": 2,
+"p1": 0.5,
+"p3": 0.1,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0162,
+"name": "adam-scale + after-shape + muon+sign + fade + keep-norm"
+},
+{
+"i": 260,
+"k": {
+"shape": 12,
+"beta": 0.8,
+"size": 7,
+"post": 2,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0163,
+"name": "low-rank + tangent + keep-norm"
+},
+{
+"i": 138,
+"k": {
+"shape": 10,
+"beta": 0.9,
+"size": 8
+},
+"f": 0.35,
+"gain": -0.0165,
+"name": "col-block-muon + row-tangent"
+},
+{
+"i": 283,
+"k": {
+"shape": 5,
+"beta": 0.95,
+"post": 3,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0165,
+"name": "sinkhorn + decay"
+},
+{
+"i": 190,
+"k": {
+"shape": 9,
+"beta": 0.7,
+"pre": 5,
+"size": 1,
+"post": 2,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0166,
+"name": "col-norm + head-muon + grad-size + keep-norm"
+},
+{
+"i": 226,
+"k": {
+"shape": 7,
+"mom": 2,
+"p3": 0.1
+},
+"f": 1,
+"gain": -0.0166,
+"name": "none + tanh"
+},
+{
+"i": 274,
+"k": {
+"shape": 19,
+"beta": 0.7,
+"pre": 7,
+"mom": 7,
+"size": 3,
+"p1": 1.0,
+"p2": 0.75,
+"p3": 0.25,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0166,
+"name": "adam-scale + sign-agree + rank-transform + weight-size"
+},
+{
+"i": 9,
+"k": {
+"shape": 1,
+"beta": 0.7
+},
+"f": 0.35,
+"gain": -0.0167,
+"name": "raw"
+},
+{
+"i": 84,
+"k": {
+"shape": 1,
+"beta": 0.7
+},
+"f": 0.35,
+"gain": -0.0167,
+"name": "raw"
+},
+{
+"i": 178,
+"k": {
+"shape": 22,
+"beta": 0.8,
+"mom": 1,
+"post": 2,
+"p3": 0.1
+},
+"f": 0.35,
+"gain": -0.0167,
+"name": "heavy + muon-times-size + keep-norm"
+},
+{
+"i": 82,
+"k": {
+"shape": 3,
+"beta": 0.7,
+"mom": 5,
+"post": 6,
+"p2": 0.75,
+"p5": 0.1
+},
+"f": 1,
+"gain": -0.0168,
+"name": "pid + rownorm + centre"
+},
+{
+"i": 57,
+"k": {
+"shape": 3,
+"beta": 0.7
+},
+"f": 0.35,
+"gain": -0.017,
+"name": "rownorm"
+},
+{
+"i": 101,
+"k": {
+"shape": 7,
+"beta": 0.9,
+"post": 3,
+"p3": 1.0,
+"p5": 0.01
+},
+"f": 0.35,
+"gain": -0.017,
+"name": "tanh + decay"
+},
+{
+"i": 276,
+"k": {
+"shape": 7,
+"beta": 0.95,
+"p3": 1.0
+},
+"f": 0.35,
+"gain": -0.017,
+"name": "tanh"
+},
+{
+"i": 70,
+"k": {
+"shape": 6,
+"beta": 0.9,
+"size": 6,
+"post": 1,
+"p4": 0.25,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.0173,
+"name": "sign + grow + lookahead"
+},
+{
+"i": 159,
+"k": {
+"shape": 1,
+"beta": 0.7,
+"size": 4,
+"p4": -0.5
+},
+"f": 0.35,
+"gain": -0.0175,
+"name": "raw + row-size"
+},
+{
+"i": 171,
+"k": {
+"shape": 20,
+"beta": 0.8,
+"pre": 9,
+"post": 6,
+"p1": 1.0,
+"p3": 0.25,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0176,
+"name": "row-clip + top-entries + centre"
+},
+{
+"i": 3,
+"k": {
+"shape": 22,
+"beta": 0.7,
+"mom": 7,
+"post": 5,
+"p2": 0.25,
+"p3": 0.1
+},
+"f": 0.35,
+"gain": -0.0177,
+"name": "sign-agree + muon-times-size + keep-rows"
+},
+{
+"i": 209,
+"k": {
+"shape": 1,
+"beta": 0.7,
+"pre": 9,
+"p1": 0.5
+},
+"f": 0.35,
+"gain": -0.018,
+"name": "row-clip + raw"
+},
+{
+"i": 272,
+"k": {
+"shape": 4,
+"beta": 0.95,
+"mom": 3,
+"post": 1,
+"p2": 0.5,
+"p5": 1.0
+},
+"f": 1,
+"gain": -0.018,
+"name": "two-speed + colnorm + lookahead"
+},
+{
+"i": 143,
+"k": {
+"shape": 2,
+"beta": 0.7,
+"pre": 8,
+"mom": 8,
+"size": 3,
+"p1": 1.0,
+"p3": 0.75,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0182,
+"name": "clip + row-restart + soft-power + weight-size"
+},
+{
+"i": 151,
+"k": {
+"shape": 7,
+"beta": 0.7,
+"mom": 1,
+"size": 6,
+"p3": 1.0,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0183,
+"name": "heavy + tanh + grow"
+},
+{
+"i": 96,
+"k": {
+"shape": 20,
+"beta": 0.9,
+"pre": 8,
+"mom": 3,
+"p1": 0.25,
+"p2": 0.5,
+"p3": 0.75
+},
+"f": 0.35,
+"gain": -0.0184,
+"name": "clip + two-speed + top-entries"
+},
+{
+"i": 74,
+"k": {
+"shape": 19,
+"beta": 0.8,
+"pre": 2,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0185,
+"name": "centre-cols + rank-transform"
+},
+{
+"i": 249,
+"k": {
+"shape": 19,
+"beta": 0.7,
+"mom": 8,
+"p3": 0.5
+},
+"f": 1,
+"gain": -0.0186,
+"name": "row-restart + rank-transform"
+},
+{
+"i": 46,
+"k": {
+"shape": 20,
+"beta": 0.95,
+"mom": 3,
+"p2": 0.75,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.0187,
+"name": "two-speed + top-entries"
+},
+{
+"i": 20,
+"k": {
+"shape": 6,
+"beta": 0.8,
+"pre": 7,
+"mom": 8,
+"size": 8,
+"p1": 0.25
+},
+"f": 1,
+"gain": -0.0188,
+"name": "adam-scale + row-restart + sign + row-tangent"
+},
+{
+"i": 37,
+"k": {
+"shape": 11,
+"beta": 0.95,
+"mom": 6,
+"post": 4,
+"p3": 0.9,
+"p5": 0.1
+},
+"f": 1,
+"gain": -0.0189,
+"name": "restart + spectrum-clip + ortho-pull"
+},
+{
+"i": 180,
+"k": {
+"shape": 21,
+"beta": 0.95,
+"mom": 7,
+"post": 2,
+"p2": 0.5,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.019,
+"name": "sign-agree + muon-keep-rows + keep-norm"
+},
+{
+"i": 196,
+"k": {
+"shape": 20,
+"beta": 0.95,
+"p3": 0.75
+},
+"f": 0.35,
+"gain": -0.0191,
+"name": "top-entries"
+},
+{
+"i": 97,
+"k": {
+"shape": 4,
+"beta": 0.7,
+"mom": 8,
+"size": 9,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0193,
+"name": "row-restart + colnorm + cycle"
+},
+{
+"i": 181,
+"k": {
+"shape": 0,
+"beta": 0.8,
+"pre": 3,
+"mom": 4,
+"post": 5,
+"p2": 0.25
+},
+"f": 0.35,
+"gain": -0.0193,
+"name": "global-norm + quasi-hyperbolic + muon + keep-rows"
+},
+{
+"i": 288,
+"k": {
+"shape": 10,
+"beta": 0.7,
+"pre": 5,
+"size": 8,
+"post": 2
+},
+"f": 0.35,
+"gain": -0.0195,
+"name": "col-norm + col-block-muon + row-tangent + keep-norm"
+},
+{
+"i": 7,
+"k": {
+"shape": 3,
+"beta": 0.8,
+"pre": 4,
+"post": 1,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.0197,
+"name": "row-norm + rownorm + lookahead"
+},
+{
+"i": 252,
+"k": {
+"shape": 17,
+"beta": 0.8,
+"size": 7,
+"post": 1,
+"p3": 0.25,
+"p5": 0.0
+},
+"f": 0.35,
+"gain": -0.0197,
+"name": "muon+adam + tangent + lookahead"
+},
+{
+"i": 45,
+"k": {
+"shape": 6,
+"beta": 0.8,
+"post": 1,
+"p5": 1.0
+},
+"f": 1,
+"gain": -0.0198,
+"name": "sign + lookahead"
+},
+{
+"i": 21,
+"k": {
+"shape": 20,
+"beta": 0.9,
+"post": 1,
+"p3": 0.5,
+"p5": 0.0
+},
+"f": 1,
+"gain": -0.02,
+"name": "top-entries + lookahead"
+},
+{
+"i": 246,
+"k": {
+"shape": 20,
+"beta": 0.95,
+"post": 4,
+"p3": 0.75,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.02,
+"name": "top-entries + ortho-pull"
+},
+{
+"i": 215,
+"k": {
+"shape": 9,
+"beta": 0.95,
+"mom": 4,
+"size": 7,
+"post": 5,
+"p2": 0.75
+},
+"f": 0.35,
+"gain": -0.0204,
+"name": "quasi-hyperbolic + head-muon + tangent + keep-rows"
+},
+{
+"i": 163,
+"k": {
+"shape": 10,
+"beta": 0.7,
+"mom": 5,
+"post": 5,
+"p2": 0.25
+},
+"f": 0.35,
+"gain": -0.0208,
+"name": "pid + col-block-muon + keep-rows"
+},
+{
+"i": 11,
+"k": {
+"shape": 18,
+"beta": 0.7,
+"pre": 7,
+"size": 9,
+"post": 4,
+"p1": 0.25,
+"p3": 0.34,
+"p4": 0.25,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.021,
+"name": "adam-scale + few-ns + cycle + ortho-pull"
+},
+{
+"i": 123,
+"k": {
+"shape": 15,
+"beta": 0.9,
+"post": 2,
+"p3": 0.1
+},
+"f": 0.35,
+"gain": -0.021,
+"name": "muon+sign + keep-norm"
+},
+{
+"i": 41,
+"k": {
+"shape": 14,
+"beta": 0.9,
+"size": 8
+},
+"f": 0.35,
+"gain": -0.0219,
+"name": "log-spectrum + row-tangent"
+},
+{
+"i": 191,
+"k": {
+"shape": 14,
+"beta": 0.8,
+"mom": 4,
+"size": 8,
+"post": 2,
+"p2": 0.25
+},
+"f": 0.35,
+"gain": -0.0219,
+"name": "quasi-hyperbolic + log-spectrum + row-tangent + keep-norm"
+},
+{
+"i": 29,
+"k": {
+"shape": 16,
+"beta": 0.95,
+"pre": 4,
+"mom": 8,
+"post": 3,
+"p3": 0.1,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0221,
+"name": "row-norm + row-restart + muon+raw + decay"
+},
+{
+"i": 236,
+"k": {
+"shape": 18,
+"beta": 0.9,
+"post": 2,
+"p3": 0.67
+},
+"f": 0.35,
+"gain": -0.0223,
+"name": "few-ns + keep-norm"
+},
+{
+"i": 136,
+"k": {
+"shape": 18,
+"beta": 0.8,
+"pre": 9,
+"post": 4,
+"p1": 0.25,
+"p3": 0.0,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.0224,
+"name": "row-clip + few-ns + ortho-pull"
+},
+{
+"i": 186,
+"k": {
+"shape": 18,
+"beta": 0.9,
+"mom": 7,
+"post": 5,
+"p2": 0.75,
+"p3": 0.34
+},
+"f": 0.35,
+"gain": -0.0232,
+"name": "sign-agree + few-ns + keep-rows"
+},
+{
+"i": 244,
+"k": {
+"shape": 24,
+"pre": 3,
+"mom": 2,
+"post": 5
+},
+"f": 0.35,
+"gain": -0.0232,
+"name": "global-norm + none + col-then-muon + keep-rows"
+},
+{
+"i": 132,
+"k": {
+"shape": 3,
+"beta": 0.8,
+"pre": 1,
+"mom": 6,
+"size": 6,
+"p4": 0.0
+},
+"f": 0.35,
+"gain": -0.0233,
+"name": "centre-rows + restart + rownorm + grow"
+},
+{
+"i": 78,
+"k": {
+"shape": 22,
+"beta": 0.9,
+"size": 4,
+"post": 2,
+"p3": 0.25,
+"p4": -0.5
+},
+"f": 0.35,
+"gain": -0.0234,
+"name": "muon-times-size + row-size + keep-norm"
+},
+{
+"i": 187,
+"k": {
+"shape": 11,
+"beta": 0.95,
+"pre": 8,
+"mom": 7,
+"post": 5,
+"p1": 0.25,
+"p2": 0.25,
+"p3": 0.9
+},
+"f": 0.35,
+"gain": -0.0238,
+"name": "clip + sign-agree + spectrum-clip + keep-rows"
+},
+{
+"i": 64,
+"k": {
+"shape": 13,
+"beta": 0.9,
+"pre": 3,
+"post": 5,
+"p3": 0.0
+},
+"f": 0.35,
+"gain": -0.0245,
+"name": "global-norm + drop-top + keep-rows"
+},
+{
+"i": 270,
+"k": {
+"shape": 6,
+"beta": 0.9,
+"pre": 10,
+"size": 9,
+"post": 4,
+"p1": 0.5,
+"p4": 0.5,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.0245,
+"name": "grad-diff + sign + cycle + ortho-pull"
+},
+{
+"i": 103,
+"k": {
+"shape": 22,
+"beta": 0.8,
+"mom": 9,
+"post": 5,
+"p3": 0.25
+},
+"f": 0.35,
+"gain": -0.0248,
+"name": "after-shape + muon-times-size + keep-rows"
+},
+{
+"i": 126,
+"k": {
+"shape": 7,
+"beta": 0.95,
+"mom": 1,
+"size": 2,
+"p3": 0.5,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0249,
+"name": "heavy + tanh + agreement"
+},
+{
+"i": 63,
+"k": {
+"shape": 10,
+"beta": 0.7,
+"mom": 4,
+"post": 4,
+"p2": 0.25,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0251,
+"name": "quasi-hyperbolic + col-block-muon + ortho-pull"
+},
+{
+"i": 257,
+"k": {
+"shape": 3,
+"beta": 0.9,
+"pre": 1,
+"mom": 9,
+"size": 9,
+"post": 3,
+"p4": 0.5,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0251,
+"name": "centre-rows + after-shape + rownorm + cycle + decay"
+},
+{
+"i": 160,
+"k": {
+"shape": 12,
+"beta": 0.7,
+"mom": 3,
+"post": 5,
+"p2": 0.25,
+"p3": 0.75
+},
+"f": 0.35,
+"gain": -0.0253,
+"name": "two-speed + low-rank + keep-rows"
+},
+{
+"i": 146,
+"k": {
+"shape": 20,
+"mom": 2,
+"post": 1,
+"p3": 0.5,
+"p5": 0.0
+},
+"f": 1,
+"gain": -0.0261,
+"name": "none + top-entries + lookahead"
+},
+{
+"i": 76,
+"k": {
+"shape": 7,
+"beta": 0.8,
+"mom": 1,
+"post": 4,
+"p3": 0.1,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.0264,
+"name": "heavy + tanh + ortho-pull"
+},
+{
+"i": 116,
+"k": {
+"shape": 14,
+"beta": 0.8,
+"mom": 5,
+"size": 5,
+"post": 1,
+"p2": 0.5,
+"p4": 0.0,
+"p5": 0.25
+},
+"f": 2.8,
+"gain": -0.0264,
+"name": "pid + log-spectrum + fade + lookahead"
+},
+{
+"i": 109,
+"k": {
+"shape": 1,
+"beta": 0.8,
+"pre": 9,
+"size": 8,
+"p1": 0.5
+},
+"f": 0.35,
+"gain": -0.0273,
+"name": "row-clip + raw + row-tangent"
+},
+{
+"i": 141,
+"k": {
+"shape": 14,
+"beta": 0.9,
+"pre": 6,
+"mom": 5,
+"size": 5,
+"post": 5,
+"p1": 0.5,
+"p2": 0.75,
+"p4": 0.0
+},
+"f": 2.8,
+"gain": -0.0275,
+"name": "sign-mix + pid + log-spectrum + fade + keep-rows"
+},
+{
+"i": 85,
+"k": {
+"shape": 12,
+"beta": 0.95,
+"post": 2,
+"p3": 0.25
+},
+"f": 0.35,
+"gain": -0.0277,
+"name": "low-rank + keep-norm"
+},
+{
+"i": 1,
+"k": {
+"shape": 7,
+"beta": 0.9,
+"size": 8,
+"p3": 0.1
+},
+"f": 0.35,
+"gain": -0.0293,
+"name": "tanh + row-tangent"
+},
+{
+"i": 195,
+"k": {
+"shape": 6,
+"beta": 0.9,
+"pre": 5,
+"mom": 4,
+"post": 2,
+"p2": 0.75
+},
+"f": 0.35,
+"gain": -0.0293,
+"name": "col-norm + quasi-hyperbolic + sign + keep-norm"
+},
+{
+"i": 59,
+"k": {
+"shape": 1,
+"beta": 0.8,
+"size": 3,
+"post": 4,
+"p4": 1.0,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.0296,
+"name": "raw + weight-size + ortho-pull"
+},
+{
+"i": 24,
+"k": {
+"shape": 19,
+"beta": 0.7,
+"pre": 6,
+"mom": 8,
+"size": 1,
+"post": 4,
+"p1": 0.25,
+"p3": 0.25,
+"p4": 0.5,
+"p5": 0.1
+},
+"f": 1,
+"gain": -0.0297,
+"name": "sign-mix + row-restart + rank-transform + grad-size + ortho-pull"
+},
+{
+"i": 265,
+"k": {
+"shape": 9,
+"beta": 0.7,
+"mom": 1,
+"size": 6,
+"post": 2,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0297,
+"name": "heavy + head-muon + grow + keep-norm"
+},
+{
+"i": 189,
+"k": {
+"shape": 13,
+"mom": 2,
+"size": 6,
+"post": 4,
+"p3": 0.5,
+"p4": 0.0,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.03,
+"name": "none + drop-top + grow + ortho-pull"
+},
+{
+"i": 293,
+"k": {
+"shape": 2,
+"mom": 2,
+"post": 4,
+"p3": 0.75,
+"p5": 0.5
+},
+"f": 1,
+"gain": -0.0301,
+"name": "none + soft-power + ortho-pull"
+},
+{
+"i": 4,
+"k": {
+"shape": 16,
+"beta": 0.9,
+"mom": 6,
+"size": 2,
+"post": 2,
+"p3": 0.5,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0302,
+"name": "restart + muon+raw + agreement + keep-norm"
+},
+{
+"i": 8,
+"k": {
+"shape": 5,
+"beta": 0.9,
+"pre": 7,
+"mom": 7,
+"post": 2,
+"p1": 0.25,
+"p2": 0.25
+},
+"f": 0.35,
+"gain": -0.0302,
+"name": "adam-scale + sign-agree + sinkhorn + keep-norm"
+},
+{
+"i": 251,
+"k": {
+"shape": 7,
+"beta": 0.7,
+"mom": 7,
+"size": 9,
+"post": 5,
+"p2": 0.25,
+"p3": 0.5,
+"p4": 0.5
+},
+"f": 0.35,
+"gain": -0.0306,
+"name": "sign-agree + tanh + cycle + keep-rows"
+},
+{
+"i": 16,
+"k": {
+"shape": 14,
+"beta": 0.95,
+"size": 8
+},
+"f": 0.35,
+"gain": -0.031,
+"name": "log-spectrum + row-tangent"
+},
+{
+"i": 100,
+"k": {
+"shape": 8,
+"beta": 0.7,
+"mom": 4,
+"size": 1,
+"post": 2,
+"p2": 0.25,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0313,
+"name": "quasi-hyperbolic + qr + grad-size + keep-norm"
+},
+{
+"i": 254,
+"k": {
+"shape": 16,
+"beta": 0.8,
+"mom": 1,
+"size": 6,
+"p3": 0.5,
+"p4": 0.0
+},
+"f": 0.35,
+"gain": -0.0324,
+"name": "heavy + muon+raw + grow"
+},
+{
+"i": 245,
+"k": {
+"shape": 6,
+"beta": 0.8,
+"post": 5
+},
+"f": 0.35,
+"gain": -0.0335,
+"name": "sign + keep-rows"
+},
+{
+"i": 0,
+"k": {
+"shape": 8,
+"beta": 0.9,
+"pre": 9,
+"size": 8,
+"post": 1,
+"p1": 0.5,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.0341,
+"name": "row-clip + qr + row-tangent + lookahead"
+},
+{
+"i": 90,
+"k": {
+"shape": 9,
+"beta": 0.95,
+"post": 5
+},
+"f": 0.35,
+"gain": -0.0343,
+"name": "head-muon + keep-rows"
+},
+{
+"i": 259,
+"k": {
+"shape": 1,
+"beta": 0.95,
+"pre": 10,
+"mom": 7,
+"post": 5,
+"p1": 0.5,
+"p2": 0.75
+},
+"f": 0.35,
+"gain": -0.0346,
+"name": "grad-diff + sign-agree + raw + keep-rows"
+},
+{
+"i": 284,
+"k": {
+"shape": 1,
+"beta": 0.9,
+"size": 7
+},
+"f": 0.35,
+"gain": -0.0348,
+"name": "raw + tangent"
+},
+{
+"i": 145,
+"k": {
+"shape": 6,
+"beta": 0.7,
+"mom": 1,
+"post": 5
+},
+"f": 0.35,
+"gain": -0.0354,
+"name": "heavy + sign + keep-rows"
+},
+{
+"i": 107,
+"k": {
+"shape": 3,
+"beta": 0.8,
+"pre": 9,
+"mom": 6,
+"post": 3,
+"p1": 1.0,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0359,
+"name": "row-clip + restart + rownorm + decay"
+},
+{
+"i": 121,
+"k": {
+"shape": 20,
+"beta": 0.8,
+"size": 6,
+"p3": 0.5,
+"p4": 0.0
+},
+"f": 0.35,
+"gain": -0.0379,
+"name": "top-entries + grow"
+},
+{
+"i": 234,
+"k": {
+"shape": 1,
+"beta": 0.9,
+"mom": 4,
+"size": 6,
+"post": 4,
+"p2": 0.25,
+"p4": 0.0,
+"p5": 0.5
+},
+"f": 0.35,
+"gain": -0.0414,
+"name": "quasi-hyperbolic + raw + grow + ortho-pull"
+},
+{
+"i": 296,
+"k": {
+"shape": 20,
+"beta": 0.8,
+"size": 8,
+"post": 2,
+"p3": 0.75
+},
+"f": 0.35,
+"gain": -0.0418,
+"name": "top-entries + row-tangent + keep-norm"
+},
+{
+"i": 72,
+"k": {
+"shape": 4,
+"beta": 0.8,
+"mom": 1,
+"size": 7,
+"post": 1,
+"p5": 0.25
+},
+"f": 0.35,
+"gain": -0.0425,
+"name": "heavy + colnorm + tangent + lookahead"
+},
+{
+"i": 108,
+"k": {
+"shape": 5,
+"beta": 0.95,
+"mom": 1,
+"size": 7
+},
+"f": 0.35,
+"gain": -0.0445,
+"name": "heavy + sinkhorn + tangent"
+},
+{
+"i": 221,
+"k": {
+"shape": 20,
+"beta": 0.9,
+"post": 2,
+"p3": 0.5
+},
+"f": 0.35,
+"gain": -0.046,
+"name": "top-entries + keep-norm"
+},
+{
+"i": 228,
+"k": {
+"shape": 22,
+"beta": 0.8,
+"size": 7,
+"post": 4,
+"p3": 0.1,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0469,
+"name": "muon-times-size + tangent + ortho-pull"
+},
+{
+"i": 271,
+"k": {
+"shape": 20,
+"beta": 0.95,
+"pre": 3,
+"mom": 5,
+"post": 3,
+"p2": 0.75,
+"p3": 0.25,
+"p5": 0.1
+},
+"f": 0.35,
+"gain": -0.0471,
+"name": "global-norm + pid + top-entries + decay"
+},
+{
+"i": 49,
+"k": {
+"shape": 19,
+"beta": 0.95,
+"mom": 1,
+"post": 2,
+"p3": 1.0
+},
+"f": 0.35,
+"gain": -0.053,
+"name": "heavy + rank-transform + keep-norm"
+},
+{
+"i": 161,
+"k": {
+"shape": 18,
+"beta": 0.95,
+"mom": 1,
+"size": 6,
+"p3": 0.0,
+"p4": 0.0
+},
+"f": 0.35,
+"gain": -0.0564,
+"name": "heavy + few-ns + grow"
+},
+{
+"i": 62,
+"k": {
+"shape": 11,
+"beta": 0.9,
+"pre": 3,
+"size": 6,
+"post": 3,
+"p3": 0.5,
+"p4": 1.0,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.06,
+"name": "global-norm + spectrum-clip + grow + decay"
+},
+{
+"i": 134,
+"k": {
+"shape": 1,
+"beta": 0.95,
+"size": 3,
+"p4": 1.0
+},
+"f": 0.35,
+"gain": -0.0667,
+"name": "raw + weight-size"
+},
+{
+"i": 106,
+"k": {
+"shape": 0,
+"beta": 0.8,
+"post": 3,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.084,
+"name": "muon + decay"
+},
+{
+"i": 33,
+"k": {
+"shape": 5,
+"beta": 0.7,
+"mom": 1,
+"size": 6,
+"post": 5,
+"p4": 0.0
+},
+"f": 0.35,
+"gain": -0.0936,
+"name": "heavy + sinkhorn + grow + keep-rows"
+},
+{
+"i": 242,
+"k": {
+"shape": 23,
+"beta": 0.7,
+"pre": 4,
+"post": 3,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.098,
+"name": "row-norm + row-then-muon + decay"
+},
+{
+"i": 60,
+"k": {
+"shape": 12,
+"beta": 0.7,
+"pre": 3,
+"mom": 5,
+"size": 9,
+"post": 3,
+"p2": 0.75,
+"p3": 0.75,
+"p4": 0.5,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.1033,
+"name": "global-norm + pid + low-rank + cycle + decay"
+},
+{
+"i": 14,
+"k": {
+"shape": 13,
+"beta": 0.8,
+"mom": 1,
+"size": 8,
+"post": 3,
+"p3": 0.25,
+"p5": 1.0
+},
+"f": 0.35,
+"gain": -0.191,
+"name": "heavy + drop-top + row-tangent + decay"
+}
+]
+},
+"tune": {
+"vo": [
+{
+"i": 19,
+"name": "row-clip + two-speed + col-then-muon",
+"tune": -0.0002
+},
+{
+"i": 168,
+"name": "soft-power + ortho-pull",
+"tune": -0.0002
+},
+{
+"i": 2,
+"name": "two-speed + muon+adam + agreement",
+"tune": -0.0002
+},
+{
+"i": 219,
+"name": "sign-agree + col-then-muon + grad-size",
+"tune": -0.0002
+},
+{
+"i": 142,
+"name": "heavy + row-then-muon",
+"tune": -0.0007
+},
+{
+"i": 280,
+"name": "centre-cols + muon-keep-rows",
+"tune": -0.0011
+},
+{
+"i": 67,
+"name": "row-then-muon",
+"tune": -0.0011
+},
+{
+"i": 94,
+"name": "col-then-muon",
+"tune": -0.0015
+},
+{
+"i": 281,
+"name": "muon",
+"tune": -0.0018
+},
+{
+"i": 155,
+"name": "muon-keep-rows",
+"tune": -0.002
+},
+{
+"i": 218,
+"name": "centre-cols + two-speed + soft-power",
+"tune": -0.0021
+},
+{
+"i": 202,
+"name": "quasi-hyperbolic + muon+adam",
+"tune": -0.0021
+},
+{
+"i": 130,
+"name": "adam-scale + muon-keep-rows + lookahead",
+"tune": -0.0024
+},
+{
+"i": 231,
+"name": "global-norm + muon + agreement + lookahead",
+"tune": -0.0027
+},
+{
+"i": 194,
+"name": "quasi-hyperbolic + col-then-muon + cycle",
+"tune": -0.0027
+},
+{
+"i": 92,
+"name": "row-then-muon + cycle",
+"tune": -0.0028
+},
+{
+"i": 35,
+"name": "sign-agree + low-rank",
+"tune": -0.0029
+},
+{
+"i": 256,
+"name": "muon + lookahead",
+"tune": -0.003
+},
+{
+"i": 156,
+"name": "global-norm + muon",
+"tune": -0.0032
+},
+{
+"i": 68,
+"name": "row-norm + quasi-hyperbolic + soft-power + agreement",
+"tune": -0.0042
+}
+]
+},
+"held": {
+"vo": [
+{
+"i": 19,
+"name": "row-clip + two-speed + col-then-muon",
+"k": {
+"shape": 24,
+"beta": 0.95,
+"pre": 9,
+"mom": 3,
+"p1": 1.0,
+"p2": 0.25
+},
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.01249:beta=0.95:h=4:mom=3:p1=1:p2=0.25:pre=9:shape=24;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_rand:0.01249:beta=0.95:h=4:mom=3:p1=1:p2=0.25:pre=9:shape=24",
+"tune": -0.0002,
+"mean": -0.0005,
+"error": 0.0014,
+"wins": 2
+},
+{
+"i": 168,
+"name": "soft-power + ortho-pull",
+"k": {
+"shape": 2,
+"beta": 0.95,
+"post": 4,
+"p3": -0.1,
+"p5": 0.01
+},
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.02499:beta=0.95:h=4:p3=-0.1:p5=0.01:post=4:shape=2;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_rand:0.02499:beta=0.95:h=4:p3=-0.1:p5=0.01:post=4:shape=2",
+"tune": -0.0002,
+"mean": 0.0025,
+"error": 0.0008,
+"wins": 5
+},
+{
+"i": 2,
+"name": "two-speed + muon+adam + agreement",
+"k": {
+"shape": 17,
+"beta": 0.95,
+"mom": 3,
+"size": 2,
+"p2": 0.5,
+"p3": 0.1,
+"p4": 0.5
+},
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.02499:beta=0.95:h=4:mom=3:p2=0.5:p3=0.1:p4=0.5:shape=17:size=2;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_rand:0.02499:beta=0.95:h=4:mom=3:p2=0.5:p3=0.1:p4=0.5:shape=17:size=2",
+"tune": -0.0002,
+"mean": -0.0006,
+"error": 0.0015,
+"wins": 3
+},
+{
+"i": 219,
+"name": "sign-agree + col-then-muon + grad-size",
+"k": {
+"shape": 24,
+"beta": 0.8,
+"mom": 7,
+"size": 1,
+"p2": 0.75,
+"p4": 1.0
+},
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.0357:beta=0.8:h=4:mom=7:p2=0.75:p4=1:shape=24:size=1;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_rand:0.0357:beta=0.8:h=4:mom=7:p2=0.75:p4=1:shape=24:size=1",
+"tune": -0.0002,
+"mean": -0.0008,
+"error": 0.0007,
+"wins": 1
+},
+{
+"i": 142,
+"name": "heavy + row-then-muon",
+"k": {
+"shape": 23,
+"beta": 0.7,
+"mom": 1
+},
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.02499:beta=0.7:h=4:mom=1:shape=23;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_rand:0.02499:beta=0.7:h=4:mom=1:shape=23",
+"tune": -0.0007,
+"mean": -0.0002,
+"error": 0.0012,
+"wins": 4
+},
+{
+"i": 280,
+"name": "centre-cols + muon-keep-rows",
+"k": {
+"shape": 21,
+"beta": 0.7,
+"pre": 2,
+"p3": 0.5
+},
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_rand:0.051:beta=0.7:h=4:p3=0.5:pre=2:shape=21;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_rand:0.051:beta=0.7:h=4:p3=0.5:pre=2:shape=21",
+"tune": -0.0011,
+"mean": -0.0026,
+"error": 0.0003,
+"wins": 0
+}
+]
+},
+"long": {}
+}
