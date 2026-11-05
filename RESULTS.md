@@ -359,7 +359,7 @@ Result at width 48, 250 steps, worlds 5-9, data in `results/spec/switch_w48.json
 | Last 1/2 | -.0060 (.0015) | 0 |
 | Last 1/4 | -.0037 (.0015) | 1 |
 
-At 250 steps the prediction fails: early steps cost more than late ones. The prediction was written for 1,000 steps, and that run was stopped partway, so `results/spec/switch_w48x1000.jsonl` is incomplete and has no result yet. Whether the learning rate falls late in training, which could explain this alone, has not been checked.
+At 250 steps the prediction fails: early steps cost more than late ones. The prediction was written for 1,000 steps, and that run was stopped partway, so `results/spec/switch_w48x1000.jsonl` is incomplete and has no result yet. The learning rate explains part of this. `env.py` warms up over 20 steps, stays flat, then falls to zero over the last 30% of training. Summing that schedule at 250 steps, the first quarter gets 2.0 times the total learning rate of the last quarter and costs 2.6 times as much, and the first half gets 1.3 times the last half and costs 2.8 times as much. So the schedule covers most of the quarter comparison and less of the half comparison.
 
 ## Related results
 
