@@ -1,0 +1,20 @@
+{
+"exact c=.5": {
+"mean": 0.0038,
+"error": 0.001,
+"wins": 5,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.1655:beta=0.8:h=4:shape=9;norm=adam:0.019:b2=0.9;o=x_rand:0.0204:beta=0.9:p3=0:shape=2;q=x_rand:0.1655:beta=0.8:h=4:shape=9;up=muon:0.01032:beta=0.8;v=x_rand:0.0204:beta=0.9:p3=0:shape=2"
+},
+"c=.7": {
+"mean": 0.0037,
+"error": 0.001,
+"wins": 5,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.1655:beta=0.8:h=4:shape=9;norm=adam:0.019:b2=0.9;o=x_rand:0.051:beta=0.95:p3=-0.4:shape=2;q=x_rand:0.1655:beta=0.8:h=4:shape=9;up=muon:0.01032:beta=0.8;v=x_rand:0.051:beta=0.95:p3=-0.4:shape=2"
+},
+"kaon": {
+"mean": 0.0029,
+"error": 0.0011,
+"wins": 5,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.1655:beta=0.8:h=4:shape=9;norm=adam:0.019:b2=0.9;o=x_kaon:0.03213:beta=0.95;q=x_rand:0.1655:beta=0.8:h=4:shape=9;up=muon:0.01032:beta=0.8;v=x_kaon:0.03213:beta=0.95"
+}
+}

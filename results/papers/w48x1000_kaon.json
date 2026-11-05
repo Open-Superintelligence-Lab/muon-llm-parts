@@ -1,0 +1,28 @@
+{
+"tier": "5sx4",
+"base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8",
+"base_held": 4.1323,
+"rows": {
+"qk kaon": {
+"mean": -0.001,
+"error": 0.0009,
+"wins": 2,
+"f": 4.0,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_kaon:0.1688:beta=0.95;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_kaon:0.1688:beta=0.95;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"vo kaon": {
+"mean": 0.0021,
+"error": 0.0015,
+"wins": 3,
+"f": 0.63,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_kaon:0.03213:beta=0.95;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_kaon:0.03213:beta=0.95"
+},
+"ffn kaon": {
+"mean": -0.0001,
+"error": 0.002,
+"wins": 4,
+"f": 1.6,
+"spec": "down=x_kaon:0.0816:beta=0.95;emb=adam:0.19:b1=0.7;gate=x_kaon:0.01651:beta=0.95;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=x_kaon:0.01651:beta=0.95;v=muon:0.051:beta=0.8"
+}
+}
+}

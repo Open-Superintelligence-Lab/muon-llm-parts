@@ -1,0 +1,21 @@
+{
+"tier": "5sx4",
+"base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8",
+"base_held": 4.1323,
+"rows": {
+"qk c=0": {
+"mean": -0.001,
+"error": 0.0018,
+"wins": 3,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.01055:beta=0.95:p3=1:shape=2;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_rand:0.01055:beta=0.95:p3=1:shape=2;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+},
+"qk c=0.1": {
+"mean": -0.0014,
+"error": 0.0014,
+"wins": 2,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_rand:0.01055:beta=0.8:p3=0.8:shape=2;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=x_rand:0.01055:beta=0.8:p3=0.8:shape=2;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+}
+}
+}

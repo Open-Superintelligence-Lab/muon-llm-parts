@@ -1,0 +1,63 @@
+{
+"tier": "5sx4",
+"base": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8",
+"base_held": 4.1323,
+"rows": {
+"vo steps=1": {
+"mean": -0.0102,
+"error": 0.0019,
+"wins": 0,
+"f": 0.63,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_nsteps:0.03213:beta=0.95:n=1;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_nsteps:0.03213:beta=0.95:n=1"
+},
+"vo steps=2": {
+"mean": -0.003,
+"error": 0.0007,
+"wins": 0,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_nsteps:0.01275:beta=0.95:n=2;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_nsteps:0.01275:beta=0.95:n=2"
+},
+"vo steps=3": {
+"mean": 0.0002,
+"error": 0.0015,
+"wins": 3,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_nsteps:0.01275:beta=0.95:n=3;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_nsteps:0.01275:beta=0.95:n=3"
+},
+"vo steps=4": {
+"mean": 0.0008,
+"error": 0.0008,
+"wins": 3,
+"f": 0.4,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_nsteps:0.0204:beta=0.95:n=4;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_nsteps:0.0204:beta=0.95:n=4"
+},
+"vo steps=5": {
+"mean": 0.0005,
+"error": 0.0016,
+"wins": 3,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_nsteps:0.01275:beta=0.95:n=5;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_nsteps:0.01275:beta=0.95:n=5"
+},
+"vo steps=7": {
+"mean": 0.001,
+"error": 0.0014,
+"wins": 2,
+"f": 0.25,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_nsteps:0.01275:beta=0.95:n=7;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_nsteps:0.01275:beta=0.95:n=7"
+},
+"vo steps=10": {
+"mean": 0.0017,
+"error": 0.0014,
+"wins": 3,
+"f": 0.6349,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_nsteps:0.03238:beta=0.9:n=10;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_nsteps:0.03238:beta=0.9:n=10"
+},
+"vo steps=20": {
+"mean": 0.0008,
+"error": 0.0014,
+"wins": 3,
+"f": 0.6349,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.04221:beta=0.8;norm=adam:0.019:b2=0.9;o=x_nsteps:0.03238:beta=0.8:n=20;q=muon:0.04221:beta=0.8;up=muon:0.01032:beta=0.8;v=x_nsteps:0.03238:beta=0.8:n=20"
+}
+}
+}

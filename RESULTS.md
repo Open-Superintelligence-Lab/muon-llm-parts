@@ -460,7 +460,7 @@ The same candidates, 100 each on q,k, v,o and FFN, screened at width 48, 1,000 s
 
 ## 2026-11-05: Random search at 1,000 steps, results
 
-The prediction held. Width 48, 1,000 steps, gain on worlds 5-9, 100 candidates on each part.
+Width 48, 1,000 steps, gain on worlds 5-9, 100 candidates on each part. No candidate passes the win rule, as predicted. Q,k reached +.0041, above the +.003 I predicted.
 
 | Part | Beat base on world 0 | Best on worlds 5-9 |
 |---|---|---|
@@ -484,6 +484,40 @@ Vuk asked about Dion3 (NorDion2, microsoft/dion, 2608.11612) and 2605.11181 (Kao
 | Dion3 fraction 1 | -.0053, 0/5 | +.0001, 2/5 | +.0001, 3/5 | -.0080, 0/5 |
 
 On all hidden matrices at this size, every arm loses to Muon, so this does not reproduce the paper's tie at 124M. The parts disagree: v,o tolerates c above 1/2 while q,k does not, and q,k gains at c=1/4 where v,o loses. Next: sweep c from 0 to .8 on each part.
+
+## 2026-11-05: Exponent c, Newton-Schulz steps and joined arms
+
+Width 48, gain on worlds 5-9, lr and momentum tuned on worlds 0,1 per arm. Each row uses exact SVD (GG^T)^-c G, resized to Muon's Frobenius norm, so c=.5 is the exact polar direction and real Muon is the base at 5 Newton-Schulz steps.
+
+| c | q,k 250 steps | q,k 1,000 | v,o 250 steps | v,o 1,000 | FFN 250 steps |
+|---|---|---|---|---|---|
+| 0 | +.0028, 4/5 | -.0010, 3/5 | -.0237, 0/5 | -.0146, 0/5 | -.0083, 0/5 |
+| .2 | +.0034, 5/5 | -.0027, 0/5 | -.0147, 0/5 | -.0114, 0/5 | -.0036, 1/5 |
+| .3 | -.0009, 2/5 | -.0017, 2/5 | -.0080, 0/5 | -.0058, 0/5 | -.0032, 1/5 |
+| .4 | -.0012, 1/5 | -.0042, 1/5 | -.0044, 0/5 | -.0015, 2/5 | -.0024, 1/5 |
+| .5 | -.0068, 0/5 | -.0029, 2/5 | +.0001, 2/5 | +.0020, 5/5 | +.0010, 2/5 |
+| .6 | -.0074, 0/5 | not run | +.0023, 4/5 | +.0010, 3/5 | -.0007, 2/5 |
+| .7 | -.0155, 0/5 | not run | +.0013, 4/5 | +.0030, 5/5 | -.0022, 2/5 |
+| .8 | -.0253, 0/5 | not run | -.0048, 1/5 | +.0007, 3/5 | -.0036, 1/5 |
+
+Each gain has an error near .0015. Below c=.5, v,o loses at both lengths. From c=.5 to .8 at 1,000 steps it sits between +.0007 and +.0030, with no clear peak. Q,k gains at low c only at 250 steps, so that gain is a fast start.
+
+Newton-Schulz steps on v,o at 1,000 steps: 1 -.0102, 2 -.0030, 3 +.0002, 4 +.0008, 5 +.0005 (control, retuned Muon), 7 +.0010, 10 +.0017, 20 +.0008. Three steps already match Muon, and more steps add nothing clear.
+
+Published arms at 1,000 steps:
+
+| Arm | q,k | v,o | FFN |
+|---|---|---|---|
+| Kaon | -.0010, 2/5 | +.0021, 3/5 | -.0001, 4/5 |
+| Dion3 fraction .25 | -.0015, 2/5 | -.0078, 0/5 | -.0046, 0/5 |
+| Dion3 fraction .5 | -.0049, 0/5 | -.0036, 1/5 | -.0010, 1/5 |
+| Dion3 fraction 1 | -.0031, 2/5 | +.0021, 4/5 | not finished |
+
+Dion3 is built to cut step cost, and this bench does not score cost. Its README says larger models tolerate a smaller fraction, so these small runs do not test that claim.
+
+Joined at 1,000 steps, head-muon on q,k (+.0041 alone) with each v,o arm, no retuning: exact c=.5 +.0038, c=.7 +.0037, Kaon +.0029, each 5/5. The v,o gain does not add to the q,k gain.
+
+Verdict: nothing passes the win rule. These are small gains from many arms on worlds that have scored earlier searches. Kaggle job `papers-a` tests c on v,o and q,k, Kaon and step counts at width 128.
 
 ## Related results
 
