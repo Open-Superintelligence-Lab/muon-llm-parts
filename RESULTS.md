@@ -361,6 +361,34 @@ Result at width 48, 250 steps, worlds 5-9, data in `results/spec/switch_w48.json
 
 At 250 steps the prediction fails: early steps cost more than late ones. The prediction was written for 1,000 steps, and that run was stopped partway, so `results/spec/switch_w48x1000.jsonl` is incomplete and has no result yet. The learning rate explains part of this. `env.py` warms up over 20 steps, stays flat, then falls to zero over the last 30% of training. Summing that schedule at 250 steps, the first quarter gets 2.0 times the total learning rate of the last quarter and costs 2.6 times as much, and the first half gets 1.3 times the last half and costs 2.8 times as much. So the schedule covers most of the quarter comparison and less of the half comparison.
 
+## 2026-11-05: For each part, does the optimizer matter, and is a better one known? Rule and prediction before running
+
+Vuk's question: for each part of the LLM, either any optimizer works, or a better optimizer exists. `debug/panel_parts.py` changes one part at a time from the tuned baseline to another published optimizer, and tunes that optimizer's learning rate and momentum on worlds 0 and 1. It then scores on worlds 5-9, tune rows, with no sealed world. A frozen control trains the part not at all, which shows the most that part can matter.
+
+- Parts: value and output, query and key, gate up and down, embedding, head, norm scales.
+- Optimizers: Muon, Adam, SGD with momentum, Lion, RowNorm, normalized SGD and per-head Muon, where each one applies.
+
+Verdict for each part, fixed now:
+
+- **Any optimizer works:** every tuned optimizer stays within .004 of the baseline.
+- **Optimizer matters, baseline is best:** some optimizer loses by over .004 and over 2 errors, and none is a candidate.
+- **Candidate for better:** a gain above .005 with the same sign in all 5 worlds.
+- **Win:** a candidate at both 250 and 1,000 steps with gain above 7.53 errors, which is the t value for 30 comparisons on 5 worlds. A win still needs larger models and Vuk's word before any sealed test.
+
+Prediction: value and output are "matters, baseline is best", with only Muon-like rules close. Query and key are the part closest to "any optimizer works". Embedding and head matter and keep Adam. Norm scales are "any optimizer works". A candidate may appear at 250 steps on query and key, as Lion did, but no win appears at 1,000 steps.
+
+First part, stopped early on 2026-11-05 because a video job needed the Mac. Width 48, 250 steps, data in `results/panel/w48.jsonl`. Base 4.3606. Positive beats the baseline.
+
+| Query and key use | Gap | Wins of 5 |
+| --- | --- | --- |
+| Frozen | -.0507 (.0024) | 0 |
+| SGD with momentum | -.0011 (.0021) | 3 |
+| Lion | -.0003 (.0016) | 2 |
+| Adam | +.0017 (.0024) | 2 |
+| RowNorm | +.0041 (.0013) | 5 |
+
+Normalized SGD and per-head Muon on query and key, and all other parts, have not run. Rerunning the same command continues from saved runs.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
