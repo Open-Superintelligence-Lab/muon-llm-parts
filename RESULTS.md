@@ -215,6 +215,23 @@ Shumaylov et al.'s inverted sizes are one over the singular value, which we trie
 
 Inverted sizes do not work as well as Muon here, unlike the GPT-2 result in that paper's title. The groups want opposite sides of Muon: query and key lose nothing at `p=1` and lose .0218 at `p=-.5`, while value and output lose .0229 at `p=1` and only .0036 at `p=-.5`.
 
+## 2026-11-05: Kaggle map, width 64, 8,000 steps (job map-d)
+
+`kaggle/out/map-d`, 7.25 GPU hours, base held-out 4.3148. Whole-matrix Muon baseline, gaps on worlds 5 to 9.
+
+| Moved to Adam | Gap | Wins of 5 |
+| --- | --- | --- |
+| Value and output | -.0025 (.0013) | 1 |
+| Query and key | -.0033 (.0016) | 1 |
+| Gate, up and down | -.0037 (.0015) | 1 |
+| Gate alone | +.0032 (.0011) | 4 |
+| All seven | -.0041 (.0025) | 0 |
+| Muon per head | -.0002 (.0010) | 1 |
+
+At width 64, moving all seven to Adam costs .0433 at 500 steps, .0119 at 2,000 and .0041 at 8,000. The gain shrinks with training length and no group stands out at 8,000 steps.
+
+Kaggle refused the next job on 2026-11-05 with "Maximum weekly GPU quota of 30.00 hours reached", so map-e (the add design at width 128) and width 512 wait for the weekly reset.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.

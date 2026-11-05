@@ -1,0 +1,32 @@
+data ready 44 s
+GPU 0: Tesla T4 (UUID: GPU-744e389a-0284-3277-45e8-2e0765afc2e5)
+GPU 1: Tesla T4 (UUID: GPU-261e05c1-2ccc-e81f-b089-e18908a1e120)
+
+== w64x8k hours left 11.29
+w64x8k tuning Muon
+  all Muon lrs x: 2 4.3091 of 4
+  all Adam lrs x: 1 4.3091 of 3
+  qk lr x: 1 4.3091 of 3
+  vo lr x: 1 4.3091 of 3
+  gu lr x: 1 4.3091 of 3
+  down lr x: 1 4.3091 of 3
+base down=muon:0.102:beta=0.9;emb=adam:0.19:b1=0.7;gate=muon:0.052:beta=0.7;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.134:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.102:beta=0.7;q=muon:0.134:beta=0.8;up=muon:0.052:beta=0.7;v=muon:0.102:beta=0.7 4.3091
+  Adam on vo, lr: 0.025 4.3130 of 4
+  Adam on qk, lr: 0.025 4.3149 of 4
+  Adam on ffn, lr: 0.01 4.3101 of 3
+  per-head q,k, lr x: 4 4.3130 of 4
+w64x8k base held-out 4.3148
+vo: -0.0025 error 0.0013 wins 1/5
+v: +0.0009 error 0.0010 wins 4/5
+o: -0.0041 error 0.0020 wins 1/5
+qk: -0.0033 error 0.0016 wins 1/5
+q: -0.0040 error 0.0014 wins 0/5
+k: -0.0042 error 0.0019 wins 1/5
+ffn: -0.0037 error 0.0015 wins 1/5
+gate: +0.0032 error 0.0011 wins 4/5
+up: -0.0013 error 0.0011 wins 1/5
+down: -0.0010 error 0.0021 wins 2/5
+qkffn: +0.0007 error 0.0019 wins 2/5
+all: -0.0041 error 0.0025 wins 0/5
+split: -0.0002 error 0.0010 wins 1/5
+w64x8k done with code 0 at 435 min
