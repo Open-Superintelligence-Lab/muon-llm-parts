@@ -298,7 +298,7 @@ The cost of moving value and output to Adam roughly doubles with each doubling o
 
 At width 64, moving all seven to Adam costs .0433 at 500 steps, .0119 at 2,000 and .0041 at 8,000. The gain shrinks with training length and no group stands out at 8,000 steps.
 
-Kaggle refused the next job on 2026-11-05 with "Maximum weekly GPU quota of 30.00 hours reached", so map-e (the add design at width 128) and width 512 wait for the weekly reset.
+Kaggle refused the next job on 2026-11-05 with "Maximum weekly GPU quota of 30.00 hours reached", so map-e (the add design at width 128) and width 512 wait for the weekly reset. Both were pushed the same day as private jobs on a second Kaggle account, `jensen404`.
 
 ## 2026-11-05: Each group gets its own step shape, prediction before running
 

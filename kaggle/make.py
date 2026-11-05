@@ -33,5 +33,5 @@ for t in TIERS:
     p.wait(); say(t, "done with code", p.returncode, "at", round((time.time() - T0) / 60), "min")
 '''
 open(os.path.join(job, "job.py"), "w").write(body)
-json.dump({"id": f"vukrosic/muon-parts-{name}", "title": f"muon-parts-{name}", "code_file": "job.py", "language": "python", "kernel_type": "script", "is_private": True, "enable_gpu": True, "enable_tpu": False, "enable_internet": True, "machine_shape": "NvidiaTeslaT4", "dataset_sources": [], "competition_sources": [], "kernel_sources": []}, open(os.path.join(job, "kernel-metadata.json"), "w"), indent=1)
+json.dump({"id": f"{json.load(open(os.path.expanduser('~/.kaggle/kaggle.json')))['username']}/muon-parts-{name}", "title": f"muon-parts-{name}", "code_file": "job.py", "language": "python", "kernel_type": "script", "is_private": True, "enable_gpu": True, "enable_tpu": False, "enable_internet": True, "machine_shape": "NvidiaTeslaT4", "dataset_sources": [], "competition_sources": [], "kernel_sources": []}, open(os.path.join(job, "kernel-metadata.json"), "w"), indent=1)
 print("wrote", job, round(len(body) / 1e6, 2), "MB")
