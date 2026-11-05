@@ -16,7 +16,7 @@
 \maketitle
 
 \begin{abstract}
-Muon trains the hidden matrices of an LLM with an orthogonalized update and leaves the embedding, the output head and the normalization scales to Adam. We ask which of those matrices actually need Muon. Starting from a tuned Muon baseline, we give one matrix, or one group of matrices, to Adam, choose every learning rate on separate tune worlds, and score the change on held-out worlds that use different training and validation text. At width 48 and 250 steps, giving the value and output matrices to Adam costs .0209 in validation loss (error .0015), which is more than the .0152 that the two cost separately, while giving any single feed-forward matrix to Adam costs nothing measurable. Giving query alone to Adam costs .0019 (.0013) and key alone costs .0011 (.0006).
+Muon trains the hidden matrices of an LLM with an orthogonalized update and leaves the embedding, the output head and the normalization scales to Adam. We ask which of those matrices actually need Muon, and what each one needs from it. Starting from a tuned Muon baseline, we give one matrix, or one group of matrices, to Adam, choose learning rates on separate tune worlds, and score the change on held-out worlds that use different training and validation text. From width 64 to width 256 at 2,000 steps, giving the value and output matrices to Adam costs .0135, .0202 and .0403 in validation loss, the three feed-forward matrices together cost .0022, .0053 and .0111, and query and key cost .0002, $-.0056$ and .0012, so query and key stay near zero while the other two groups grow with width. The groups also want different step shapes. On value and output, keeping the gradient's own singular values as step sizes costs .0229 at width 48 and 250 steps. On query and key the same change gains .0029 (error .0013), and those matrices lose .0218 when strong directions are shrunk. Removing QK-norm does not change this, and a one-step measure of loss on unseen batches does not explain it.
 \end{abstract}
 
 \section{Introduction}
@@ -31,6 +31,7 @@ This paper asks three questions that their design leaves open.
 \item What does each matrix lose when it alone leaves a tuned Muon baseline? Adding Muon to Adam and removing it from Muon are different questions when matrices interact. In their gated table, Muon on any one feed-forward matrix lowers the loss by about .09 to .10 from Adam everywhere, while leaving one feed-forward matrix out of the full Muon set of value, output and feed-forward matrices costs .017 to .052.
 \item Does the map survive tuning? Wang et al.\ keep the Muon learning rate fixed across their ablations and treat the remaining gap as possibly due to it. We retune the learning rate of every change on tune worlds and score it on other worlds.
 \item How does the map move with width and with training length? Their numeric tables are at one size and one length.
+\item What does each group need from Muon's step? We keep Muon's singular directions and change only their sizes, one group at a time.
 \end{enumerate}
 
 \section{Setup}
@@ -89,7 +90,41 @@ We repeat the map on GPUs with $V=4000$, 64 rows of 128 tokens per step and each
 
 The design is cheaper than at small size because of the GPU budget. The baseline is tuned on worlds 0 and 1: a shared factor for all Muon learning rates, a shared factor for all Adam learning rates, one shared Muon momentum out of .8, .9 and .95, and then each Muon group's learning rate. Adam's learning rate is chosen on the same worlds for value and output together, for query and key together, and for the three feed-forward matrices together, and single matrices and joint moves inherit it with no tuning of their own. Query and key use whole-matrix Muon in the baseline here. Scores come from worlds 5 to 9.
 
-% MAPTABLE
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Width, steps & 64, 500 & 64, 2{,}000 & 64, 8{,}000 & 128, 2{,}000 & 256, 2{,}000 \\
+\midrule
+Value and output & $-.0366$ (.0036) & $-.0135$ (.0026) & $-.0025$ (.0013) & $-.0202$ (.0018) & $-.0403$ (.0019) \\
+Value & $-.0105$ (.0031) & $-.0076$ (.0033) & $+.0009$ (.0010) & $-.0069$ (.0005) & $-.0154$ (.0028) \\
+Output & $-.0136$ (.0027) & $-.0058$ (.0017) & $-.0041$ (.0020) & $-.0103$ (.0018) & $-.0145$ (.0021) \\
+Query and key & $+.0022$ (.0032) & $-.0002$ (.0019) & $-.0033$ (.0016) & $+.0056$ (.0014) & $-.0012$ (.0014) \\
+Query & $+.0010$ (.0019) & $-.0026$ (.0028) & $-.0040$ (.0014) & $+.0063$ (.0012) & $+.0032$ (.0010) \\
+Key & $+.0009$ (.0025) & $-.0045$ (.0019) & $-.0042$ (.0019) & $+.0024$ (.0012) & $-.0019$ (.0006) \\
+Gate, up and down & $-.0064$ (.0028) & $-.0022$ (.0022) & $-.0037$ (.0015) & $-.0053$ (.0015) & $-.0111$ (.0014) \\
+Gate & $-.0017$ (.0033) & $-.0010$ (.0019) & $+.0032$ (.0011) & $+.0016$ (.0021) & $-.0009$ (.0019) \\
+Up & $-.0016$ (.0028) & $-.0009$ (.0011) & $-.0013$ (.0011) & $+.0017$ (.0014) & $-.0007$ (.0015) \\
+Down & $-.0018$ (.0033) & $-.0014$ (.0015) & $-.0010$ (.0021) & $-.0007$ (.0006) & $-.0017$ (.0016) \\
+Query, key, gate, up and down & $-.0061$ (.0036) & $-.0027$ (.0011) & $+.0007$ (.0019) & $-.0084$ (.0013) & $-.0141$ (.0008) \\
+All seven & $-.0433$ (.0035) & $-.0119$ (.0017) & $-.0041$ (.0025) & $-.0511$ (.0029) & $-.0507$ (.0019) \\
+Per-head query and key & $+.0045$ (.0023) & $.0000$ (.0021) & $-.0002$ (.0010) & $+.0052$ (.0008) & $+.0038$ (.0015) \\
+\midrule
+Baseline loss & 4.6453 & 4.4258 & 4.3148 & 4.2629 & 4.1375 \\
+\bottomrule
+\end{tabular}
+\caption{Validation loss gap on held-out worlds 5 to 9, whole-matrix Muon baseline minus the change, with the standard error in brackets. Negative means Muon was better. The last gap row replaces whole-matrix Muon on query and key with per-head Muon and stays on Muon.}
+\label{tab:map}
+\end{table}
+
+Table~\ref{tab:map} gives the map. Three patterns hold across the sizes tested. Value and output are the group that matters most, and their cost roughly doubles with each doubling of width, from .0135 to .0202 to .0403. Query and key stay near zero, with query alone beating Muon by .0063 (.0012) at width 128 and .0032 (.0010) at width 256, in all 5 worlds at both. Each feed-forward matrix alone is free to move at every size and length, while the three together cost .0111 (.0014) at width 256, so they can substitute for one another up to a point.
+
+Training length works against all of these. At width 64, moving all seven costs .0433 at 500 steps, .0119 at 2,000 and .0041 at 8,000, and no group stands out at 8,000 steps. Models with many tokens per weight may therefore show smaller gaps than short runs do, though Wang et al.'s gap of .3712 at 160M and 10,000 steps is much larger than any here, so length alone does not close it.
+
+The row for all seven does not behave like the sum of its groups across sizes. At width 256 the three groups sum to .0526 against .0507, but at width 128 they sum to .0199 against .0511. Moved matrices inherit Adam learning rates from their groups in this design, which can overstate the cost of a joint move, so the width 128 excess needs its own tuned row before we read it as an interaction.
+
+Per-head Muon on query and key beats whole-matrix Muon by .0052 (.0008) at width 128 and .0038 (.0015) at width 256, in all 5 worlds at both.
 
 \paragraph{Adding Muon and removing it.} To compare with Wang et al.\ directly, we also run their design on our model with whole-matrix query and key. Adam trains every hidden matrix with one learning rate chosen on the tune worlds, and Muon then takes some matrices at the baseline's Muon learning rates. Table~\ref{tab:add} gives each group's gain from adding Muon and its cost when removed from full Muon, where removal uses that group's own tuned Adam learning rate. At both small sizes the two numbers nearly agree, and the added gains sum to .0297 against a full gain of .0265 at width 48 and to .0105 against .0147 at width 32. The groups therefore act close to independently at these sizes. Wang et al.'s gated table does not behave this way, since each feed-forward matrix added alone gains about .09 to .10 while removing one from the full set costs .017 to .052.
 
@@ -114,16 +149,75 @@ Query and key & $+.0021$ & $-.0023$ & $+.0006$ & $-.0002$ \\
 \paragraph{When the gain appears.} The gaps shrink during training. At width 128, moving all seven matrices to Adam costs about .186 at step 250 and about .056 at step 2,000, and moving value and output costs about .050 and .022. These curve values use only 64 validation rows at each mark, so they are noisier than the final gaps, which use 3,200 rows.
 
 
+\section{What each group needs from the step}
+
+We now keep the baseline fixed at width 48 and change only one group's step. The strongest quarter of a step's singular directions are its strong directions and the rest are its weak directions. Each change walks its own learning rate factor on worlds 0 and 1 and is scored on worlds 5 to 9. All predictions below were written before the runs and are in the repository's log.
+
+\paragraph{Weak directions.} Table~\ref{tab:weak} removes the weak directions from one group's step, or keeps their size and pairs each weak left direction with the wrong right direction. Query and key lose little from either. Value and output and the feed-forward matrices lose about as much from scrambling as from removal, so these directions help through the information they carry and not only through their size. At 1,000 steps, removing them from all seven costs .0282, which is about twice the .0140 between Muon and Adam everywhere. A Muon step without weak directions is therefore worse than Adam, which keeps them. In that row all seven share one learning rate factor, x1, while feed-forward alone chose x4, so .0282 is an upper bound.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{250 steps} & \multicolumn{2}{c}{1,000 steps} \\
+Group & Removed & Scrambled & Removed & Scrambled \\
+\midrule
+Value and output & $-.0112$ (.0011) & $-.0069$ (.0016) & $-.0152$ (.0017) & $-.0122$ (.0016) \\
+Gate, up and down & $-.0055$ (.0016) & $-.0074$ (.0009) & $-.0103$ (.0008) & $-.0113$ (.0012) \\
+Query and key & $+.0011$ (.0008) & $-.0006$ (.0018) & $-.0019$ (.0013) & $-.0032$ (.0008) \\
+All seven & $-.0141$ (.0005) & $-.0184$ (.0022) & $-.0282$ (.0011) & $-.0275$ (.0024) \\
+\bottomrule
+\end{tabular}
+\caption{Changing the weak directions of one group's Muon step at width 48. Gap on held-out worlds from whole-matrix Muon, with the standard error in brackets. Exact orthogonalization by SVD on all seven gives $-.0011$ (.0014) and $-.0005$ (.0011), so the SVD code alone costs nothing.}
+\label{tab:weak}
+\end{table}
+
+\paragraph{Step shapes.} Table~\ref{tab:shape} sets each direction's size to its singular value to the power $p$, scaled to Muon's step size, so $p=0$ is Muon and $p=1$ keeps the gradient's own shape, and also tries random sizes. Shumaylov et al.~\cite{shumaylov} report that random sizes match Muon on GPT-2, and we see the same in every group, within .0031. They also report that inverted sizes, $p=-1$, work as well on GPT-2. In our runs $p=-1$ is the worst shape in every group except feed-forward, where it ties the gradient's shape, and it costs .0900 on all seven. Our model is much smaller than theirs and we did not run theirs.
+
+The two groups want opposite sides of Muon. Value and output cannot take the gradient's shape but can take mildly inverted sizes, while query and key can take the gradient's shape and cannot take inverted sizes. So value and output depend on weak directions keeping their size, and query and key depend on strong directions keeping theirs. Per-group shape is thus a real difference between the matrices, and it is not visible in a map that only swaps Muon for Adam.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Group & $p=1$ (gradient) & Random sizes & $p=-.5$ & $p=-1$ (inverted) \\
+\midrule
+\multicolumn{5}{l}{\emph{250 steps}} \\
+Value and output & $-.0229$ (.0020) & $-.0018$ (.0014) & $-.0036$ (.0020) & $-.0343$ (.0018) \\
+Gate, up and down & $-.0065$ (.0013) & $-.0024$ (.0007) & $-.0015$ (.0013) & $-.0073$ (.0013) \\
+Query and key & $+.0029$ (.0013) & $-.0031$ (.0009) & $-.0218$ (.0014) & $-.0469$ (.0023) \\
+All seven & $-.0245$ (.0017) & $-.0025$ (.0015) & $-.0245$ (.0021) & $-.0900$ (.0034) \\
+\midrule
+\multicolumn{5}{l}{\emph{1,000 steps}} \\
+Value and output & $-.0192$ (.0028) & $+.0004$ (.0009) & $-.0027$ (.0009) & $-.0315$ (.0017) \\
+Gate, up and down & $-.0046$ (.0015) & $-.0010$ (.0008) & $+.0001$ (.0014) & $-.0043$ (.0013) \\
+Query and key & $+.0001$ (.0015) & $-.0011$ (.0009) & $-.0079$ (.0017) & $-.0371$ (.0052) \\
+All seven & $-.0236$ (.0021) & $-.0022$ (.0015) & $-.0106$ (.0027) & $-.0940$ (.0056) \\
+\bottomrule
+\end{tabular}
+\caption{Keeping Muon's singular directions and changing only their sizes in one group at width 48. Gap on held-out worlds from whole-matrix Muon, with the standard error in brackets.}
+\label{tab:shape}
+\end{table}
+
+\paragraph{Two explanations that failed.} We predicted that QK-norm causes query and key's indifference, since it removes their overall scale. Without QK-norm, moving query and key to Adam still gains .0023 (.0014) and removing their weak directions still gains .0010 (.0012), and value and output keep their costs, so QK-norm does not explain it.
+
+We also predicted that Muon's step lowers the loss on unseen data faster than the gradient's shape does on value and output. We measured the cosine between a candidate step and the gradient of the next unseen batch at the same weights, in one training run. In every group the gradient's shape scores about three to five times higher than Muon's step, for example .2356 against .0504 on value and output at 250 steps, and the weak directions alone score almost nothing, .0023. So the help from weak directions is not a one-step drop in unseen loss. Value and output do have the most concentrated gradients, with .965 of the squared singular values in the strongest quarter against .925 for query and key and .876 for feed-forward, but feed-forward loses more than query and key from the gradient's shape, so concentration does not order the costs either. Why the groups differ remains open.
+
+No variant here passes our win line of .005 on all 5 worlds. The largest gains are the gradient's shape on query and key at $+.0029$ and per-head Muon on query and key.
+
 \section{Related work}
 
-Wang et al.~\cite{wang2025tail} is the closest work, as described above. Compositional Muon~\cite{compositional} treats $QK^\top$ and $OV$ as composed circuits, with query and key handled per head with a half split, value per head and output as one matrix, and reports gains at 340M and 1B. Muon has also been ablated in vision transformers~\cite{muonvit}, where the largest difference is reported in query, key and value, which differs from the LLM ranking. CMuon~\cite{cmuon} ablates chunking across feed-forward, query-key-value and AdaLN matrices. Spectral Allocation~\cite{spectral} measures how often each matrix's update directions agree with gradients on unseen batches at one checkpoint, and reports that the weak directions of query and key agree least while feed-forward matrices stay aligned across almost the whole spectrum.
+Wang et al.~\cite{wang2025tail} is the closest work, as described above. Compositional Muon~\cite{compositional} treats $QK^\top$ and $OV$ as composed circuits, with query and key handled per head with a half split, value per head and output as one matrix, and reports gains at 340M and 1B. Muon has also been ablated in vision transformers~\cite{muonvit}, where the largest difference is reported in query, key and value, which differs from the LLM ranking. CMuon~\cite{cmuon} ablates chunking across feed-forward, query-key-value and AdaLN matrices. Spectral Allocation~\cite{spectral} measures how often each matrix's update directions agree with gradients on unseen batches at one checkpoint, and reports that the weak directions of query and key agree least while feed-forward matrices stay aligned across almost the whole spectrum. Our next-batch cosines agree on feed-forward, whose weak directions score highest, and are too close to separate query and key from value and output. Su~\cite{su} shows in a curvature model that exact orthogonalization is an extreme case rather than a general optimum. Shumaylov et al.~\cite{shumaylov} test step shapes on the whole of GPT-2, and we test them per group.
 
 \section{Limits}
 
-The results in this draft's small-model table are from models with far fewer weights than those trained in practice, trained for far fewer tokens. A map at this size can be wrong at 160M, which is why the scale check matters. All losses here are validation loss on next-token prediction, and we did not measure downstream tasks.
+These models have far fewer weights than those trained in practice and are trained for far fewer tokens. Width 256 has 6.8M weights and Wang et al.\ use 160M, so the map can still change at larger sizes. All losses are validation loss on next-token prediction, and we did not measure downstream tasks.
+
+The larger-model baselines are tuned on two worlds and moved matrices inherit Adam learning rates from their group, as described above, so joint rows may overstate a cost. The baseline there uses whole-matrix query and key, so the per-head row is a change and not the reference. Tests of the step's shape run only at width 48, with 250 and 1,000 steps, and each uses three to seven learning rate factors on two worlds. The next-batch cosines come from one training run for each setting and have no error bars. Gaps smaller than about .004 are within noise at one world, and the win line we use is a gap above .005 with the same sign in all 5 held-out worlds.
 
 \bibliographystyle{plain}
-\begin{thebibliography}{9}
+\begin{thebibliography}{99}
 \bibitem{muon} K.~Jordan et al. Muon: An optimizer for hidden layers in neural networks. Blog post, 2024.
 \bibitem{wang2025tail} S.~Wang, F.~Zhang, J.~Li, C.~Du, C.~Du, T.~Pang, Z.~Yang, M.~Hong, V.~Y.~F.~Tan. Muon outperforms Adam in tail-end associative memory learning. arXiv:2509.26030, 2025.
 \bibitem{perhead} When and why grouping attention heads accelerates Muon optimization. arXiv:2605.08933, 2026.
@@ -131,6 +225,8 @@ The results in this draft's small-model table are from models with far fewer wei
 \bibitem{muonvit} Muon in vision transformers. arXiv:2605.24770, 2026.
 \bibitem{cmuon} CMuon. arXiv:2608.02502, 2026.
 \bibitem{spectral} X.~Wu, W.~Yu, et al. Spectral allocation: Why Muon outperforms Adam, and how to improve Muon. arXiv:2608.25990, 2026.
+\bibitem{shumaylov} Z.~Shumaylov et al. Muon is not that special: Random or inverted spectra work just as well. arXiv:2605.11181, 2026.
+\bibitem{su} Su. Isotropic curvature model for understanding deep learning optimization: Is gradient orthogonalization optimal? arXiv:2511.00674, 2025.
 \end{thebibliography}
 
 \end{document}
