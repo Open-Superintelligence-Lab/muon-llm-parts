@@ -1,7 +1,7 @@
 """Maps where Muon matters: starts from a tuned Muon baseline and gives one matrix at a time to Adam. Every setting is chosen on tune worlds and scored on other worlds, on tune rows; sealed worlds are never read. Positive gap means the change beats Muon.
 
 python3 debug/map_parts.py w128 --results map.jsonl [--tune 0,1] [--held 5,6,7,8,9] [--par 4] [--hours 11]
-Finished runs are skipped, so the same command continues a stopped map. --time-only prints seconds per run and stops.
+Finished runs are skipped, so the same command continues a stopped map. --time-only prints seconds per run and stops. --add-only runs the design that adds Muon to Adam instead of the map, and --add runs it after the map. --few --start SPEC is a cut-down map for a width too costly to map in full.
 """
 import argparse, concurrent.futures as cf, json, multiprocessing as mp, os, re, sys, time
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, HERE)
@@ -74,9 +74,10 @@ def walk(R, make, grid, worlds, label):
     v = {f: R.mean(make(f), worlds) for f in grid if all((arms.show(make(f)), w) in R.rows for w in worlds)}; best = min(v, key=v.get); print(f"  {label}: {best:g} {v[best]:.4f} of {len(v)}", flush=True); return best
 
 
-def tune_base(R, worlds):
-    b = arms.parse(MUON); muon = [m for m in b if b[m]["rule"] == "muon"]
+def tune_base(R, worlds, start=MUON, few=False):
+    b = arms.parse(start); muon = [m for m in b if b[m]["rule"] == "muon"]
     f = walk(R, lambda f: scaled(b, muon, f), (.5, 1, 2), worlds, "all Muon lrs x"); b = scaled(b, muon, f)
+    if few: return b
     f = walk(R, lambda f: scaled(b, ADAMS, f), (.5, 1, 2), worlds, "all Adam lrs x"); b = scaled(b, ADAMS, f)
     opts = [{m: dict(g, beta=x) if m in muon else g for m, g in b.items()} for x in (.8, .9, .95)]; R.need(opts, worlds); b = min(opts + [b], key=lambda x: R.mean(x, worlds))
     for g, parts in GROUPS.items():
@@ -90,23 +91,37 @@ def swapped(b, lrs): return {m: dict(rule="adam", lr=lrs[m]) if m in lrs else g 
 def split(b, heads, f): return {m: dict(rule="muonsplit", lr=round(g["lr"] * f, 5), beta=g["beta"], h=heads) if m in ("q", "k") else g for m, g in b.items()}
 
 
+def add_map(R, b, tune, held, tier, path):
+    """Wang et al.'s design on our model: Adam everywhere with one lr, then Muon on some matrices at the baseline's Muon lrs. The last row also retunes Adam on q,k and the other Muon lrs, to show what fixed lrs change."""
+    lr = walk(R, lambda f: swapped(b, {m: f for m in MATS}), (.004, .01, .025), tune, "Adam on all, lr"); A = swapped(b, {m: lr for m in MATS}); qk = walk(R, lambda f: swapped(b, {m: f for m in ("q", "k")}), (.004, .01, .025), tune, "Adam on qk, lr")
+    keep = lambda *parts: {m: b[m] if m in parts else A[m] for m in A}; other = ("v", "o", "gate", "up", "down"); f = walk(R, lambda f: scaled(swapped(b, dict(q=qk, k=qk)), other, f), (.63, 1, 1.6), tune, "other Muon lrs x")
+    rows = dict(qk=keep("q", "k"), vo=keep("v", "o"), ffn=keep("gate", "up", "down"), voffn=keep(*other), voffn_retuned=scaled(swapped(b, dict(q=qk, k=qk)), other, f))
+    R.need([b, A] + list(rows.values()), held); B = np.array([R.val(b, w) for w in held]); Z = np.array([R.val(A, w) for w in held]); out = dict(tier=tier, kind="add", base=arms.show(b), base_held=round(float(B.mean()), 4), adam=arms.show(A), adam_held=round(float(Z.mean()), 4), adam_lr=lr, qk_lr=qk, other_factor=f, rows={})
+    print(f"{tier} all Muon {B.mean():.4f}, all Adam {Z.mean():.4f}", flush=True)
+    for name, s in rows.items():
+        x = np.array([R.val(s, w) for w in held]); g = B - x; h = Z - x; out["rows"][name] = dict(loss=round(float(x.mean()), 4), vs_muon=round(float(g.mean()), 4), vs_muon_error=round(float(g.std(ddof=1) / len(g) ** .5), 4), wins_vs_muon=int((g > 0).sum()), vs_adam=round(float(h.mean()), 4), spec=arms.show(s)); print(f"{name}: loss {x.mean():.4f}, vs all Muon {g.mean():+.4f} error {g.std(ddof=1) / len(g) ** .5:.4f}, vs all Adam {h.mean():+.4f}", flush=True)
+    if path: open(path, "a").write(json.dumps(out) + "\n")
+
+
 def main():
     global PATH, STEPS
-    p = argparse.ArgumentParser(); p.add_argument("tier"); p.add_argument("--results", required=True); p.add_argument("--tune", default="0,1"); p.add_argument("--held", default="5,6,7,8,9"); p.add_argument("--par", type=int, default=4); p.add_argument("--hours", type=float, default=11); p.add_argument("--out", default=""); p.add_argument("--time-only", action="store_true"); a = p.parse_args()
+    p = argparse.ArgumentParser(); p.add_argument("tier"); p.add_argument("--results", required=True); p.add_argument("--tune", default="0,1"); p.add_argument("--held", default="5,6,7,8,9"); p.add_argument("--par", type=int, default=4); p.add_argument("--hours", type=float, default=11); p.add_argument("--out", default=""); p.add_argument("--time-only", action="store_true"); p.add_argument("--add", action="store_true", help="also run the add-Muon-to-Adam design"); p.add_argument("--add-only", action="store_true"); p.add_argument("--few", action="store_true", help="for a width too costly to map: tune only a shared Muon factor from --start, and run base, vo, qk, ffn and split"); p.add_argument("--start", default=MUON); a = p.parse_args()
     PATH = os.path.abspath(a.results); tune = [int(x) for x in a.tune.split(",")]; held = [int(x) for x in a.held.split(",")]; R = Runner(a.tier, a.par, a.hours); heads = env.TIERS[a.tier]["heads"]
     if a.time_only:
         STEPS = 200; t = time.time(); R.need([arms.parse(MUON)], [0, 1, 2, 5]); print(a.tier, "seconds for 4 runs at once, 200 steps", round(time.time() - t, 1), [(r["s_per_step"], r["train_s"], r["eval_s"]) for r in R.rows.values() if r["steps"] == 200], flush=True); return R.ex.shutdown()
-    print(a.tier, "tuning Muon", flush=True); b = tune_base(R, tune); print("base", arms.show(b), f"{R.mean(b, tune):.4f}", flush=True)
-    lrs = {}
-    for name, parts in TUNED.items():  # one Adam lr per group, chosen on tune worlds; single matrices and joint moves inherit it
+    print(a.tier, "tuning Muon", flush=True); b = tune_base(R, tune, a.start, a.few); print("base", arms.show(b), f"{R.mean(b, tune):.4f}", flush=True)
+    if a.add_only: add_map(R, b, tune, held, a.tier, a.out); return R.ex.shutdown()
+    lrs = dict(gate=.01, up=.01, down=.01) if a.few else {}
+    for name, parts in ({k: v for k, v in TUNED.items() if k != "ffn"} if a.few else TUNED).items():  # one Adam lr per group, chosen on tune worlds; single matrices and joint moves inherit it
         lr = walk(R, lambda f: swapped(b, {m: f for m in parts}), (.004, .01, .025), tune, f"Adam on {name}, lr")
         for m in parts: lrs[m] = lr
-    f = walk(R, lambda f: split(b, heads, f), (1, 2, 4), tune, "per-head q,k, lr x"); picks = {name: swapped(b, {m: lrs[m] for m in parts}) for name, parts in SWAPS.items()}; picks["split"] = split(b, heads, f)
+    f = 1 if a.few else walk(R, lambda f: split(b, heads, f), (1, 2, 4), tune, "per-head q,k, lr x"); picks = {name: swapped(b, {m: lrs[m] for m in parts}) for name, parts in SWAPS.items() if not a.few or name in ("vo", "qk", "ffn")}; picks["split"] = split(b, heads, f)
     R.need([b] + list(picks.values()), held); B = np.array([R.val(b, w) for w in held]); out = dict(tier=a.tier, base=arms.show(b), base_tune=round(R.mean(b, tune), 4), base_held=round(float(B.mean()), 4), s_per_step=R.rows[(arms.show(b), held[0])]["s_per_step"], adam_lr=lrs, split_factor=f, gaps={})
     print(f"{a.tier} base held-out {B.mean():.4f}", flush=True)
     for name, s in picks.items():
         g = B - np.array([R.val(s, w) for w in held]); out["gaps"][name] = dict(mean=round(float(g.mean()), 4), error=round(float(g.std(ddof=1) / len(g) ** .5), 4), wins=int((g > 0).sum()), worlds=np.round(g, 4).tolist(), spec=arms.show(s)); print(f"{name}: {g.mean():+.4f} error {g.std(ddof=1) / len(g) ** .5:.4f} wins {(g > 0).sum()}/{len(g)}", flush=True)
     if a.out: open(a.out, "a").write(json.dumps(out) + "\n")
+    if a.add: add_map(R, b, tune, held, a.tier, a.out)
     R.ex.shutdown()
 
 

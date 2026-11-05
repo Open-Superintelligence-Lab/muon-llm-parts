@@ -1,14 +1,14 @@
-"""Packs one private Kaggle job: python3 kaggle/make.py NAME "tier tier ..." [--time-only] [--seed path.jsonl] writes kaggle/NAME/job.py and kernel-metadata.json. Push with kaggle kernels push -p kaggle/NAME.
+"""Packs one private Kaggle job: python3 kaggle/make.py NAME "tier tier ..." [--time-only] [--add] [--add-only] [--seed path.jsonl] [--hours H] [--pass "more map_parts arguments"] writes kaggle/NAME/job.py and kernel-metadata.json. Push with kaggle kernels push -p kaggle/NAME.
 The job installs tiktoken, downloads only the FineWeb shards its worlds read, and writes everything to /kaggle/working so it comes back with kaggle kernels output."""
 import base64, io, json, os, sys, tarfile
 HERE = os.path.dirname(os.path.abspath(__file__)); SRC = os.path.dirname(HERE); args = sys.argv[1:]
-name, tiers = args[0], args[1]; time_only = "--time-only" in args; seed = args[args.index("--seed") + 1] if "--seed" in args else ""
+name, tiers = args[0], args[1]; time_only = "--time-only" in args; extra = [x for x in ("--add", "--add-only") if x in args]; seed = args[args.index("--seed") + 1] if "--seed" in args else ""; hours = float(args[args.index("--hours") + 1]) if "--hours" in args else 11.3; more = args[args.index("--pass") + 1].split() if "--pass" in args else []
 buf = io.BytesIO()
 with tarfile.open(fileobj=buf, mode="w:gz") as t:
     for f in ("env.py", "evals.py", "rules.py", "arms.py", "runq.py", "sandbox.py", "debug/map_parts.py"): t.add(os.path.join(SRC, f), f)
     for f in ("facts.json", "counts.npy"): t.add(os.path.realpath(os.path.join(SRC, "data", f)), "data/" + f)
 job = os.path.join(HERE, name); os.makedirs(job, exist_ok=True)
-body = f"CODE = {base64.b64encode(buf.getvalue()).decode()!r}\nSEED = {base64.b64encode(open(seed, 'rb').read()).decode() if seed else ''!r}\nTIERS = {tiers.split()!r}\nTIME_ONLY = {time_only!r}\n" + r'''
+body = f"CODE = {base64.b64encode(buf.getvalue()).decode()!r}\nSEED = {base64.b64encode(open(seed, 'rb').read()).decode() if seed else ''!r}\nTIERS = {tiers.split()!r}\nTIME_ONLY = {time_only!r}\nEXTRA = {extra + more!r}\nHOURS = {hours!r}\n" + r'''
 import base64, io, os, subprocess, sys, tarfile, time
 T0 = time.time(); OUT = "/kaggle/working"; C = "/tmp/code"; W = "/tmp/web"; os.makedirs(C, exist_ok=True); os.makedirs(W, exist_ok=True)
 tarfile.open(fileobj=io.BytesIO(base64.b64decode(CODE))).extractall(C)
@@ -23,10 +23,10 @@ for f in ["fineweb_val_000000.bin"] + [f"fineweb_train_{w + 1:06d}.bin" for w in
 say("data ready", round(time.time() - T0), "s"); say(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout)
 E = dict(os.environ, FWDIR=W, RUNS_DIR="/tmp/runs", OPTIMIZERS_DIR=C, PYTHONWARNINGS="ignore", LOAD="99")
 for t in TIERS:
-    left = 11.3 - (time.time() - T0) / 3600
+    left = HOURS - (time.time() - T0) / 3600
     if left < .1: say("out of time before", t); break
     say("==", t, "hours left", round(left, 2))
-    cmd = [sys.executable, "debug/map_parts.py", t, "--results", OUT + "/map.jsonl", "--out", OUT + "/map_out.jsonl", "--hours", str(left), "--par", "4"] + (["--time-only"] if TIME_ONLY else [])
+    cmd = [sys.executable, "debug/map_parts.py", t, "--results", OUT + "/map.jsonl", "--out", OUT + "/map_out.jsonl", "--hours", str(left), "--par", "4"] + (["--time-only"] if TIME_ONLY else []) + EXTRA
     p = subprocess.Popen(cmd, cwd=C, env=E, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     for line in p.stdout:
         if not any(x in line for x in ("Exception ignored", "weakref", "AttributeError")): say(line.rstrip())
