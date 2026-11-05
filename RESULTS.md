@@ -419,6 +419,14 @@ Verdicts at both lengths. No optimizer passes the win rule on any part.
 
 Limits: this is one model size, width 48, at two short lengths. Earlier map results show the size and length can change the answer, so these verdicts need a larger run.
 
+## 2026-11-05: Random optimizer search, prediction before running
+
+Vuk asked for many random, diverse optimizers on each part. `optimizers/x_rand.py` has five stages: gradient edit (10 choices plus none), memory (9 plus Nesterov), direction shape (25, each tried equally often), step size (9 plus constant) and weight edit (6 plus none). All stages at 0 is Muon, with a difference of 0 on random inputs. `debug/random_opt.py` screens candidates at width 48, 250 steps, on world 0, with three lrs. The top 20 per part get three finer lrs on worlds 0,1, and the top 6 are scored on worlds 5-9.
+
+The size check for the screen: over the 13 moves in the map, part costs at width 32 and 48 correlate .97 and .96 with width 256, and width 64 at 8,000 steps correlates .25. Small runs predict size better than they predict long training, so a winner must also hold at longer runs.
+
+Prediction: no candidate passes the win rule (gain above .005 in 5 of 5 worlds at both lengths, and above 7.53 errors). Many will beat the base on world 0 by chance, since a one-world gap under about .004 is noise.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
