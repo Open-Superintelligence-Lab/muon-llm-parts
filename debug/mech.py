@@ -31,14 +31,15 @@ def loss(ctx): return float(np.mean(ctx.row_loss(ctx.W.val)))
 
 def job(x):
     name, spec, tier, w, analyse, noqk, steps = x; torch.set_num_threads(1); held = []; LM = env.LM
-    if steps: env.TIERS[tier] = dict(env.TIERS[tier], steps=steps)
+    if steps: env.TIERS[tier] = dict(env.TIERS[tier], steps=steps, val_rows=64)  # debug only
 
     def hold(*a, **k):
         held.append(LM(*a, **k)); return held[-1]
     env.LM = hold
     a = env.parser().parse_args(["--tier", tier] + (["--no-qknorm"] if noqk else [])); a.world = w; a.evals = "tune"; a.threads = 1
+    a.device = f"cuda:{(mp.current_process()._identity[0] - 1) % torch.cuda.device_count()}" if torch.cuda.is_available() else "cpu"
     W = env.World(dict(env.TIERS[tier]), env.TIERS[tier]["steps"], w); env.train(a, spec, W=W, out=os.path.join(tempfile.mkdtemp(), "x.jsonl"))
-    model = held[-1].eval(); c = env.TIERS[tier]; ctx = evals.Ctx(model, W, c, "cpu"); r = dict(name=name, world=w, loss=loss(ctx))
+    model = held[-1].eval(); c = env.TIERS[tier]; ctx = evals.Ctx(model, W, c, a.device); r = dict(name=name, world=w, loss=loss(ctx))
     r["rarity"] = {k: float(np.nanmean(v)) for k, v in evals.rarity(ctx).items()}
     if analyse:
         r["cut"] = {}; base = r["loss"]
@@ -58,7 +59,7 @@ def job(x):
 
 
 def main():
-    p = argparse.ArgumentParser(); p.add_argument("--tier", required=True); p.add_argument("--add", default=""); p.add_argument("--out", required=True); p.add_argument("--worlds", default="5,6,7,8,9"); p.add_argument("--par", type=int, default=9); p.add_argument("--cut-only", action="store_true"); p.add_argument("--no-qknorm", action="store_true"); p.add_argument("--map", default="", help="a map_out.jsonl: trains that tier's Muon base and the base with v,o moved to tuned Adam, and cuts both"); p.add_argument("--steps", type=int, default=0, help="debug only: override the tier's steps"); a = p.parse_args()
+    p = argparse.ArgumentParser(); p.add_argument("--tier", required=True); p.add_argument("--add", default=""); p.add_argument("--out", required=True); p.add_argument("--worlds", default="5,6,7,8,9"); p.add_argument("--par", type=int, default=9); p.add_argument("--cut-only", action="store_true"); p.add_argument("--no-qknorm", action="store_true"); p.add_argument("--map", default="", help="a map_out.jsonl: trains that tier's Muon base and the base with v,o moved to tuned Adam, and cuts both"); p.add_argument("--steps", type=int, default=0, help="debug only: override the tier's steps and use 64 report rows"); a = p.parse_args()
     if a.map:
         row = [x for x in map(json.loads, open(a.map)) if x["tier"] == a.tier][-1]; specs = dict(muon=arms.parse(row["base"]), vo_adam=arms.parse(row["gaps"]["vo"]["spec"]))
     else:

@@ -1,0 +1,15 @@
+data ready 24 s
+GPU 0: Tesla T4 (UUID: GPU-e51ce152-9899-016c-380f-b08f8a11d652)
+GPU 1: Tesla T4 (UUID: GPU-58bc2776-4181-55d0-3175-9e881ddc5a99)
+
+== w512 hours left 11.29
+w512 tuning Muon
+  all Muon lrs x: 1 4.0398 of 3
+base down=muon:0.0255:beta=0.9;emb=adam:0.0475:b1=0.7;gate=muon:0.00819:beta=0.9;head=adam:0.012:b1=0.3:b2=0.999;k=muon:0.0335:beta=0.9;norm=adam:0.00475:b2=0.9;o=muon:0.01606:beta=0.9;q=muon:0.0335:beta=0.9;up=muon:0.00819:beta=0.9;v=muon:0.01606:beta=0.9 4.0398
+  Adam on vo, lr: 0.00064 4.0808 of 5
+  Adam on ffn, lr: 0.0016 4.0526 of 5
+w512 base held-out 4.0445
+vo: -0.0476 error 0.0001 wins 0/3
+ffn: -0.0165 error 0.0018 wins 0/3
+split: +0.0021 error 0.0021 wins 2/3
+w512 done with code 0 at 127 min

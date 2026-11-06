@@ -4,10 +4,10 @@ Notes for co-authors, 2026-11-06. Every number comes from `RESULTS.md`, where ea
 
 ## The short version
 
-1. **Value and output are the parts that need Muon.** Moving them to Adam costs the most, and the cost doubles each time the width doubles. Query and key barely need Muon. The three feed-forward matrices can each move alone at no cost, but not all together.
+1. **Value and output are the parts that need Muon.** Moving them to Adam costs the most at every width from 64 to 512, and the cost doubles each time the width doubles up to 256. Query and key barely need Muon up to width 256, but at width 512 they do. The three feed-forward matrices can each move alone at no cost, but not all together.
 2. **Groups need different things from Muon's step.** Value and output need the weak directions of the step to keep a full-size step. Query and key need the strong directions to keep theirs.
 3. **The weak directions carry information.** Scrambling where they point hurts value and output about as much as deleting them.
-4. **Query and key weights use few directions.** Keeping only the top quarter of directions costs query and key a sixth of what it costs value and output. Muon spreads every group over more directions than Adam does.
+4. **Query and key weights use few directions.** Keeping only the top quarter of directions costs query and key a sixth of what it costs value and output. Muon spreads every group over more directions than Adam does, but the spread does not set the size of the gain: it grows with training length while the gain shrinks.
 5. **Nothing we tried beats tuned Muon per group.** The groups fail on opposite sides of Muon's step shape, and near Muon the loss barely changes. The best changes gain about .002 at 1,000 steps and nothing at 4,000.
 6. **For ICML this is not enough yet.** The value and output result is already published. The query and key side and the "why nothing beats it" account are new, but we still need a tested mechanism for query and key.
 
@@ -22,7 +22,7 @@ Notes for co-authors, 2026-11-06. Every number comes from `RESULTS.md`, where ea
 
 ## How we test
 
-- **Model.** A small LLM with RoPE, RMSNorm, QK-norm and a gated feed-forward layer. Most step tests use width 48 with 2 layers. Size tests on Kaggle GPUs go from width 64 (0.71M weights) to width 256 (6.8M weights).
+- **Model.** A small LLM with RoPE, RMSNorm, QK-norm and a gated feed-forward layer. Most step tests use width 48 with 2 layers. Size tests on Kaggle GPUs go from width 64 (0.71M weights) to width 512 (29M weights).
 - **Worlds.** A world is its own training text, validation text and data order. Worlds 0-4 choose settings, worlds 5-9 report them, and worlds 10-14 rescore anything picked as best of many. Five more worlds are sealed and have not been read.
 - **Fair baseline.** Muon's learning rate and momentum are tuned first. Every change gets its own learning rate chosen on tune worlds before it is scored.
 - **Win line.** A gap above .005 with the same sign on all 5 held-out worlds.
@@ -31,14 +31,15 @@ Notes for co-authors, 2026-11-06. Every number comes from `RESULTS.md`, where ea
 
 Cost of moving each group from tuned Muon to Adam at 2,000 steps, worlds 5-9:
 
-| Moved to Adam | Width 64 | Width 128 | Width 256 |
-|---|---|---|---|
-| Value and output | -.0135 (.0026) | -.0202 (.0018) | -.0403 (.0019) |
-| Gate, up and down | -.0022 (.0022) | -.0053 (.0015) | -.0111 (.0014) |
-| Query and key | -.0002 (.0019) | +.0056 (.0014) | -.0012 (.0014) |
+| Moved to Adam | Width 64 | Width 128 | Width 256 | Width 512 (worlds 5-7) |
+|---|---|---|---|---|
+| Value and output | -.0135 (.0026) | -.0202 (.0018) | -.0403 (.0019) | -.0476 (.0001) |
+| Gate, up and down | -.0022 (.0022) | -.0053 (.0015) | -.0111 (.0014) | -.0165 (.0018) |
+| Query and key | -.0002 (.0019) | +.0056 (.0014) | -.0012 (.0014) | -.0091 (.0006) |
 
-- Value and output cost about twice as much at each doubling of width.
-- Query and key stay near zero. At width 128, Adam on query alone even beats Muon by .0063 on 5/5 worlds.
+- Value and output cost about twice as much at each doubling of width up to 256. From 256 to 512 the growth slows (.0403 to .0476).
+- Query and key stay near zero up to width 256. At width 128, Adam on query alone even beats Muon by .0063 on 5/5 worlds. At width 512 they need Muon (-.0091, 3/3), so "query and key don't need Muon" holds only up to 256.
+- Width 512 is a cut-down map (3 worlds, each group's Adam learning rate walked until both ends lost). An earlier width-512 run had the feed-forward Adam learning rate fixed at .01 and showed a wrong cost of .2108.
 - Each feed-forward matrix moved alone costs nothing at any size.
 - Longer training shrinks every gap. At width 64, moving all seven matrices costs .0433 at 500 steps, .0119 at 2,000 and .0041 at 8,000.
 
@@ -100,6 +101,18 @@ Test: train a model, then keep only the top 12 of 48 directions in one group's w
 - Muon spreads weights over more directions than Adam in every group: the same cut costs value and output .1193 under Muon and .0339 under Adam.
 - The ratio does not rise with length (.25, .15, .14). So query and key's fading tolerance of the gradient's shape is not because they start using relatively more directions. That prediction failed.
 
+**Spread does not set the size of the gain.** We compared all Adam with Adam plus Muon on value and output only. "Spread gap" is how much more the top-12 cut costs in the second model:
+
+| Steps | Value and output gain from Muon | Spread gap | Gain left after cutting both to top 36 of 48 |
+|---|---|---|---|
+| 250 | +.0194 (.0025) | +.0268 (.0023) | 97% |
+| 1,000 | +.0156 (.0011) | +.0784 (.0051) | 91% |
+| 4,000 | +.0102 (.0011) | +.1237 (.0060) | 58% |
+
+- The spread grows 4.6 times while the gain halves. We predicted this before the run.
+- Muon on query and key spreads them too (.0195 vs .0075) and gains nothing.
+- With longer training, more of the value and output gain sits in the weakest directions.
+
 This supports one half of the guess: deciding where to attend uses few directions, so a step shape that serves only the strong directions costs query and key little. It does not yet show why value and output need the weak ones.
 
 **The rare-token test failed.** We predicted that Muon on value and output helps rare tokens most, as the associative-memory account suggests. At 1,000 steps Muon on value and output (added to all-Adam) helps rarer tokens +.0203 and common tokens +.0149, only 1.36 times more. At 250 steps the gain is on common tokens (+.0214 vs +.0008) and on phrases seen 10 or more times (+.0846 vs +.0154 for unseen phrases). Muon on query and key helps no bucket. Limit: our vocabulary is the 1,000 most common GPT-2 tokens, so "rarer" tokens are still common words.
@@ -141,7 +154,7 @@ Each had a prediction written before the run.
 | Claim | Status |
 |---|---|
 | Value, output and feed-forward carry Muon's benefit; query and key little | Published by [Wang et al.](https://arxiv.org/abs/2509.26030) (adding Muon to Adam at 160M). They explain it as associative memory: Muon learns all stored facts, including rare ones, at an equal rate. We confirm it from the other direction (removing Muon from a tuned Muon baseline) |
-| Value and output cost grows with width; all gaps shrink with length | Ours, at 0.7M to 6.8M weights |
+| Value and output cost grows with width; all gaps shrink with length | Ours, at 0.7M to 29M weights |
 | Query and key prefer the opposite side of Muon, and that fades with length | Ours. No paper we found splits step shape by group |
 | Weak directions matter by where they point (scramble = remove) | Ours |
 | Why reshaping sizes cannot beat tuned Muon (two failure sides, flat middle) | Ours. Related papers reshape the spectrum for all matrices at once: [Muon^p](https://arxiv.org/abs/2606.13867), [BulkBoost](https://arxiv.org/abs/2610.07497), [Freon and Kaon](https://arxiv.org/abs/2605.11181), [HTMuon](https://arxiv.org/abs/2603.10067) |
@@ -153,7 +166,7 @@ Not yet. On the reviewer form:
 
 - **Soundness:** good. Held-out worlds, re-tuned baselines, picks rescored on unused worlds, predictions written before runs.
 - **Originality:** medium. The main value and output map repeats Wang et al. The query and key side and the flat-middle account are new.
-- **Significance:** limited. Our models go up to 6.8M weights, against 160M in the closest work, and every per-group gain fades with length.
+- **Significance:** limited. Our models go up to 29M weights, against 160M in the closest work, and every per-group gain fades with length.
 - **Main gap:** we say why value and output need Muon, using Wang et al.'s associative-memory account. We do not yet know why query and key don't. Our guess: deciding where to attend needs only a few strong directions, while storing facts needs many. Finding 4 supports the first half (query and key use few directions, also without QK-norm). The second half failed its first test: the value and output gain is not on rare tokens in our models.
 
 Estimate as it stands: weak reject to borderline. With the query and key mechanism tested and holding, borderline accept is realistic.
@@ -163,7 +176,7 @@ Estimate as it stands: weak reject to borderline. With the query and key mechani
 1. **Done, held.** How many directions each group uses (Finding 4).
 2. **Done, failed.** Rare vs common tokens (Finding 4).
 3. **Done, failed.** Query and key do not catch up with value and output in directions used as training gets longer.
-4. **Next. Why the value and output cost doubles with width.** Repeat test 1 at widths 64, 128 and 256. Prediction: the number of directions value and output use grows with width.
+4. **Length side done, held: spread grows while the gain shrinks** (Finding 4). Width side running on Kaggle (`mech-a`, widths 64, 128, 256): does the spread gap follow the value and output cost as width grows?
 
 ## Where things are
 

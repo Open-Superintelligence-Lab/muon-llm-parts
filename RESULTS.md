@@ -689,7 +689,7 @@ Reading: two parts. (1) A flat step about a third of Muon's (.32) gives +.0014, 
 | Query and key | -.0091 (.0006) | 0 |
 | Muon per head on query and key (not Adam) | +.0021 (.0021) | 2 |
 
-At width 512 every group needs Muon, and the order is the same as at width 48: FFN most, then value and output, then query and key. The FFN cost (.21) is about 40 times its width-128 size, and it is not a fair number: in this cut-down map (`--few`) the FFN Adam lr was fixed at .01, not walked. Value and output's walked Adam lr ended at .00064, the lowest value tried, so it also sits at the edge of its walk. Job map-g reruns both groups with Adam lrs walked from .00025 to .01 and further past a winning end. Until it returns, only the order (every group needs Muon at width 512) stands, not the sizes.
+At width 512 every group needs Muon, and the order is the same as at width 48: FFN most, then value and output, then query and key. The FFN cost (.21) is about 40 times its width-128 size, and it is not a fair number: in this cut-down map (`--few`) the FFN Adam lr was fixed at .01, not walked. Value and output's walked Adam lr ended at .00064, the lowest value tried, so it also sits at the edge of its walk. Job map-g reruns both groups with Adam lrs walked from .00025 to .01 and further past a winning end. Until it returns, only the order (every group needs Muon at width 512) stands, not the sizes. Update: map-g returned, see the next section; the FFN number here is wrong and the order changes.
 
 ## 2026-11-06: Kaggle add design at width 128 (job map-e)
 
@@ -902,3 +902,20 @@ Data: `results/mech/w48_spread.json`, `w48x1000_spread.json`, `w48x4000_spread.j
 - At 250 steps the gain survives removing the weakest quarter of directions. At 4,000 steps 42% of it is gone.
 - So with longer training more of Muon's v,o gain sits in weak directions, and the Muon model depends on them more: with 24 directions kept it is worse than Adam at 4,000 steps.
 - Limit: cutting is not additive, so "the share of the gain in the weakest quarter" is a rough reading.
+
+## 2026-11-06: Width 512 with tuned Adam lrs (job map-g)
+
+`kaggle/out/map-g`, same width-512 shape, worlds 5-7. Adam lrs walked on world 0: v,o tried .00025, .00064, .0016, .004, .01, .025 and picked .00064; FFN tried .00025, .00064, .0016, .004, .01 and picked .0016. Both picks are inside their walks.
+
+| Moved to Adam | Gap | Wins of 3 |
+| --- | --- | --- |
+| Value and output | -.0476 (.0001) | 0 |
+| Gate, up and down | -.0165 (.0018) | 0 |
+| Query and key (from map-f) | -.0091 (.0006) | 0 |
+| Muon per head on query and key | +.0021 (.0021) | 2 |
+
+- The map-f FFN cost of .2108 came from the untuned Adam lr of .01. Tuned, it is .0165.
+- The order now matches every smaller width: v,o most, then FFN, then q,k.
+- v,o by width: .0135, .0202, .0403, .0476 (64 to 512). The doubling stops between 256 and 512.
+- q,k need Muon at width 512 (-.0091, 3/3). Up to width 256 they did not. The q,k claim holds only up to 256.
+- Figure 1 (`paper/fig/width.py`) now shows width 512 as open markers.
