@@ -25,13 +25,14 @@ Muon~\cite{muon} replaces each hidden matrix's update with the nearest matrix th
 
 Wang et al.~\cite{wang2025tail} answered the first version of this question. They start from Adam everywhere and add Muon to one group at a time at 160M parameters and 10,000 steps. Muon on the value and output matrices plus the feed-forward layer nearly matches Muon everywhere, and Muon on query and key alone adds little to Adam. Our results agree with that ranking.
 
-This paper asks three questions that their design leaves open.
+This paper asks five questions that their design leaves open.
 
 \begin{enumerate}
 \item What does each matrix lose when it alone leaves a tuned Muon baseline? Adding Muon to Adam and removing it from Muon are different questions when matrices interact. In their gated table, Muon on any one feed-forward matrix lowers the loss by about .09 to .10 from Adam everywhere, while leaving one feed-forward matrix out of the full Muon set of value, output and feed-forward matrices costs .017 to .052.
 \item Does the map survive tuning? Wang et al.\ keep the Muon learning rate fixed across their ablations and treat the remaining gap as possibly due to it. We retune the learning rate of every change on tune worlds and score it on other worlds.
 \item How does the map move with width and with training length? Their numeric tables are at one size and one length.
 \item What does each group need from Muon's step? We keep Muon's singular directions and change only their sizes, one group at a time.
+\item Can a step chosen for one group beat tuned Muon on that group? We test random update rules, published variants and spectrum shapes, rescore every pick on worlds no choice looked at, and repeat the best at four times the training length.
 \end{enumerate}
 
 \section{Setup}
