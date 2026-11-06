@@ -1018,3 +1018,16 @@ Result, `results/induction/w64rep25x4000_w5.json` (world 5, one run per arm, 4,0
 - Prediction 3 cannot be read as written, because the map arms switch one part from Muon to Adam rather than adding Muon to one part. Read the other way, putting q,k on Adam removed the head almost entirely (attention 0.049 against 0.15-0.18 elsewhere), while loss was only 0.016 worse than Muon's.
 - Kill rule: Adam loss minus Muon loss peaks at 0.127 at step 500 and ends at 0.034 (3.7×). The window was 500-2,700 (formation steps 900 and 2,300, ±400). The peak sits on the window's first step, so it passes only at the edge. Muon also leads early at every tier, so this peak may be general early speed rather than the head.
 - Next: worlds 6 and 7 for Muon, all Adam, and Muon with q,k on Adam, to see whether the missing head is real.
+
+Replication on worlds 6 and 7 (`results/induction/w64rep25x4000_w67.json`), with the same setting. Each world has its own init and tune rows; the training stream is the same. Values are ICL (mean of the last 5 probes) / best-head induction attention at step 4,000 / first step attention ≥ 0.05:
+
+| arm | world 5 | world 6 | world 7 | final loss w5 / w6 / w7 |
+|---|---|---|---|---|
+| Muon | 0.463 / 0.175 / 600 | 0.624 / 0.071 / 2,500 | 0.394 / 0.065 / 2,400 | 4.4432 / 4.3785 / 4.4124 |
+| all Adam | 0.644 / 0.157 / 1,000 | 2.025 / 0.375 / 800 | 0.458 / 0.075 / 100 | 4.4773 / 4.4210 / 4.4194 |
+| Muon, q,k on Adam | 0.242 / 0.049 / 3,700 | 0.338 / 0.032 / never | 0.175 / 0.014 / never | 4.4597 / 4.3994 / 4.4263 |
+
+- Prediction 2 failed. Muon's head formed earlier only on world 5. On worlds 6 and 7, Adam's formed first (step 800 vs 2,500 on world 6), and Adam ended with the larger copy score on all three worlds.
+- Muon had the lowest loss on all three worlds, 0.007-0.043 below Adam. So lower loss did not come with a stronger induction head.
+- By the kill rule's own terms, the direction "Muon forms the induction head earlier" is dropped.
+- One result held on all three worlds: Muon with q,k on Adam had the lowest copy score (0.18-0.34, against 0.39-0.62 for Muon and 0.46-2.03 for Adam), and its best head never passed attention 0.05 by step 3,600. Its loss sits within 0.02 of the other two. Untested: whether this comes from the mix itself or from the q,k learning rate (0.0625, tuned for loss at 2,000 steps).
