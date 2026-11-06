@@ -1,0 +1,9 @@
+{
+"tier": "5sx4",
+"rows": {
+"per-head q,k": {
+"mean": 0.0032,
+"spec": "down=muon:0.051:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.01032:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muonsplit:0.16884:beta=0.8:h=4;norm=adam:0.019:b2=0.9;o=muon:0.051:beta=0.8;q=muonsplit:0.16884:beta=0.8:h=4;up=muon:0.01032:beta=0.8;v=muon:0.051:beta=0.8"
+}
+}
+}

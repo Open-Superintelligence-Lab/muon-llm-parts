@@ -1,0 +1,18 @@
+{
+"worlds": [
+10,
+11,
+12,
+13,
+14
+],
+"base": 4.1461,
+"rows": {
+"perhead_pick per-head q,k": {
+"old": 0.0032,
+"new": 0.002,
+"error": 0.0016,
+"wins": 3
+}
+}
+}

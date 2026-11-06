@@ -770,6 +770,10 @@ On world 0, 25 of 300 v,o candidates beat the base (best +.0034, median -.0117) 
 
 The search found nothing on FFN beyond +.0015. Its only v,o rule that held is the same family as the tilted step above (exponent above .5 with momentum .95), found without being told about it, and it gains less (+.0015 on unused worlds) than the hand-set ramp did at 1,000 steps.
 
+## 2026-11-06: Per-head Muon on query and key, unused worlds and 4,000 steps
+
+Per-head Muon on q,k (4 heads, lr x4 of whole-matrix Muon's) gained +.0032 (.0013) on worlds 5-9 at 1,000 steps. On worlds 10-14 it gains +.0020 (.0016), 3/5 (`results/papers/recheck_perhead.json`). At 4,000 steps on worlds 5-14 (`debug/perhead_long.py`, `results/papers/perhead_4000.json`) it gains +.0011 (.0008) 7/10 at lr x4 and +.0004 (.0009) 6/10 at x2. Per-head q,k is a small, early gain that fades with length, like the v,o tilt.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
