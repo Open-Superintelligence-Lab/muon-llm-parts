@@ -1,0 +1,52 @@
+{
+ "adam/w5": {
+  "held": 4.4473,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.972,
+   "second": 9.0965,
+   "icl": 1.8755,
+   "acc": 0.0026,
+   "second_se": 0.0113
+  },
+  "freq": {
+   "first": 8.5429,
+   "second": 6.5453,
+   "icl": 1.9976,
+   "acc": 0.0997,
+   "second_se": 0.0137
+  },
+  "off63": {
+   "first": 10.9465,
+   "second": 9.4405,
+   "icl": 1.506,
+   "acc": 0.0022,
+   "second_se": 0.01
+  }
+ },
+ "muon/w5": {
+  "held": 4.4493,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.2036,
+   "second": 7.7603,
+   "icl": 3.4433,
+   "acc": 0.037,
+   "second_se": 0.0356
+  },
+  "freq": {
+   "first": 8.634,
+   "second": 4.404,
+   "icl": 4.23,
+   "acc": 0.2779,
+   "second_se": 0.0159
+  },
+  "off63": {
+   "first": 11.1731,
+   "second": 7.9304,
+   "icl": 3.2428,
+   "acc": 0.0332,
+   "second_se": 0.0348
+  }
+ }
+}

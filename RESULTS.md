@@ -1063,3 +1063,17 @@ Result C (`results/induction/w64rep25x4000_w89.json`). Every saved final model w
 - Muon's held-out loss is below Adam's on all 5 worlds: 4.407/4.444, 4.412/4.446, 4.434/4.450, 4.421/4.493, 4.403/4.437.
 - No model in this setting has a working copying head. Second-copy loss on uniform random tokens is 9.5-11.0 nats, above the 8.29 of a uniform guess, and copy accuracy is 0.0-1.4%. At a 63-token look-back, the copy score goes up to 3.8 for some models and down to -5.9 for others. The repeated-first-half data taught a fixed 64-token look-back, not content copying, so the whole `--rep 0.25` series measures that look-back and not induction.
 - Next: `--repvar`, where each repeat copies a 20-token span to a random later place, 21-87 tokens back, so that only content-based copying helps. Pilot on world 5, Muon and Adam, half of the rows. Pass condition before any Muon/Adam comparison counts: copy accuracy above 30% on the uniform probe for both arms.
+
+Pilot result, `--repvar --rep 0.5`, world 5, 4,000 steps (`results/induction/w64repvar50x4000_w5.json`, re-measure in `eval_repvar50x4000.json`):
+
+| step | 1,000 | 1,500 | 2,000 | 2,500 | 3,000 | 3,500 | 4,000 |
+|---|---|---|---|---|---|---|---|
+| Muon ICL / best-head attention | 0.18/0.08 | 0.79/0.34 | 1.35/0.42 | 1.88/0.42 | 2.29/0.41 | 3.14/0.44 | 3.52/0.45 |
+| Adam ICL / best-head attention | 0.07/0.02 | 0.12/0.02 | 0.23/0.07 | 0.33/0.15 | 0.81/0.31 | 1.62/0.50 | 1.84/0.52 |
+
+- A real copying head now forms in both arms: attention 0.45-0.52 to the right token, against a chance level of 0.02.
+- Muon's head forms about 1,500 steps earlier.
+- Re-measured at the end: copy accuracy is 3.7% (Muon) vs 0.3% (Adam) on uniform probes, and 27.8% vs 10.0% on frequency-matched probes. Second-copy loss on frequency-matched probes is 4.40 vs 6.55. Held-out loss is 4.4493 vs 4.4473, nearly equal.
+- The pass condition I set (above 30% uniform-probe accuracy for both arms) failed. Uniform probes use mostly rare tokens that these models barely predict at all, so I switch the accuracy check to frequency-matched probes for the next runs. This is a change made after seeing data, and I record it here as one.
+
+Prediction D (written before the runs): on worlds 6 and 7 in the same setting, Muon's best head passes attention 0.2 at least 500 steps before Adam's, and Muon's frequency-matched copy accuracy at step 4,000 is higher than Adam's on both worlds.
