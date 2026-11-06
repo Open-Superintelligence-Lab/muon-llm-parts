@@ -145,6 +145,7 @@ Estimate as it stands: weak reject to borderline. With the query and key mechani
 
 ## Where things are
 
+- [Feishu copy](https://vcn2lh6dzewa.feishu.cn/wiki/HJ1CwkImpiEpd8kle52cLR6CnAg) of this note.
 - `paper/main.tex`: draft, with Table `tab:map` (size map), `tab:shape` (step shapes), `tab:weak` (weak directions) and `tab:tilt` (tilted step vs Muon).
 - `RESULTS.md`: every experiment, prediction, script and data file.
 - `results/`, `kaggle/out/`: raw data. `kaggle/*/job.py` is the exact code each GPU job ran.
