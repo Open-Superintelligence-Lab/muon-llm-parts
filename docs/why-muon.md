@@ -7,8 +7,9 @@ Notes for co-authors, 2026-11-06. Every number comes from `RESULTS.md`, where ea
 1. **Value and output are the parts that need Muon.** Moving them to Adam costs the most, and the cost doubles each time the width doubles. Query and key barely need Muon. The three feed-forward matrices can each move alone at no cost, but not all together.
 2. **Groups need different things from Muon's step.** Value and output need the weak directions of the step to keep a full-size step. Query and key need the strong directions to keep theirs.
 3. **The weak directions carry information.** Scrambling where they point hurts value and output about as much as deleting them.
-4. **Nothing we tried beats tuned Muon per group.** The groups fail on opposite sides of Muon's step shape, and near Muon the loss barely changes. The best changes gain about .002 at 1,000 steps and nothing at 4,000.
-5. **For ICML this is not enough yet.** The value and output result is already published. The query and key side and the "why nothing beats it" account are new, but we still need a tested mechanism for query and key.
+4. **Query and key weights use few directions.** Keeping only the top quarter of directions costs query and key a sixth of what it costs value and output. Muon spreads every group over more directions than Adam does.
+5. **Nothing we tried beats tuned Muon per group.** The groups fail on opposite sides of Muon's step shape, and near Muon the loss barely changes. The best changes gain about .002 at 1,000 steps and nothing at 4,000.
+6. **For ICML this is not enough yet.** The value and output result is already published. The query and key side and the "why nothing beats it" account are new, but we still need a tested mechanism for query and key.
 
 ## Words used here
 
@@ -82,6 +83,27 @@ Width 48, gap from Muon:
 
 "Scrambled" keeps each weak direction's size but pairs it with the wrong partner direction, so the step is the same size but points the wrong way. For value, output and feed-forward, scrambling hurts about as much as removing. So the weak directions matter because of where they point, not just because they make the step bigger. Removing them from all seven costs .0282, twice the whole Muon-vs-Adam gap of .0140, so a Muon step without weak directions is worse than Adam.
 
+## Finding 4: query and key weights use few directions
+
+Test: train a model, then keep only the top 12 of 48 directions in one group's weights and measure how much the loss rises. A group that uses few directions loses little. Worlds 5-9, mean (error):
+
+| Model | Steps | Query and key | Value and output | Feed-forward |
+|---|---|---|---|---|
+| Muon | 250 | +.0097 (.0016) | +.0390 (.0034) | +.0567 (.0027) |
+| Muon | 1,000 | +.0182 (.0021) | +.1193 (.0029) | +.0907 (.0040) |
+| Muon | 4,000 | +.0335 (.0018) | +.2469 (.0118) | +.2371 (.0091) |
+| Muon, no QK-norm | 1,000 | +.0231 (.0035) | +.0950 (.0024) | +.0773 (.0029) |
+| Adam | 1,000 | +.0075 (.0005) | +.0339 (.0015) | +.0573 (.0041) |
+
+- Query and key lose .15 of what value and output lose at 1,000 steps. This matched the prediction (under a third).
+- QK-norm is not the reason: without it the ratio is .24.
+- Muon spreads weights over more directions than Adam in every group: the same cut costs value and output .1193 under Muon and .0339 under Adam.
+- The ratio does not rise with length (.25, .15, .14). So query and key's fading tolerance of the gradient's shape is not because they start using relatively more directions. That prediction failed.
+
+This supports one half of the guess: deciding where to attend uses few directions, so a step shape that serves only the strong directions costs query and key little. It does not yet show why value and output need the weak ones.
+
+**The rare-token test failed.** We predicted that Muon on value and output helps rare tokens most, as the associative-memory account suggests. At 1,000 steps Muon on value and output (added to all-Adam) helps rarer tokens +.0203 and common tokens +.0149, only 1.36 times more. At 250 steps the gain is on common tokens (+.0214 vs +.0008) and on phrases seen 10 or more times (+.0846 vs +.0154 for unseen phrases). Muon on query and key helps no bucket. Limit: our vocabulary is the 1,000 most common GPT-2 tokens, so "rarer" tokens are still common words.
+
 ## Why other optimizers do not beat tuned Muon
 
 **The two groups fail on opposite sides of Muon.** Value and output break on the gradient side (p=1). Query and key break on the inverted side (p=-1). Muon's equal sizes (p=0) are safe for both.
@@ -132,16 +154,16 @@ Not yet. On the reviewer form:
 - **Soundness:** good. Held-out worlds, re-tuned baselines, picks rescored on unused worlds, predictions written before runs.
 - **Originality:** medium. The main value and output map repeats Wang et al. The query and key side and the flat-middle account are new.
 - **Significance:** limited. Our models go up to 6.8M weights, against 160M in the closest work, and every per-group gain fades with length.
-- **Main gap:** we say why value and output need Muon, using Wang et al.'s associative-memory account. We do not yet know why query and key don't. Our best guess: deciding where to attend needs only a few strong directions, while storing facts needs many. That guess has not been tested.
+- **Main gap:** we say why value and output need Muon, using Wang et al.'s associative-memory account. We do not yet know why query and key don't. Our guess: deciding where to attend needs only a few strong directions, while storing facts needs many. Finding 4 supports the first half (query and key use few directions, also without QK-norm). The second half failed its first test: the value and output gain is not on rare tokens in our models.
 
 Estimate as it stands: weak reject to borderline. With the query and key mechanism tested and holding, borderline accept is realistic.
 
 ## Next tests, each with a written prediction
 
-1. **How many directions each group really uses.** Cut each group's trained weights to their top-r directions and measure the loss. Prediction: query and key lose little even at small r. Value, output and feed-forward lose a lot. This takes seconds per model.
-2. **Rare vs common tokens.** Split the loss by token frequency when value and output, or query and key, move to Adam. Prediction: the value and output cost sits on rare tokens, and query and key show no rare-token cost.
-3. **Why query and key's tolerance fades.** Repeat test 1 at 250 and 4,000 steps. Prediction: query and key use more directions later in training.
-4. **Why the value and output cost doubles with width.** Repeat test 1 at widths 64, 128 and 256. Prediction: the number of directions value and output use grows with width.
+1. **Done, held.** How many directions each group uses (Finding 4).
+2. **Done, failed.** Rare vs common tokens (Finding 4).
+3. **Done, failed.** Query and key do not catch up with value and output in directions used as training gets longer.
+4. **Next. Why the value and output cost doubles with width.** Repeat test 1 at widths 64, 128 and 256. Prediction: the number of directions value and output use grows with width.
 
 ## Where things are
 
