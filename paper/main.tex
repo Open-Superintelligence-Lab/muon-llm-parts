@@ -39,7 +39,7 @@ This paper asks five questions that their design leaves open.
 
 \paragraph{Model.} A transformer with RoPE, RMSNorm, normalized queries and keys, and a gated SiLU feed-forward layer, with no biases. A block with width $d$ holds $d\times d$ matrices $Q$, $K$, $V$ and $O$, $h\times d$ matrices gate and up, and a $d\times h$ matrix down, with $h=\lfloor 8d/3\rfloor$.
 
-\paragraph{Worlds.} A world fixes the training text, the validation rows and the order of the data. Two worlds share no training or validation tokens. Worlds 0 to 4 choose settings, and worlds 5 to 9 report them. Five further worlds are sealed behind a separate program for later design claims and were not read for this paper.
+\paragraph{Worlds.} A world fixes the training text, the validation rows and the order of the data. Two worlds share no training or validation tokens. Worlds 0 to 4 choose settings, and worlds 5 to 9 report them. Where a setting was picked as the best of many on worlds 5 to 9, worlds 10 to 14, which no choice looked at, rescore it. Five further worlds are sealed behind a separate program for later design claims and were not read for this paper.
 
 \paragraph{Baseline.} Muon on the seven hidden matrix kinds and Adam on the embedding, head and normalization scales. In the small-model table, query and key use per-head Muon and the baseline's learning rate and momentum for each part are tuned together by coordinate descent on the mean of worlds 0 to 4. In the larger-model table, query and key use whole-matrix Muon, as in Wang et al., and the per-head version is a separate row.
 
