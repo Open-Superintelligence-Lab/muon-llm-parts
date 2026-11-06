@@ -15,5 +15,5 @@ for name, c, m, y, e in ROWS:
     ax.annotate(name, (W[-1], y[-1]), xytext=(6, 0), textcoords="offset points", va="center", fontsize=8, color="#333")
 ax.set_xscale("log", base=2); ax.set_xticks(W); ax.set_xticklabels([str(w) for w in W]); ax.set_xlim(52, 1100)
 ax.set_xlabel("Width (2,000 steps)"); ax.set_ylabel("Gap after moving to Adam\n(below 0: Muon better)")
-ax.grid(axis="y", color="#eee", lw=.6); ax.legend(frameon=False, fontsize=7, loc="lower left")
+ax.grid(axis="y", color="#eee", lw=.6); ax.legend(frameon=False, fontsize=7, loc="center right", bbox_to_anchor=(1.02, .42))
 fig.tight_layout(); fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "width.pdf")); fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "width.png"), dpi=200)
