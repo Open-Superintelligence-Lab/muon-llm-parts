@@ -16,7 +16,7 @@ def changed(b, parts, knobs, f): return {m: dict(rule="x_muon_spec", lr=round(g[
 
 def main():
     p = argparse.ArgumentParser(); p.add_argument("tier"); p.add_argument("base_file"); p.add_argument("--results", required=True); p.add_argument("--seed", default=""); p.add_argument("--par", type=int, default=4); p.add_argument("--hours", type=float, default=11); p.add_argument("--out", default=""); a = p.parse_args()
-    mp.PATH = os.path.abspath(a.results); os.makedirs(os.path.dirname(mp.PATH), exist_ok=True); b = arms.parse([json.loads(l) for l in open(a.base_file) if "gaps" in l][-1]["base"]); tune, held = [0, 1], [5, 6, 7, 8, 9]
+    mp.PATH = os.path.abspath(a.results); os.makedirs(os.path.dirname(mp.PATH), exist_ok=True); b = arms.parse((lambda L: ([x for x in L if "gaps" in x] or L)[-1])([json.loads(l) for l in open(a.base_file) if '"base"' in l])["base"]); tune, held = [0, 1], [5, 6, 7, 8, 9]
     if a.seed and not os.path.exists(mp.PATH):
         want = {arms.show(b)}
         with open(mp.PATH, "w") as f: f.writelines(l for l in open(a.seed) if json.loads(l)["spec"] in want)

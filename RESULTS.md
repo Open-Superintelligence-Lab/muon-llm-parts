@@ -228,6 +228,19 @@ Inverted sizes do not work as well as Muon here, unlike the GPT-2 result in that
 
 The pattern from 250 steps holds, with smaller gaps for query and key at `p=-.5`: value and output cannot take the gradient's shape, and query and key cannot take shapes that shrink strong directions. Random sizes stay within .0022 of Muon on every row.
 
+### Step shapes at 4,000 steps
+
+`debug/spec_parts.py 5sx16` (now reads base files with no `gaps` line), data in `results/spec/w48x4000.jsonl` and `w48x4000_out.jsonl`. Base 3.9826 on worlds 5-9. Flat sizes by SVD on all seven give -0.0008 (0.0010) and `p=.5` gives -0.0083 (0.0010).
+
+| Group | `p=1` (gradient) | Random sizes | `p=-.5` | `p=-1` (inverted) | Reversed sizes |
+| --- | --- | --- | --- | --- | --- |
+| Value and output | -0.0128 (0.0012) | +0.0005 (0.0008) | +0.0010 (0.0018) | -0.0238 (0.0008) | -0.0057 (0.0007) |
+| Gate, up and down | -0.0098 (0.0020) | -0.0014 (0.0014) | +0.0002 (0.0009) | -0.0029 (0.0010) | -0.0007 (0.0009) |
+| Query and key | -0.0034 (0.0005) | +0.0012 (0.0017) | -0.0026 (0.0015) | -0.0273 (0.0025) | -0.0154 (0.0013) |
+| All seven | -0.0183 (0.0010) | -0.0012 (0.0014) | -0.0015 (0.0012) | -0.0637 (0.0031) | -0.0339 (0.0009) |
+
+The gradient's shape on query and key goes +.0029, +.0001, -.0034 (0/5) over 250, 1,000 and 4,000 steps, so its being free on query and key is a short-training effect. Value and output still lose the most from it (-.0128). `p=-.5` on query and key shrinks from -.0218 to -.0026. The groups move closer with length, but the order holds. Random sizes stay within .0014 of Muon.
+
 ## 2026-11-05: Why the groups differ, prediction before running
 
 `debug/spectrum.py` measures one training run at each step: the cosine between a candidate step and the gradient of the next, unseen batch at the same weights. Prediction: on value and output the flat Muon step has a higher cosine than the gradient's shape, and the weak directions alone have a clearly positive cosine. On query and key the two shapes are about equal and the strong directions carry most of the cosine.
