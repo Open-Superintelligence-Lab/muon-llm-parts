@@ -1,0 +1,21 @@
+{
+"tier": "w128",
+"base": "down=muon:0.03213:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.03213:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.03213:beta=0.8",
+"base_held": 4.2629,
+"rows": {
+"qk kaon": {
+"mean": -0.0038,
+"error": 0.0019,
+"wins": 1,
+"f": 0.6349,
+"spec": "down=muon:0.03213:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_kaon:0.04254:beta=0.9;norm=adam:0.019:b2=0.9;o=muon:0.03213:beta=0.8;q=x_kaon:0.04254:beta=0.9;up=muon:0.026:beta=0.8;v=muon:0.03213:beta=0.8"
+},
+"vo kaon": {
+"mean": 0.0083,
+"error": 0.001,
+"wins": 5,
+"f": 1.0,
+"spec": "down=muon:0.03213:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=x_kaon:0.03213:beta=0.95;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=x_kaon:0.03213:beta=0.95"
+}
+}
+}

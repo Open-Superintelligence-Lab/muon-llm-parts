@@ -1,0 +1,49 @@
+data ready 43 s
+GPU 0: Tesla T4 (UUID: GPU-210ca439-a674-153d-6124-6f1bc38ece51)
+GPU 1: Tesla T4 (UUID: GPU-5e85b469-3141-e50a-10f1-546e5b8108f2)
+
+== ['--sweep', '--cs', '0.5,0.7,0.6,0.8', '--parts', 'vo'] hours left 11.29
+w128 base 4.2629
+  vo c=0.5 lr x: 0.25 4.2541 of 4
+  vo c=0.5 fine x: 2.53968 4.2499 of 5
+vo c=0.5: +0.0059 error 0.0008 wins 5/5
+  vo c=0.6 lr x: 1 4.2484 of 3
+  vo c=0.6 fine x: 1 4.2484 of 3
+vo c=0.6: +0.0079 error 0.0009 wins 5/5
+  vo c=0.7 lr x: 1 4.2513 of 3
+  vo c=0.7 fine x: 1.6 4.2496 of 4
+vo c=0.7: +0.0084 error 0.0011 wins 5/5
+  vo c=0.8 lr x: 1 4.2606 of 3
+  vo c=0.8 fine x: 1.6 4.2570 of 4
+vo c=0.8: -0.0001 error 0.0009 wins 3/5
+['--sweep', '--cs', '0.5,0.7,0.6,0.8', '--parts', 'vo'] done with code 0 at 290 min
+== ['--sweep', '--cs', '0.5,0.3,0.2', '--parts', 'qk'] hours left 6.47
+w128 base 4.2629
+  qk c=0.2 lr x: 4 4.2601 of 4
+  qk c=0.2 fine x: 1 4.2601 of 3
+qk c=0.2: +0.0004 error 0.0006 wins 1/5
+  qk c=0.3 lr x: 1 4.2574 of 3
+  qk c=0.3 fine x: 1 4.2574 of 3
+qk c=0.3: +0.0023 error 0.0015 wins 4/5
+  qk c=0.5 lr x: 0.25 4.2591 of 4
+  qk c=0.5 fine x: 1.6 4.2578 of 4
+qk c=0.5: -0.0033 error 0.0011 wins 0/5
+['--sweep', '--cs', '0.5,0.3,0.2', '--parts', 'qk'] done with code 0 at 505 min
+== ['--only', 'kaon', '--parts', 'vo,qk'] hours left 2.88
+w128 base 4.2629
+  qk kaon lr x: 0.25 4.2630 of 4
+  qk kaon fine x: 2.53968 4.2601 of 5
+qk kaon: -0.0038 error 0.0019 wins 1/5
+  vo kaon lr x: 1 4.2507 of 3
+  vo kaon fine x: 1 4.2507 of 3
+vo kaon: +0.0083 error 0.0010 wins 5/5
+['--only', 'kaon', '--parts', 'vo,qk'] done with code 0 at 597 min
+== ['--steps', '--parts', 'vo,qk'] hours left 1.34
+w128 base 4.2629
+  qk steps=1 lr x: 1 4.2580 of 3
+  qk steps=1 fine x: 0.63 4.2576 of 4
+qk steps=1: -0.0009 error 0.0009 wins 2/5
+  qk steps=2 lr x: 0.25 4.2591 of 4
+  qk steps=2 fine x: 1.6 4.2577 of 4
+time budget used; rerun the same command to continue
+['--steps', '--parts', 'vo,qk'] done with code 1 at 679 min

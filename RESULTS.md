@@ -802,3 +802,22 @@ Per-head Muon on q,k (4 heads, lr x4 of whole-matrix Muon's) gained +.0032 (.001
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
+
+## 2026-11-06: Width 128 exponent sweep (Kaggle papers-a)
+
+`debug/papers_parts.py w128`, 2,000 steps, lr then momentum chosen on worlds 0,1, scored on worlds 5-9. Base 4.2629, Muon at momentum .8 on every hidden matrix. Data in `kaggle/out/papers-a/` (map.jsonl not committed, 0.6 MB; out*.json committed).
+
+| Arm | Gain | Wins | Chosen lr x, momentum |
+| --- | --- | --- | --- |
+| v,o exact c=.5 (flat) | +.0059 (.0008) | 5/5 | .63, .95 |
+| v,o c=.6 | +.0079 (.0009) | 5/5 | 1, .9 |
+| v,o c=.7 | +.0084 (.0011) | 5/5 | 1.6, .95 |
+| v,o c=.8 | -.0001 (.0009) | 3/5 | 1.6, .95 |
+| v,o Kaon | +.0083 (.0010) | 5/5 | 1, .95 |
+| q,k c=.2 | +.0004 (.0006) | 1/5 | 4, .8 |
+| q,k c=.3 | +.0023 (.0015) | 4/5 | 1, .8 |
+| q,k exact c=.5 | -.0033 (.0011) | 0/5 | .4, .95 |
+| q,k Kaon | -.0038 (.0019) | 1/5 | .63, .9 |
+| q,k 1 Newton-Schulz step | -.0009 (.0009) | 2/5 | .63, .9 |
+
+Every v,o arm that wins chose momentum .9-.95 against the base's .8, and flat exact c=.5 already gains +.0059, so most of the v,o gain is likely momentum, not the step shape. c=.7 over c=.5 is +.0025, close to the +.0019 at width 48 and 1,000 steps. q,k again prefers the gradient side (c=.3) to flat. Kaggle job `papers-c` walks Muon itself on v,o (momentum .9, .95, .97) and q,k (.9, .95) over lr x .35-1.4 on the same worlds, seeded with these runs; it decides whether c=.7 beats a walked Muon at width 128.

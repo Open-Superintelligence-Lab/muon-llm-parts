@@ -1,0 +1,14 @@
+{
+"tier": "w128",
+"base": "down=muon:0.03213:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.03213:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.03213:beta=0.8",
+"base_held": 4.2629,
+"rows": {
+"qk steps=1": {
+"mean": -0.0009,
+"error": 0.0009,
+"wins": 2,
+"f": 0.63,
+"spec": "down=muon:0.03213:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=x_nsteps:0.04221:beta=0.9:n=1;norm=adam:0.019:b2=0.9;o=muon:0.03213:beta=0.8;q=x_nsteps:0.04221:beta=0.9:n=1;up=muon:0.026:beta=0.8;v=muon:0.03213:beta=0.8"
+}
+}
+}

@@ -1,9 +1,9 @@
-"""Packs one private Kaggle job of debug/papers_parts.py: python3 kaggle/make_papers.py NAME TIER BASE_OUT SEED "args for one run" ["args for the next run" ...]. Push with kaggle kernels push -p kaggle/NAME."""
+"""Packs one private Kaggle job of debug/papers_parts.py: python3 kaggle/make_papers.py NAME TIER BASE_OUT SEED "args for one run" ["args for the next run" ...]; a run starting with debug/c_lr_grid.py runs that script with --tier, --base, --results, --out, --hours and --par filled in. Push with kaggle kernels push -p kaggle/NAME."""
 import base64, io, json, os, sys, tarfile
 HERE = os.path.dirname(os.path.abspath(__file__)); SRC = os.path.dirname(HERE); name, tier, base, seed, *runs = sys.argv[1:]
 buf = io.BytesIO()
 with tarfile.open(fileobj=buf, mode="w:gz") as t:
-    for f in ("env.py", "evals.py", "rules.py", "arms.py", "runq.py", "sandbox.py", "debug/map_parts.py", "debug/papers_parts.py", "optimizers/x_rand.py", "optimizers/x_kaon.py", "optimizers/x_dion3.py", "optimizers/x_nsteps.py", "optimizers/x_band.py", "optimizers/x_hyc.py"): t.add(os.path.join(SRC, f), f)
+    for f in ("env.py", "evals.py", "rules.py", "arms.py", "runq.py", "sandbox.py", "debug/map_parts.py", "debug/papers_parts.py", "debug/c_lr_grid.py", "optimizers/x_rand.py", "optimizers/x_kaon.py", "optimizers/x_dion3.py", "optimizers/x_nsteps.py", "optimizers/x_band.py", "optimizers/x_hyc.py"): t.add(os.path.join(SRC, f), f)
     for f in ("facts.json", "counts.npy"): t.add(os.path.realpath(os.path.join(SRC, "data", f)), "data/" + f)
     t.add(base, "base_out.jsonl")
 job = os.path.join(HERE, name); os.makedirs(job, exist_ok=True)
@@ -25,7 +25,8 @@ for i, r in enumerate(RUNS):
     left = HOURS - (time.time() - T0) / 3600
     if left < .1: say("out of time before", r); break
     say("==", r, "hours left", round(left, 2))
-    p = subprocess.Popen([sys.executable, "debug/papers_parts.py", TIER, "base_out.jsonl", "--results", OUT + "/map.jsonl", "--out", OUT + f"/out{i}.json", "--hours", str(left), "--par", "4"] + r, cwd=C, env=E, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    cmd = [sys.executable, r[0], "--tier", TIER, "--base", "base_out.jsonl", "--results", OUT + "/map.jsonl", "--out", OUT + f"/out{i}.json", "--hours", str(left), "--par", "4"] + r[1:] if r[0].endswith(".py") else [sys.executable, "debug/papers_parts.py", TIER, "base_out.jsonl", "--results", OUT + "/map.jsonl", "--out", OUT + f"/out{i}.json", "--hours", str(left), "--par", "4"] + r
+    p = subprocess.Popen(cmd, cwd=C, env=E, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     for line in p.stdout:
         if not any(x in line for x in ("Exception ignored", "weakref", "AttributeError")): say(line.rstrip())
     p.wait(); say(r, "done with code", p.returncode, "at", round((time.time() - T0) / 60), "min")
