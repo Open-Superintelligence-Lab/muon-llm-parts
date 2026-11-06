@@ -4,6 +4,7 @@
 One training run per setting and world; the analysis itself trains nothing.
 
 python3 debug/mech.py --tier 5sx4 --add results/add/w48x1000_out.jsonl --out results/mech/w48x1000.json
+python3 debug/mech.py --tier w64 --map kaggle/out/map-a/map_out.jsonl --out results/mech/w64_map.json  (Muon base and v,o on Adam at a Kaggle map width)
 """
 import argparse, copy, json, multiprocessing as mp, os, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -29,7 +30,8 @@ def loss(ctx): return float(np.mean(ctx.row_loss(ctx.W.val)))
 
 
 def job(x):
-    name, spec, tier, w, analyse, noqk = x; torch.set_num_threads(1); held = []; LM = env.LM
+    name, spec, tier, w, analyse, noqk, steps = x; torch.set_num_threads(1); held = []; LM = env.LM
+    if steps: env.TIERS[tier] = dict(env.TIERS[tier], steps=steps)
 
     def hold(*a, **k):
         held.append(LM(*a, **k)); return held[-1]
@@ -56,16 +58,19 @@ def job(x):
 
 
 def main():
-    p = argparse.ArgumentParser(); p.add_argument("--tier", required=True); p.add_argument("--add", required=True); p.add_argument("--out", required=True); p.add_argument("--worlds", default="5,6,7,8,9"); p.add_argument("--par", type=int, default=9); p.add_argument("--cut-only", action="store_true"); p.add_argument("--no-qknorm", action="store_true"); a = p.parse_args()
-    L = [json.loads(l) for l in open(a.add)]; row = [x for x in L if x.get("kind") == "add"][-1]
-    specs = dict(muon=arms.parse(row["base"]))
-    if not a.cut_only: specs.update(adam=arms.parse(row["adam"]), adam_muon_vo=arms.parse(row["rows"]["vo"]["spec"]), adam_muon_qk=arms.parse(row["rows"]["qk"]["spec"]))
-    W = [int(x) for x in a.worlds.split(",")]; jobs = [(n, s, a.tier, w, n in ("muon", "adam"), a.no_qknorm) for n, s in specs.items() for w in W]
+    p = argparse.ArgumentParser(); p.add_argument("--tier", required=True); p.add_argument("--add", default=""); p.add_argument("--out", required=True); p.add_argument("--worlds", default="5,6,7,8,9"); p.add_argument("--par", type=int, default=9); p.add_argument("--cut-only", action="store_true"); p.add_argument("--no-qknorm", action="store_true"); p.add_argument("--map", default="", help="a map_out.jsonl: trains that tier's Muon base and the base with v,o moved to tuned Adam, and cuts both"); p.add_argument("--steps", type=int, default=0, help="debug only: override the tier's steps"); a = p.parse_args()
+    if a.map:
+        row = [x for x in map(json.loads, open(a.map)) if x["tier"] == a.tier][-1]; specs = dict(muon=arms.parse(row["base"]), vo_adam=arms.parse(row["gaps"]["vo"]["spec"]))
+    else:
+        L = [json.loads(l) for l in open(a.add)]; row = [x for x in L if x.get("kind") == "add"][-1]
+        specs = dict(muon=arms.parse(row["base"]))
+        if not a.cut_only: specs.update(adam=arms.parse(row["adam"]), adam_muon_vo=arms.parse(row["rows"]["vo"]["spec"]), adam_muon_qk=arms.parse(row["rows"]["qk"]["spec"]))
+    W = [int(x) for x in a.worlds.split(",")]; jobs = [(n, s, a.tier, w, True, a.no_qknorm, a.steps) for n, s in specs.items() for w in W]
     with mp.get_context("spawn").Pool(min(a.par, len(jobs))) as pool: res = pool.map(job, jobs)
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True); json.dump(dict(tier=a.tier, qknorm=not a.no_qknorm, worlds=W, specs={n: arms.show(s) for n, s in specs.items()}, runs=res), open(a.out, "w"), indent=0)
     by = lambda n: [r for r in res if r["name"] == n]
     for n in specs: print(n, "loss", round(np.mean([r["loss"] for r in by(n)]), 4))
-    for n in ("muon", "adam"):
+    for n in specs:
         if not by(n): continue
         print(f"\n{n}: loss rise when a group keeps its top fraction of directions (mean over worlds, error)")
         for key in by(n)[0]["cut"]:

@@ -861,3 +861,44 @@ Data: `results/mech/w48.json` (250 steps), `w48x1000.json` (1,000), `w48x4000_cu
 At 1,000 steps the rare-token gain is 1.36 times the common one (prediction: at least 2), rare minus common +.0054 (.0024), 4/5. At 250 steps the gain sits on common tokens and frequent phrases. Muon on q,k gains nothing in any bucket (-.0050 to +.0006 at 1,000 steps), as predicted. Limit: the vocabulary is the 1,000 most common GPT-2 tokens, so "rarer" tokens are still common words.
 
 **Test 3 fails: q,k do not catch up with v,o.** The q,k cut cost grows with length (.0097, .0182, .0335) but the v,o cost grows faster (.0390, .1193, .2469), so the ratio falls from .25 to .15 to .14. The fading q,k tolerance of the gradient's shape is not explained by q,k using relatively more directions.
+
+## 2026-11-06: Does spreading v,o over more directions explain Muon's v,o gain? (predictions written before any run)
+
+Test 4, length side, local. Script `debug/mech.py`, width 48, worlds 5-9, 250, 1,000 and 4,000 steps. Every model is now cut, including Adam plus Muon on v,o.
+
+Spread gap: the v,o top-12-of-48 cut cost in Adam plus Muon on v,o, minus the same cut cost in all Adam. Only the v,o optimizer differs between the two models.
+
+The v,o gain of Adam plus Muon on v,o over all Adam (from `results/add/`) shrinks with length: .0199, .0139, .0098.
+
+- If spreading over more directions is what makes Muon help v,o, the spread gap should shrink with length too.
+- Prediction: it grows instead, as the all-Muon vs all-Adam gap did (.0292 at 250, .0854 at 1,000). Then spreading is a side effect of Muon, and it does not set the size of the gain.
+
+Width side (Kaggle, not run yet): the same spread gap at widths 64, 128 and 256, where the v,o swap cost grows .0135, .0202, .0403.
+
+### Results (2026-11-06)
+
+Data: `results/mech/w48_spread.json`, `w48x1000_spread.json`, `w48x4000_spread.json`. Worlds 5-9, mean (error) and worlds above 0. The gains below come from these new runs, so they differ slightly from `results/add/`.
+
+**The prediction holds: the spread grows while the gain shrinks.**
+
+| Steps | v,o gain of Muon over Adam | Spread gap, keep 12 of 48 | Spread gap, keep 24 of 48 |
+|---|---|---|---|
+| 250 | +.0194 (.0025) 5/5 | +.0268 (.0023) 5/5 | +.0032 (.0005) 5/5 |
+| 1,000 | +.0156 (.0011) 5/5 | +.0784 (.0051) 5/5 | +.0106 (.0006) 5/5 |
+| 4,000 | +.0102 (.0011) 5/5 | +.1237 (.0060) 5/5 | +.0305 (.0025) 5/5 |
+
+- Muon on v,o spreads v,o over more directions, and the spread grows 4.6 times from 250 to 4,000 steps. Over the same steps the gain falls by half. So the size of the spread does not set the size of the gain.
+- Muon on q,k spreads q,k too (the q,k keep-12 cut costs .0195 against .0075 under Adam at 1,000 steps), and q,k gain nothing (-.0026). A wider spread is not useful by itself.
+- Muon on v,o changes only v,o's spread. The q,k and FFN cut costs stay at the all-Adam values (q,k .0067 vs .0075, FFN .0766 vs .0573 at 1,000 steps; FFN moves a little).
+
+**Where the gain sits.** Cut v,o to the same number of directions in both models, then compare loss (gain left, Muon on v,o over Adam):
+
+| Steps | Keep 36 of 48 | Keep 24 | Keep 12 |
+|---|---|---|---|
+| 250 | +.0189 (97% of the gain) | +.0161 | -.0074 |
+| 1,000 | +.0142 (91%) | +.0050 | -.0629 |
+| 4,000 | +.0059 (58%) | -.0203 | -.1135 |
+
+- At 250 steps the gain survives removing the weakest quarter of directions. At 4,000 steps 42% of it is gone.
+- So with longer training more of Muon's v,o gain sits in weak directions, and the Muon model depends on them more: with 24 directions kept it is worse than Adam at 4,000 steps.
+- Limit: cutting is not additive, so "the share of the gain in the weakest quarter" is a rough reading.
