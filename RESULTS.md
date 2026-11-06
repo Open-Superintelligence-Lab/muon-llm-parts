@@ -1077,3 +1077,21 @@ Pilot result, `--repvar --rep 0.5`, world 5, 4,000 steps (`results/induction/w64
 - The pass condition I set (above 30% uniform-probe accuracy for both arms) failed. Uniform probes use mostly rare tokens that these models barely predict at all, so I switch the accuracy check to frequency-matched probes for the next runs. This is a change made after seeing data, and I record it here as one.
 
 Prediction D (written before the runs): on worlds 6 and 7 in the same setting, Muon's best head passes attention 0.2 at least 500 steps before Adam's, and Muon's frequency-matched copy accuracy at step 4,000 is higher than Adam's on both worlds.
+
+Result D (`results/induction/w64repvar50x4000_w67.json`, re-measured in `eval_repvar50x4000.json`). Frequency-matched probes, 1,000 rows, step 4,000:
+
+| world | step best head ≥ 0.2 (Muon / Adam) | 2nd-copy loss (Muon / Adam) | copy accuracy (Muon / Adam) | ICL, training probe (Muon / Adam) | held-out loss (Muon / Adam) |
+|---|---|---|---|---|---|
+| 5 | 1,300 / 2,700 | 4.40 / 6.55 | 27.8% / 10.0% | 3.52 / 1.84 | 4.4493 / 4.4473 |
+| 6 | 2,000 / 1,800 | 5.02 / 6.11 | 21.7% / 12.6% | 3.75 / 1.82 | 4.4481 / 4.4521 |
+| 7 | 2,153 / 3,000 | 5.50 / 6.71 | 18.0% / 10.6% | 2.53 / 1.61 | 4.4580 / 4.4568 |
+
+- Prediction D, timing part: failed. On world 6, Adam's head passed 0.2 attention 200 steps earlier. Earlier formation under Muon is 2 of 3 worlds, so the timing claim is dropped.
+- Prediction D, copying part: held on all three worlds. At equal held-out loss (within 0.004), Muon's model copies much better: second-copy loss is 1.1-2.2 nats lower, and accuracy is 1.7-2.8× higher.
+- Both optimizers end with the same attention to the right token (0.40-0.55). So the difference is in what the head writes once it attends, which is the v,o (OV) circuit, not in where it looks (q,k).
+- Related: the Opus critic cites a NeurIPS 2026 paper ("Optimizers Select Algorithms") in which orthogonalized updates favour in-context recall in associative-recall toys. This result points the same way on web text, with the extra finding that attention is equal and only the copied output differs.
+
+Prediction E (written before the runs): in the same setting, on worlds 5-7, the copying advantage follows v,o.
+- Muon with v,o on Adam: frequency-matched second-copy loss ends at least halfway from Muon's toward Adam's on all 3 worlds.
+- Muon with q,k on Adam: ends within a quarter of the gap from Muon's on at least 2 of 3 worlds.
+- All Adam with v,o on Muon: ends at least halfway from Adam's toward Muon's on at least 2 of 3 worlds.

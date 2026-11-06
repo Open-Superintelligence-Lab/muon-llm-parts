@@ -48,5 +48,105 @@
    "acc": 0.0332,
    "second_se": 0.0348
   }
+ },
+ "adam/w6": {
+  "held": 4.4521,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.9395,
+   "second": 9.1062,
+   "icl": 1.8333,
+   "acc": 0.0032,
+   "second_se": 0.0136
+  },
+  "freq": {
+   "first": 8.5453,
+   "second": 6.1144,
+   "icl": 2.4309,
+   "acc": 0.1264,
+   "second_se": 0.0144
+  },
+  "off63": {
+   "first": 10.9271,
+   "second": 9.2206,
+   "icl": 1.7065,
+   "acc": 0.0027,
+   "second_se": 0.0116
+  }
+ },
+ "adam/w7": {
+  "held": 4.4568,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0297,
+   "second": 9.4441,
+   "icl": 1.5855,
+   "acc": 0.0024,
+   "second_se": 0.0111
+  },
+  "freq": {
+   "first": 8.5432,
+   "second": 6.7144,
+   "icl": 1.8288,
+   "acc": 0.1058,
+   "second_se": 0.0136
+  },
+  "off63": {
+   "first": 11.0028,
+   "second": 9.6574,
+   "icl": 1.3454,
+   "acc": 0.0017,
+   "second_se": 0.0093
+  }
+ },
+ "muon/w6": {
+  "held": 4.4481,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.2247,
+   "second": 7.4511,
+   "icl": 3.7736,
+   "acc": 0.039,
+   "second_se": 0.0187
+  },
+  "freq": {
+   "first": 8.6571,
+   "second": 5.0219,
+   "icl": 3.6352,
+   "acc": 0.2175,
+   "second_se": 0.0163
+  },
+  "off63": {
+   "first": 11.19,
+   "second": 7.7071,
+   "icl": 3.4829,
+   "acc": 0.0345,
+   "second_se": 0.0163
+  }
+ },
+ "muon/w7": {
+  "held": 4.458,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.2484,
+   "second": 8.717,
+   "icl": 2.5314,
+   "acc": 0.0096,
+   "second_se": 0.0176
+  },
+  "freq": {
+   "first": 8.5571,
+   "second": 5.5008,
+   "icl": 3.0563,
+   "acc": 0.1804,
+   "second_se": 0.0148
+  },
+  "off63": {
+   "first": 11.1937,
+   "second": 9.0028,
+   "icl": 2.1909,
+   "acc": 0.0065,
+   "second_se": 0.0145
+  }
  }
 }
