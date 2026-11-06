@@ -821,3 +821,43 @@ Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weig
 | q,k 1 Newton-Schulz step | -.0009 (.0009) | 2/5 | .63, .9 |
 
 Every v,o arm that wins chose momentum .9-.95 against the base's .8, and flat exact c=.5 already gains +.0059, so most of the v,o gain is likely momentum, not the step shape. c=.7 over c=.5 is +.0025, close to the +.0019 at width 48 and 1,000 steps. q,k again prefers the gradient side (c=.3) to flat. Kaggle job `papers-c` walks Muon itself on v,o (momentum .9, .95, .97) and q,k (.9, .95) over lr x .35-1.4 on the same worlds, seeded with these runs; it decides whether c=.7 beats a walked Muon at width 128.
+
+## 2026-11-06: Why q,k don't need Muon: mechanism tests (predictions written before any run)
+
+Script `debug/mech.py`. Width 48, worlds 5-9, models trained with the tuned Muon baseline, all Adam, and Adam plus Muon on one group (the `add` rows of `results/add/`). Analysis only, no new training settings.
+
+Guess under test: deciding where to attend needs a few strong directions, while storing facts needs many.
+
+1. **Directions used.** Cut each group's trained weights in the Muon model to their top k of 48 directions (k = 6, 12, 24, 36) and measure loss on the report rows. Prediction: at k = 12, the q,k cut raises loss by less than a third of the v,o cut, and the FFN cut is closer to v,o than to q,k.
+2. **Rare vs common tokens.** Loss by target-token frequency (`evals.rarity`) for all Adam, Adam plus Muon on v,o, and Adam plus Muon on q,k. Prediction: Muon on v,o lowers rare-token loss at least twice as much as common-token loss. Muon on q,k shows no rare-token gain.
+3. **Change with length.** Repeat test 1 at 250, 1,000 and 4,000 steps. Prediction: the q,k cut cost at k = 12 grows with length, relative to the v,o cut cost.
+
+### Results (2026-11-06)
+
+Data: `results/mech/w48.json` (250 steps), `w48x1000.json` (1,000), `w48x4000_cut.json` (4,000, Muon only), `w48x1000_noqknorm_cut.json` (1,000, no QK-norm, Muon only). Loss rise on report rows, worlds 5-9, mean (error).
+
+**Test 1 holds: q,k weights use few directions.** Loss rise when a group keeps its top 12 of 48 directions (whole matrices):
+
+| Model | Steps | q,k | v,o | FFN |
+|---|---|---|---|---|
+| Muon | 250 | +.0097 (.0016) | +.0390 (.0034) | +.0567 (.0027) |
+| Muon | 1,000 | +.0182 (.0021) | +.1193 (.0029) | +.0907 (.0040) |
+| Muon | 4,000 | +.0335 (.0018) | +.2469 (.0118) | +.2371 (.0091) |
+| Muon, no QK-norm | 1,000 | +.0231 (.0035) | +.0950 (.0024) | +.0773 (.0029) |
+| Adam | 250 | +.0037 (.0003) | +.0098 (.0008) | +.0307 (.0006) |
+| Adam | 1,000 | +.0075 (.0005) | +.0339 (.0015) | +.0573 (.0041) |
+
+- At 1,000 steps the q,k cut costs .15 of the v,o cut (prediction: under a third). FFN is closer to v,o. Without QK-norm the ratio is .24, so QK-norm is not why q,k are cheap to cut.
+- Per head (3 of 12 directions per head) the q,k cut costs .0720 against .1953 for v,o, a ratio of .37.
+- Not predicted: Muon spreads every group over more directions than Adam. The same cut costs v,o .1193 under Muon and .0339 under Adam at 1,000 steps.
+
+**Test 2 fails: the v,o gain is not on rare tokens.** Gain of Adam plus Muon on v,o over all Adam:
+
+| Steps | Common tokens (top 500) | Rarer tokens (rank 500-999) | Phrases never seen | Phrases seen 1-9 times | Phrases seen 10+ times |
+|---|---|---|---|---|---|
+| 250 | +.0214 | +.0008 | +.0154 | +.0218 | +.0846 |
+| 1,000 | +.0149 (.0011) | +.0203 (.0026) | +.0144 (.0016) | +.0142 (.0014) | +.0223 (.0020) |
+
+At 1,000 steps the rare-token gain is 1.36 times the common one (prediction: at least 2), rare minus common +.0054 (.0024), 4/5. At 250 steps the gain sits on common tokens and frequent phrases. Muon on q,k gains nothing in any bucket (-.0050 to +.0006 at 1,000 steps), as predicted. Limit: the vocabulary is the 1,000 most common GPT-2 tokens, so "rarer" tokens are still common words.
+
+**Test 3 fails: q,k do not catch up with v,o.** The q,k cut cost grows with length (.0097, .0182, .0335) but the v,o cost grows faster (.0390, .1193, .2469), so the ratio falls from .25 to .15 to .14. The fading q,k tolerance of the gradient's shape is not explained by q,k using relatively more directions.
