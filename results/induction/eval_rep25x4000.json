@@ -1,0 +1,602 @@
+{
+ "adam_qkmuon/w5": {
+  "held": 4.4418,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.1278,
+   "second": 10.8015,
+   "icl": 0.3264,
+   "acc": 0.0139,
+   "second_se": 0.0435
+  },
+  "freq": {
+   "first": 8.6107,
+   "second": 7.8459,
+   "icl": 0.7647,
+   "acc": 0.0426,
+   "second_se": 0.0149
+  },
+  "off63": {
+   "first": 11.1458,
+   "second": 11.1848,
+   "icl": -0.0391,
+   "acc": 0.14,
+   "second_se": 0.0662
+  }
+ },
+ "adam_qkmuon/w6": {
+  "held": 4.4428,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.8788,
+   "second": 10.3432,
+   "icl": 0.5357,
+   "acc": 0.0031,
+   "second_se": 0.0112
+  },
+  "freq": {
+   "first": 8.7297,
+   "second": 8.1203,
+   "icl": 0.6095,
+   "acc": 0.035,
+   "second_se": 0.0142
+  },
+  "off63": {
+   "first": 10.8745,
+   "second": 9.5835,
+   "icl": 1.291,
+   "acc": 0.0422,
+   "second_se": 0.0255
+  }
+ },
+ "adam_qkmuon/w7": {
+  "held": 4.4465,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.9392,
+   "second": 9.6161,
+   "icl": 1.3231,
+   "acc": 0.0136,
+   "second_se": 0.0179
+  },
+  "freq": {
+   "first": 8.5548,
+   "second": 7.5267,
+   "icl": 1.0281,
+   "acc": 0.0514,
+   "second_se": 0.0143
+  },
+  "off63": {
+   "first": 10.9214,
+   "second": 7.1328,
+   "icl": 3.7886,
+   "acc": 0.1397,
+   "second_se": 0.0366
+  }
+ },
+ "adam/w5": {
+  "held": 4.4444,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.9259,
+   "second": 10.2964,
+   "icl": 0.6295,
+   "acc": 0.0049,
+   "second_se": 0.0131
+  },
+  "freq": {
+   "first": 8.6559,
+   "second": 7.8855,
+   "icl": 0.7704,
+   "acc": 0.0402,
+   "second_se": 0.0142
+  },
+  "off63": {
+   "first": 10.9202,
+   "second": 9.3319,
+   "icl": 1.5883,
+   "acc": 0.0193,
+   "second_se": 0.0209
+  }
+ },
+ "adam/w6": {
+  "held": 4.4456,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.4873,
+   "second": 9.5195,
+   "icl": 1.9678,
+   "acc": 0.0136,
+   "second_se": 0.0151
+  },
+  "freq": {
+   "first": 8.6025,
+   "second": 7.6115,
+   "icl": 0.9911,
+   "acc": 0.0506,
+   "second_se": 0.0142
+  },
+  "off63": {
+   "first": 11.3783,
+   "second": 7.8757,
+   "icl": 3.5025,
+   "acc": 0.0553,
+   "second_se": 0.0276
+  }
+ },
+ "adam/w7": {
+  "held": 4.45,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.1109,
+   "second": 10.6911,
+   "icl": 0.4199,
+   "acc": 0.0052,
+   "second_se": 0.019
+  },
+  "freq": {
+   "first": 8.5934,
+   "second": 8.0835,
+   "icl": 0.5099,
+   "acc": 0.0325,
+   "second_se": 0.014
+  },
+  "off63": {
+   "first": 11.0813,
+   "second": 9.8609,
+   "icl": 1.2204,
+   "acc": 0.0471,
+   "second_se": 0.0382
+  }
+ },
+ "adam/w8": {
+  "held": 4.4931,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.9689,
+   "second": 10.8691,
+   "icl": 0.0998,
+   "acc": 0.0003,
+   "second_se": 0.0101
+  },
+  "freq": {
+   "first": 8.6918,
+   "second": 8.5578,
+   "icl": 0.134,
+   "acc": 0.0247,
+   "second_se": 0.014
+  },
+  "off63": {
+   "first": 10.9456,
+   "second": 10.8844,
+   "icl": 0.0612,
+   "acc": 0.0003,
+   "second_se": 0.0189
+  }
+ },
+ "adam/w9": {
+  "held": 4.4372,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.8896,
+   "second": 10.5434,
+   "icl": 0.3462,
+   "acc": 0.0018,
+   "second_se": 0.0097
+  },
+  "freq": {
+   "first": 8.6027,
+   "second": 8.2473,
+   "icl": 0.3554,
+   "acc": 0.0292,
+   "second_se": 0.014
+  },
+  "off63": {
+   "first": 10.8677,
+   "second": 10.1766,
+   "icl": 0.6911,
+   "acc": 0.0107,
+   "second_se": 0.0166
+  }
+ },
+ "muon_ffn_adam/w5": {
+  "held": 4.4168,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.97,
+   "second": 10.131,
+   "icl": 0.839,
+   "acc": 0.0086,
+   "second_se": 0.0128
+  },
+  "freq": {
+   "first": 8.556,
+   "second": 7.7895,
+   "icl": 0.7665,
+   "acc": 0.0438,
+   "second_se": 0.0145
+  },
+  "off63": {
+   "first": 10.9442,
+   "second": 9.4551,
+   "icl": 1.4892,
+   "acc": 0.0542,
+   "second_se": 0.0264
+  }
+ },
+ "muon_qk_adam/w5": {
+  "held": 4.4219,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.1074,
+   "second": 10.8479,
+   "icl": 0.2596,
+   "acc": 0.0043,
+   "second_se": 0.0133
+  },
+  "freq": {
+   "first": 8.6324,
+   "second": 8.2696,
+   "icl": 0.3628,
+   "acc": 0.0342,
+   "second_se": 0.0149
+  },
+  "off63": {
+   "first": 11.1108,
+   "second": 16.9772,
+   "icl": -5.8665,
+   "acc": 0.0419,
+   "second_se": 0.0835
+  }
+ },
+ "muon_qk_adam/w6": {
+  "held": 4.4185,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.9997,
+   "second": 10.6817,
+   "icl": 0.318,
+   "acc": 0.0013,
+   "second_se": 0.0101
+  },
+  "freq": {
+   "first": 8.6355,
+   "second": 8.3009,
+   "icl": 0.3346,
+   "acc": 0.032,
+   "second_se": 0.0147
+  },
+  "off63": {
+   "first": 10.9723,
+   "second": 10.4335,
+   "icl": 0.5388,
+   "acc": 0.0027,
+   "second_se": 0.0092
+  }
+ },
+ "muon_qk_adam/w7": {
+  "held": 4.457,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.1417,
+   "second": 10.992,
+   "icl": 0.1497,
+   "acc": 0.0004,
+   "second_se": 0.0098
+  },
+  "freq": {
+   "first": 8.6782,
+   "second": 8.4427,
+   "icl": 0.2354,
+   "acc": 0.0263,
+   "second_se": 0.0136
+  },
+  "off63": {
+   "first": 11.1194,
+   "second": 11.7865,
+   "icl": -0.6671,
+   "acc": 0.0006,
+   "second_se": 0.0463
+  }
+ },
+ "muon_vo_adam/w5": {
+  "held": 4.4381,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.9298,
+   "second": 10.1141,
+   "icl": 0.8157,
+   "acc": 0.0064,
+   "second_se": 0.0126
+  },
+  "freq": {
+   "first": 8.5387,
+   "second": 7.9975,
+   "icl": 0.5412,
+   "acc": 0.0371,
+   "second_se": 0.0141
+  },
+  "off63": {
+   "first": 10.9056,
+   "second": 9.2535,
+   "icl": 1.6521,
+   "acc": 0.0221,
+   "second_se": 0.0211
+  }
+ },
+ "muon/w5": {
+  "held": 4.407,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.8506,
+   "second": 10.3974,
+   "icl": 0.4532,
+   "acc": 0.0028,
+   "second_se": 0.0098
+  },
+  "freq": {
+   "first": 8.5436,
+   "second": 7.929,
+   "icl": 0.6146,
+   "acc": 0.0388,
+   "second_se": 0.0142
+  },
+  "off63": {
+   "first": 10.8404,
+   "second": 10.1381,
+   "icl": 0.7022,
+   "acc": 0.0042,
+   "second_se": 0.0104
+  }
+ },
+ "muon/w6": {
+  "held": 4.4124,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0894,
+   "second": 10.4931,
+   "icl": 0.5963,
+   "acc": 0.0053,
+   "second_se": 0.0116
+  },
+  "freq": {
+   "first": 8.6714,
+   "second": 8.1235,
+   "icl": 0.5479,
+   "acc": 0.0358,
+   "second_se": 0.015
+  },
+  "off63": {
+   "first": 11.0688,
+   "second": 9.7236,
+   "icl": 1.3452,
+   "acc": 0.036,
+   "second_se": 0.0204
+  }
+ },
+ "muon/w7": {
+  "held": 4.434,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0156,
+   "second": 10.6265,
+   "icl": 0.3891,
+   "acc": 0.0021,
+   "second_se": 0.0101
+  },
+  "freq": {
+   "first": 8.6089,
+   "second": 8.1316,
+   "icl": 0.4773,
+   "acc": 0.0331,
+   "second_se": 0.0144
+  },
+  "off63": {
+   "first": 10.9911,
+   "second": 10.0408,
+   "icl": 0.9503,
+   "acc": 0.0081,
+   "second_se": 0.0143
+  }
+ },
+ "muon/w8": {
+  "held": 4.4213,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0745,
+   "second": 10.616,
+   "icl": 0.4586,
+   "acc": 0.0082,
+   "second_se": 0.0222
+  },
+  "freq": {
+   "first": 8.6452,
+   "second": 8.0774,
+   "icl": 0.5677,
+   "acc": 0.0388,
+   "second_se": 0.0145
+  },
+  "off63": {
+   "first": 11.0707,
+   "second": 11.9559,
+   "icl": -0.8852,
+   "acc": 0.0848,
+   "second_se": 0.0668
+  }
+ },
+ "muon/w9": {
+  "held": 4.4031,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.11,
+   "second": 10.4542,
+   "icl": 0.6558,
+   "acc": 0.0056,
+   "second_se": 0.014
+  },
+  "freq": {
+   "first": 8.7032,
+   "second": 8.0143,
+   "icl": 0.6889,
+   "acc": 0.0425,
+   "second_se": 0.0147
+  },
+  "off63": {
+   "first": 11.0964,
+   "second": 9.8131,
+   "icl": 1.2833,
+   "acc": 0.0242,
+   "second_se": 0.0262
+  }
+ },
+ "qkadam_lr0156/w5": {
+  "held": 4.4159,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.9653,
+   "second": 10.5639,
+   "icl": 0.4014,
+   "acc": 0.002,
+   "second_se": 0.01
+  },
+  "freq": {
+   "first": 8.5818,
+   "second": 8.1963,
+   "icl": 0.3855,
+   "acc": 0.0298,
+   "second_se": 0.0141
+  },
+  "off63": {
+   "first": 10.9447,
+   "second": 10.3764,
+   "icl": 0.5682,
+   "acc": 0.0104,
+   "second_se": 0.0246
+  }
+ },
+ "qkadam_lr0156/w6": {
+  "held": 4.418,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0869,
+   "second": 10.6398,
+   "icl": 0.447,
+   "acc": 0.0039,
+   "second_se": 0.0112
+  },
+  "freq": {
+   "first": 8.7415,
+   "second": 8.1199,
+   "icl": 0.6216,
+   "acc": 0.035,
+   "second_se": 0.0156
+  },
+  "off63": {
+   "first": 11.0855,
+   "second": 10.9381,
+   "icl": 0.1473,
+   "acc": 0.0475,
+   "second_se": 0.0472
+  }
+ },
+ "qkadam_lr0156/w7": {
+  "held": 4.4186,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0781,
+   "second": 10.705,
+   "icl": 0.3731,
+   "acc": 0.0029,
+   "second_se": 0.0109
+  },
+  "freq": {
+   "first": 8.6103,
+   "second": 8.1952,
+   "icl": 0.4151,
+   "acc": 0.0335,
+   "second_se": 0.0139
+  },
+  "off63": {
+   "first": 11.0651,
+   "second": 11.9064,
+   "icl": -0.8413,
+   "acc": 0.0313,
+   "second_se": 0.0658
+  }
+ },
+ "qkadam_lr25/w5": {
+  "held": 4.4116,
+  "n_held": 3200,
+  "uniform": {
+   "first": 10.954,
+   "second": 10.4567,
+   "icl": 0.4973,
+   "acc": 0.007,
+   "second_se": 0.0131
+  },
+  "freq": {
+   "first": 8.6069,
+   "second": 8.0561,
+   "icl": 0.5508,
+   "acc": 0.0368,
+   "second_se": 0.0146
+  },
+  "off63": {
+   "first": 10.9335,
+   "second": 13.1918,
+   "icl": -2.2584,
+   "acc": 0.0457,
+   "second_se": 0.082
+  }
+ },
+ "qkadam_lr25/w6": {
+  "held": 4.4169,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0782,
+   "second": 10.4065,
+   "icl": 0.6717,
+   "acc": 0.0076,
+   "second_se": 0.0124
+  },
+  "freq": {
+   "first": 8.6048,
+   "second": 8.0144,
+   "icl": 0.5904,
+   "acc": 0.0359,
+   "second_se": 0.0139
+  },
+  "off63": {
+   "first": 11.0426,
+   "second": 9.0163,
+   "icl": 2.0263,
+   "acc": 0.1263,
+   "second_se": 0.0271
+  }
+ },
+ "qkadam_lr25/w7": {
+  "held": 4.4366,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0659,
+   "second": 10.7192,
+   "icl": 0.3467,
+   "acc": 0.0016,
+   "second_se": 0.0099
+  },
+  "freq": {
+   "first": 8.6785,
+   "second": 8.3033,
+   "icl": 0.3752,
+   "acc": 0.0307,
+   "second_se": 0.0146
+  },
+  "off63": {
+   "first": 11.0476,
+   "second": 10.3919,
+   "icl": 0.6557,
+   "acc": 0.0073,
+   "second_se": 0.015
+  }
+ }
+}

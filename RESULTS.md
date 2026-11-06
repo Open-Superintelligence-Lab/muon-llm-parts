@@ -1057,3 +1057,9 @@ Result (`results/induction/w64rep25x4000_qkfollow.json`; table from `python3 deb
 
 Same setting, worlds 8 and 9, Muon and all Adam.
 - Prediction C: Adam's copy score is above Muon's on both new worlds, and Muon's loss is below Adam's on both. If either fails on either world, the pattern is 3 of 5 or 4 of 5, and I treat it as unproven.
+
+Result C (`results/induction/w64rep25x4000_w89.json`). Every saved final model was re-measured on 1,000 probe rows and on all tune rows (`debug/induction_eval.py` → `results/induction/eval_rep25x4000.json`), following the Opus critic, who pointed out that ICL = first-copy loss minus second-copy loss rewards a model for doing badly on rare first-copy tokens:
+- Prediction C failed. Muon's copy score beat Adam's on world 8 (0.459 vs 0.100) and world 9 (0.656 vs 0.346). "Adam copies better" holds on 3 of 5 worlds, so it is dropped.
+- Muon's held-out loss is below Adam's on all 5 worlds: 4.407/4.444, 4.412/4.446, 4.434/4.450, 4.421/4.493, 4.403/4.437.
+- No model in this setting has a working copying head. Second-copy loss on uniform random tokens is 9.5-11.0 nats, above the 8.29 of a uniform guess, and copy accuracy is 0.0-1.4%. At a 63-token look-back, the copy score goes up to 3.8 for some models and down to -5.9 for others. The repeated-first-half data taught a fixed 64-token look-back, not content copying, so the whole `--rep 0.25` series measures that look-back and not induction.
+- Next: `--repvar`, where each repeat copies a 20-token span to a random later place, 21-87 tokens back, so that only content-based copying helps. Pilot on world 5, Muon and Adam, half of the rows. Pass condition before any Muon/Adam comparison counts: copy accuracy above 30% on the uniform probe for both arms.
