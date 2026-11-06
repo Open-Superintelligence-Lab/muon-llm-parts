@@ -1,0 +1,31 @@
+data ready 24 s
+GPU 0: Tesla T4 (UUID: GPU-274263f3-e328-72c3-f111-cfcf5e6220a2)
+GPU 1: Tesla T4 (UUID: GPU-453c6fc6-9c82-70e2-88b8-0202e74fb54c)
+
+== ['--band', '--parts', 'vo'] hours left 11.29
+w128 base 4.2629
+  vo band flat lr x: 0.25 4.2547 of 4
+  vo band flat fine x: 2.53968 4.2498 of 5
+vo band flat: +0.0059 error 0.0007 wins 5/5
+  vo band ramp lr x: 0.25 4.2523 of 4
+  vo band ramp fine x: 1.6 4.2500 of 4
+vo band ramp: +0.0070 error 0.0005 wins 5/5
+  vo band bottom lr x: 0.25 4.2512 of 4
+  vo band bottom fine x: 1 4.2512 of 3
+vo band bottom: +0.0028 error 0.0008 wins 4/5
+['--band', '--parts', 'vo'] done with code 0 at 238 min
+== ['--band', '--only', 'ramp', '--parts', 'ffn'] hours left 7.33
+w128 base 4.2629
+  ffn band ramp lr x: 0.25 4.2581 of 4
+  ffn band ramp fine x: 1.6 4.2545 of 4
+ffn band ramp: +0.0023 error 0.0010 wins 4/5
+['--band', '--only', 'ramp', '--parts', 'ffn'] done with code 0 at 337 min
+== ['--hyc', '--only', 'rho=.99', '--parts', 'vo'] hours left 5.68
+w128 base 4.2629
+  vo hyc eta=.01 rho=.99 lr x: 0.25 4.2559 of 4
+  vo hyc eta=.01 rho=.99 fine x: 2.53968 4.2504 of 5
+vo hyc eta=.01 rho=.99: +0.0045 error 0.0012 wins 5/5
+  vo hyc eta=.03 rho=.99 lr x: 0.25 4.2652 of 4
+  vo hyc eta=.03 rho=.99 fine x: 1.6 4.2616 of 4
+vo hyc eta=.03 rho=.99: -0.0050 error 0.0009 wins 0/5
+['--hyc', '--only', 'rho=.99', '--parts', 'vo'] done with code 0 at 509 min

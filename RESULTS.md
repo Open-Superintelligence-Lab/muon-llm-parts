@@ -919,3 +919,30 @@ Data: `results/mech/w48_spread.json`, `w48x1000_spread.json`, `w48x4000_spread.j
 - v,o by width: .0135, .0202, .0403, .0476 (64 to 512). The doubling stops between 256 and 512.
 - q,k need Muon at width 512 (-.0091, 3/3). Up to width 256 they did not. The q,k claim holds only up to 256.
 - Figure 1 (`paper/fig/width.py`) now shows width 512 as open markers.
+
+## 2026-11-06: Is it head size, not width, that makes q,k need Muon? (predictions written before any run)
+
+Width 512 is the first size where q,k need Muon (-.0091). Its heads are 64 wide; widths 64 and 128 have heads of 16 and width 256 has 32. q,k costs by width: -.0002, +.0056, -.0012, -.0091. So head size and width move together in the map.
+
+Test: width 48, 1,000 steps, 1, 2, 4 and 12 heads (head size 48, 24, 12, 4). Script `debug/map_parts.py h{H}x1000 --few --few-groups vo,qk --start <the tuned w48x1000 base>`: shared Muon lr factor walked, Adam lrs for v,o and for q,k walked on worlds 0-1, scored on 5-9. FFN goes to Adam at a fixed lr .01.
+
+- If head size drives it: moving q,k to Adam costs more with fewer, bigger heads. Prediction: 1 head costs below -.005 on 5/5 worlds, 4 heads costs about 0.
+- If width (or depth) drives it, the q,k cost stays near 0 for every head count at width 48.
+- v,o's cost should not depend much on head count.
+
+## 2026-11-06: Width 128 quarter-step shapes and HyC on v,o (Kaggle papers-b)
+
+`debug/papers_parts.py w128 --band` and `--hyc`, 2,000 steps, lr then a fine lr factor chosen on worlds 0,1, scored on worlds 5-9. Base 4.2629 (Muon momentum .8 on every hidden matrix). Data `kaggle/out/papers-b/out*.json`.
+
+| Arm | Gap over base | Wins |
+|---|---|---|
+| v,o flat quarters (Muon's shape, own lr and momentum) | +.0059 (.0007) | 5/5 |
+| v,o ramp (weakest quarter 2.2 times the top) | +.0070 (.0005) | 5/5 |
+| v,o bottom (weakest quarter 3 times) | +.0028 (.0008) | 4/5 |
+| FFN ramp | +.0023 (.0010) | 4/5 |
+| v,o HyC eta .01 rho .99 | +.0045 (.0012) | 5/5 |
+| v,o HyC eta .03 rho .99 | -.0050 (.0009) | 0/5 |
+
+- The flat arm is Muon's own shape with its own lr, and it gains +.0059, the same as exact Muon at momentum .95 in papers-a. So most of the v,o gain at width 128 is the baseline's shared momentum .8, not the shape.
+- The ramp adds +.0011 over flat. At width 48 and 1,000 steps the tilt added about .0015. Both are below the .005 win line.
+- papers-c (pushed 2026-11-06 after shrinking its seed file to 0.77 MB; the 1.2 MB file was refused by Kaggle) walks Muon itself on v,o and q,k at width 128.

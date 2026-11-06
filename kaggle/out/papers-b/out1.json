@@ -1,0 +1,14 @@
+{
+"tier": "w128",
+"base": "down=muon:0.03213:beta=0.8;emb=adam:0.19:b1=0.7;gate=muon:0.026:beta=0.8;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.03213:beta=0.8;q=muon:0.067:beta=0.8;up=muon:0.026:beta=0.8;v=muon:0.03213:beta=0.8",
+"base_held": 4.2629,
+"rows": {
+"ffn band ramp": {
+"mean": 0.0023,
+"error": 0.001,
+"wins": 4,
+"f": 0.4,
+"spec": "down=x_band:0.01285:beta=0.95:t2=1.25:t3=1.5:t4=2.2;emb=adam:0.19:b1=0.7;gate=x_band:0.0104:beta=0.95:t2=1.25:t3=1.5:t4=2.2;head=adam:0.048:b1=0.3:b2=0.999;k=muon:0.067:beta=0.8;norm=adam:0.019:b2=0.9;o=muon:0.03213:beta=0.8;q=muon:0.067:beta=0.8;up=x_band:0.0104:beta=0.95:t2=1.25:t3=1.5:t4=2.2;v=muon:0.03213:beta=0.8"
+}
+}
+}
