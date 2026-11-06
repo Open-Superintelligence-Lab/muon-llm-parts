@@ -2,6 +2,7 @@
 
 We are using this repo to write a paper for ICML 2027. The question is how Muon influences each part of an LLM, and whether custom optimizers per part help, maybe focusing on attention heads.
 
+- `docs/why-muon.md`: start here. What we found, why Muon helps each part, why other optimizers don't beat it, and what's next.
 - `paper/main.tex`: the draft.
 - `RESULTS.md`: every experiment, its numbers and where its data is.
 - `results/`, `kaggle/out/`: the data behind those numbers. `kaggle/map-*/job.py` is the exact code each GPU job ran.
