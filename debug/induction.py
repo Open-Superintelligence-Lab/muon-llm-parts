@@ -83,13 +83,15 @@ def job(x):
 def main():
     p = argparse.ArgumentParser(); p.add_argument("--tier", default="5sx4"); p.add_argument("--add", default="results/add/w48x1000_out.jsonl"); p.add_argument("--out", required=True)
     p.add_argument("--worlds", default="5,6,7,8,9"); p.add_argument("--arms", default="adam,muon,adam_muon_vo,adam_muon_qk"); p.add_argument("--steps", type=int, default=0); p.add_argument("--every", type=int, default=10); p.add_argument("--par", type=int, default=9)
-    p.add_argument("--map", default="", help="a map_out.jsonl: arms muon, adam (the map's all-Adam row), muon_vo_adam, muon_qk_adam, muon_ffn_adam"); p.add_argument("--stream", default=""); p.add_argument("--max-min", type=float, default=0); p.add_argument("--rep", type=float, default=0); p.add_argument("--ckpt", default="", help="folder: save each arm when --max-min runs out and resume it on the next call"); a = p.parse_args()
+    p.add_argument("--map", default="", help="a map_out.jsonl: arms muon, adam (the map's all-Adam row), muon_vo_adam, muon_qk_adam, muon_ffn_adam"); p.add_argument("--stream", default=""); p.add_argument("--max-min", type=float, default=0); p.add_argument("--rep", type=float, default=0); p.add_argument("--extra", default="", help="json file {arm name: spec string} for arms the map does not have"); p.add_argument("--ckpt", default="", help="folder: save each arm when --max-min runs out and resume it on the next call"); a = p.parse_args()
     if a.map:
         row = [x for x in map(json.loads, open(a.map)) if x["tier"] == a.tier.split("x")[0]][-1]; g = row["gaps"]
         specs = dict(muon=arms.parse(row["base"]), adam=arms.parse(g["all"]["spec"]), muon_vo_adam=arms.parse(g["vo"]["spec"]), muon_qk_adam=arms.parse(g["qk"]["spec"]), muon_ffn_adam=arms.parse(g["ffn"]["spec"]))
+        specs.update({f"gap_{k}": arms.parse(v["spec"]) for k, v in g.items()})  # every map row by name, e.g. gap_q, gap_qkffn, gap_split
     else:
         row = [x for x in map(json.loads, open(a.add)) if x.get("kind") == "add"][-1]
         specs = dict(muon=arms.parse(row["base"]), adam=arms.parse(row["adam"]), adam_muon_vo=arms.parse(row["rows"]["vo"]["spec"]), adam_muon_qk=arms.parse(row["rows"]["qk"]["spec"]))
+    if a.extra: specs.update({n: arms.parse(v) for n, v in json.load(open(a.extra)).items()})
     specs = {n: specs[n] for n in a.arms.split(",")}; W = [int(x) for x in a.worlds.split(",")]
     jobs = [(n, s, a.tier, w, a.steps, a.every, a.stream, a.max_min and time.time() + 60 * a.max_min, a.rep, a.ckpt) for n, s in specs.items() for w in W]
     with mp.get_context("spawn").Pool(min(a.par, len(jobs))) as pool: res = pool.map(job, jobs)

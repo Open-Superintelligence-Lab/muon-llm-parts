@@ -1031,3 +1031,29 @@ Replication on worlds 6 and 7 (`results/induction/w64rep25x4000_w67.json`), with
 - Muon had the lowest loss on all three worlds, 0.007-0.043 below Adam. So lower loss did not come with a stronger induction head.
 - By the kill rule's own terms, the direction "Muon forms the induction head earlier" is dropped.
 - One result held on all three worlds: Muon with q,k on Adam had the lowest copy score (0.18-0.34, against 0.39-0.62 for Muon and 0.46-2.03 for Adam), and its best head never passed attention 0.05 by step 3,600. Its loss sits within 0.02 of the other two. Untested: whether this comes from the mix itself or from the q,k learning rate (0.0625, tuned for loss at 2,000 steps).
+
+### 2026-11-06, follow-up: why does Muon with q,k on Adam copy worst? (predictions written before the runs)
+
+All-Adam uses the same q,k Adam lr (0.0625) and still copies, so the lr alone is not an obvious cause. Arms in the same setting (width 64, `--rep 0.25`, 4,000 steps, worlds 5-7): Muon with q,k on Adam at q,k lr 0.0156 and 0.25 (¼× and 4× the tuned 0.0625), and the reverse mix, all Adam with q,k on Muon (lr 0.067).
+- Prediction A (lr): if the lr causes it, at least one of the two other lrs lifts the copy score to ≥ 0.39 (Muon's lowest) on at least 2 of 3 worlds. My guess: neither does.
+- Prediction B (mismatch): if mixing optimizers between q,k and the rest causes it, the reverse mix also copies worse than both pure arms on at least 2 of 3 worlds. My guess: it does not; Muon's v,o/FFN with Adam's q,k is the specific bad pair.
+
+Result (`results/induction/w64rep25x4000_qkfollow.json`; table from `python3 debug/induction_table.py` on all three files). Copy score = ICL, the mean of the last 5 probes:
+
+| arm | w5 | w6 | w7 | mean loss |
+|---|---|---|---|---|
+| Muon, q,k on Adam lr 0.0156 | 0.428 | 0.449 | 0.383 | 4.4173 |
+| Muon, q,k on Adam lr 0.0625 (tuned) | 0.221 | 0.332 | 0.179 | 4.4285 |
+| Muon, q,k on Adam lr 0.25 | 0.467 | 0.653 | 0.374 | 4.4152 |
+| all Adam, q,k on Muon | 0.451 | 0.540 | 1.305 | 4.4360 |
+| Muon | 0.463 | 0.624 | 0.394 | 4.4114 |
+| all Adam | 0.644 | 2.025 | 0.458 | 4.4392 |
+
+- Prediction A: at ¼× and 4× the q,k lr, the copy score reaches Muon's lowest value (0.39) on 2 of 3 worlds. So the low copy score belongs to the tuned lr only; my guess was wrong. Because it is not monotone in lr, it is most likely a narrow effect, so I drop "the mix removes the head".
+- Prediction B is met by its letter (the reverse mix is below both pure arms on worlds 5 and 6), but the world-5 margin is 0.012. On world 7, the reverse mix has the highest copy score of all arms. Not a finding.
+- One pattern holds on all three worlds: all Adam copies better than Muon (0.644 vs 0.463, 2.025 vs 0.624, 0.458 vs 0.394), while Muon has the lower loss (by 0.034, 0.043 and 0.007).
+
+### 2026-11-06: does Adam learn in-context copying better than Muon at lower or equal loss? (predictions written before the runs)
+
+Same setting, worlds 8 and 9, Muon and all Adam.
+- Prediction C: Adam's copy score is above Muon's on both new worlds, and Muon's loss is below Adam's on both. If either fails on either world, the pattern is 3 of 5 or 4 of 5, and I treat it as unproven.
