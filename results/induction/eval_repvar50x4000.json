@@ -148,5 +148,230 @@
    "acc": 0.0065,
    "second_se": 0.0145
   }
+ },
+ "adam_vomuon/w5": {
+  "held": 4.4387,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0109,
+   "second": 9.7427,
+   "icl": 1.2682,
+   "acc": 0.0025,
+   "second_se": 0.0126
+  },
+  "freq": {
+   "first": 8.5495,
+   "second": 6.7781,
+   "icl": 1.7714,
+   "acc": 0.0932,
+   "second_se": 0.0141
+  },
+  "off63": {
+   "first": 10.9902,
+   "second": 9.8462,
+   "icl": 1.1439,
+   "acc": 0.0024,
+   "second_se": 0.0104
+  }
+ },
+ "adam_vomuon/w6": {
+  "held": 4.4272,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.1201,
+   "second": 10.045,
+   "icl": 1.0751,
+   "acc": 0.0016,
+   "second_se": 0.011
+  },
+  "freq": {
+   "first": 8.5892,
+   "second": 7.1772,
+   "icl": 1.412,
+   "acc": 0.0638,
+   "second_se": 0.014
+  },
+  "off63": {
+   "first": 11.0878,
+   "second": 10.2406,
+   "icl": 0.8472,
+   "acc": 0.0012,
+   "second_se": 0.0091
+  }
+ },
+ "adam_vomuon/w7": {
+  "held": 4.4676,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.2372,
+   "second": 7.7432,
+   "icl": 3.494,
+   "acc": 0.0278,
+   "second_se": 0.0177
+  },
+  "freq": {
+   "first": 8.6336,
+   "second": 4.8705,
+   "icl": 3.7632,
+   "acc": 0.2374,
+   "second_se": 0.017
+  },
+  "off63": {
+   "first": 11.1845,
+   "second": 8.138,
+   "icl": 3.0465,
+   "acc": 0.0228,
+   "second_se": 0.0158
+  }
+ },
+ "muon_qk_adam/w5": {
+  "held": 4.4525,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.3565,
+   "second": 7.1868,
+   "icl": 4.1697,
+   "acc": 0.0437,
+   "second_se": 0.028
+  },
+  "freq": {
+   "first": 8.6689,
+   "second": 4.5913,
+   "icl": 4.0776,
+   "acc": 0.2603,
+   "second_se": 0.0173
+  },
+  "off63": {
+   "first": 11.3272,
+   "second": 7.4515,
+   "icl": 3.8756,
+   "acc": 0.0356,
+   "second_se": 0.026
+  }
+ },
+ "muon_qk_adam/w6": {
+  "held": 4.4505,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.2529,
+   "second": 8.2275,
+   "icl": 3.0254,
+   "acc": 0.0183,
+   "second_se": 0.0298
+  },
+  "freq": {
+   "first": 8.6225,
+   "second": 5.2941,
+   "icl": 3.3284,
+   "acc": 0.1969,
+   "second_se": 0.0172
+  },
+  "off63": {
+   "first": 11.2137,
+   "second": 8.5234,
+   "icl": 2.6903,
+   "acc": 0.0138,
+   "second_se": 0.0263
+  }
+ },
+ "muon_qk_adam/w7": {
+  "held": 4.4455,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0954,
+   "second": 9.6074,
+   "icl": 1.488,
+   "acc": 0.0025,
+   "second_se": 0.0135
+  },
+  "freq": {
+   "first": 8.5404,
+   "second": 6.712,
+   "icl": 1.8284,
+   "acc": 0.0694,
+   "second_se": 0.0136
+  },
+  "off63": {
+   "first": 11.0725,
+   "second": 9.9309,
+   "icl": 1.1416,
+   "acc": 0.0015,
+   "second_se": 0.011
+  }
+ },
+ "muon_vo_adam/w5": {
+  "held": 4.4546,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0893,
+   "second": 7.7906,
+   "icl": 3.2988,
+   "acc": 0.0122,
+   "second_se": 0.0178
+  },
+  "freq": {
+   "first": 8.5578,
+   "second": 5.5975,
+   "icl": 2.9603,
+   "acc": 0.1668,
+   "second_se": 0.0139
+  },
+  "off63": {
+   "first": 11.0333,
+   "second": 8.0373,
+   "icl": 2.996,
+   "acc": 0.01,
+   "second_se": 0.0163
+  }
+ },
+ "muon_vo_adam/w6": {
+  "held": 4.4443,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0716,
+   "second": 9.1063,
+   "icl": 1.9653,
+   "acc": 0.0043,
+   "second_se": 0.0145
+  },
+  "freq": {
+   "first": 8.5023,
+   "second": 5.9508,
+   "icl": 2.5515,
+   "acc": 0.1478,
+   "second_se": 0.0147
+  },
+  "off63": {
+   "first": 11.0616,
+   "second": 9.3483,
+   "icl": 1.7133,
+   "acc": 0.0031,
+   "second_se": 0.0121
+  }
+ },
+ "muon_vo_adam/w7": {
+  "held": 4.435,
+  "n_held": 3200,
+  "uniform": {
+   "first": 11.0468,
+   "second": 10.1482,
+   "icl": 0.8986,
+   "acc": 0.0009,
+   "second_se": 0.0102
+  },
+  "freq": {
+   "first": 8.4916,
+   "second": 7.4519,
+   "icl": 1.0398,
+   "acc": 0.0522,
+   "second_se": 0.0136
+  },
+  "off63": {
+   "first": 11.0229,
+   "second": 10.2988,
+   "icl": 0.7241,
+   "acc": 0.0006,
+   "second_se": 0.0088
+  }
  }
 }

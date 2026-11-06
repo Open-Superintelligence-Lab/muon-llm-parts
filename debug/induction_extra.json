@@ -2,5 +2,7 @@
  "qkadam_lr0156": "down=muon:0.051:beta=0.8;emb=adam:0.095:b1=0.7;gate=muon:0.0416:beta=0.8;head=adam:0.024:b1=0.3:b2=0.999;norm=adam:0.0095:b2=0.9;o=muon:0.03213:beta=0.8;up=muon:0.0416:beta=0.8;v=muon:0.03213:beta=0.8;k=adam:0.015625;q=adam:0.015625",
  "qkadam_lr25": "down=muon:0.051:beta=0.8;emb=adam:0.095:b1=0.7;gate=muon:0.0416:beta=0.8;head=adam:0.024:b1=0.3:b2=0.999;norm=adam:0.0095:b2=0.9;o=muon:0.03213:beta=0.8;up=muon:0.0416:beta=0.8;v=muon:0.03213:beta=0.8;k=adam:0.25;q=adam:0.25",
  "adam_qkmuon": "down=adam:0.01;emb=adam:0.095:b1=0.7;gate=adam:0.01;head=adam:0.024:b1=0.3:b2=0.999;norm=adam:0.0095:b2=0.9;o=adam:0.01;up=adam:0.01;v=adam:0.01;k=muon:0.067:beta=0.8;q=muon:0.067:beta=0.8",
- "adam_vomuon": "down=adam:0.01;emb=adam:0.095:b1=0.7;gate=adam:0.01;head=adam:0.024:b1=0.3:b2=0.999;k=adam:0.0625;norm=adam:0.0095:b2=0.9;o=muon:0.03213:beta=0.8;q=adam:0.0625;up=adam:0.01;v=muon:0.03213:beta=0.8"
+ "adam_vomuon": "down=adam:0.01;emb=adam:0.095:b1=0.7;gate=adam:0.01;head=adam:0.024:b1=0.3:b2=0.999;k=adam:0.0625;norm=adam:0.0095:b2=0.9;o=muon:0.03213:beta=0.8;q=adam:0.0625;up=adam:0.01;v=muon:0.03213:beta=0.8",
+ "adam_x05": "down=adam:0.005;emb=adam:0.0475:b1=0.7;gate=adam:0.005;head=adam:0.012:b1=0.3:b2=0.999;k=adam:0.03125;norm=adam:0.00475:b2=0.9;o=adam:0.005;q=adam:0.03125;up=adam:0.005;v=adam:0.005",
+ "adam_x2": "down=adam:0.02;emb=adam:0.19:b1=0.7;gate=adam:0.02;head=adam:0.048:b1=0.3:b2=0.999;k=adam:0.125;norm=adam:0.019:b2=0.9;o=adam:0.02;q=adam:0.125;up=adam:0.02;v=adam:0.02"
 }

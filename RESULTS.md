@@ -1095,3 +1095,21 @@ Prediction E (written before the runs): in the same setting, on worlds 5-7, the 
 - Muon with v,o on Adam: frequency-matched second-copy loss ends at least halfway from Muon's toward Adam's on all 3 worlds.
 - Muon with q,k on Adam: ends within a quarter of the gap from Muon's on at least 2 of 3 worlds.
 - All Adam with v,o on Muon: ends at least halfway from Adam's toward Muon's on at least 2 of 3 worlds.
+
+Result E (`results/induction/w64repvar50x4000_parts.json`, re-measured in `eval_repvar50x4000.json`). Each cell is frequency-matched second-copy loss and, in brackets, the share of the Muon→Adam gap. 0 = like Muon, 1 = like Adam:
+
+| arm | w5 | w6 | w7 |
+|---|---|---|---|
+| Muon | 4.40 (0) | 5.02 (0) | 5.50 (0) |
+| Muon, q,k on Adam | 4.59 (0.09) | 5.29 (0.25) | 6.71 (1.00) |
+| Muon, v,o on Adam | 5.60 (0.56) | 5.95 (0.85) | 7.45 (1.61) |
+| all Adam, v,o on Muon | 6.78 (1.11) | 7.18 (1.97) | 4.87 (-0.52) |
+| all Adam | 6.55 (1) | 6.11 (1) | 6.71 (1) |
+
+Held-out loss stays within 4.427-4.468 across all 15 models.
+- "Taking v,o off Muon loses at least half the copying advantage, on all 3 worlds": held (0.56, 0.85, 1.61).
+- "Taking q,k off Muon keeps it, on at least 2 of 3": held, but at the edge (0.09, 0.25, 1.00).
+- "Muon on v,o alone in an Adam model gives at least half of it, on at least 2 of 3": failed (1 of 3).
+- Reading: Muon on v,o is needed for the copying advantage but is not enough on its own. World 7 swings widely in every arm, so single runs per world are noisy here.
+
+Prediction F (written before the runs): Adam's copying deficit is not a learning-rate artifact. With every Adam lr scaled ×0.5 or ×2, on worlds 5 and 6, neither scaled arm reaches within a quarter of the gap of Muon's frequency-matched second-copy loss on both worlds.
