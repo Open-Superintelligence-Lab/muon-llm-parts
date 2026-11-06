@@ -748,8 +748,12 @@ Same test at 4,000 steps (`results/papers/band_vo_4000.json` and `muon_vo_4000.j
 | Muon, lr x.35 | +.0022 (.0010) | 7/10 |
 | Muon, lr x.5 | +.0017 (.0012) | 6/10 |
 | Muon, lr x.7 | +.0011 (.0008) | 8/10 |
+| Quarter steps .22 .28 .34 .50, momentum .97 | +.0031 (.0010) | 8/10 |
+| Muon, momentum .97, lr x.25 / x.35 / x.5 | +.0014 / +.0036 / +.0020 | |
 
 At 4,000 steps the tilted step no longer beats Muon: Muon with momentum .95 and a third of its tuned lr gains +.0022, and the best tilted step +.0025. The 4,000-step base was tuned on worlds 0 and 1 at momentum .9, and that tuning leaves about .002 for any smaller, longer-momentum step to take. So the tilt's edge over walked Muon is .0019 at 1,000 steps, .0018 at 250 (with large errors) and .0003 at 4,000. With exact polar, a flat step at a third of Muon's size gains only +.0013 here against +.0022 for Newton-Schulz Muon at a similar size, so Newton-Schulz's uneven singular values are worth about .001 at this length.
+
+At momentum .97 the same holds: Muon at a third of its lr gains +.0036 (`muon_vo_4000_b97.json`), the tilt +.0031. At 1,000 steps Muon at momentum .97 gains at most +.0007 (lr x.25 +.0007, x.35 +.0004, x.5 -.0009, `muon_vo_b97.json`), so there the tilt's edge over walked Muon (+.0032 against +.0013) stands across momentum .8 to .97.
 
 ## 2026-11-06: Random search, 300 candidates per part at 1,000 steps
 
