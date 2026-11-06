@@ -1113,3 +1113,26 @@ Held-out loss stays within 4.427-4.468 across all 15 models.
 - Reading: Muon on v,o is needed for the copying advantage but is not enough on its own. World 7 swings widely in every arm, so single runs per world are noisy here.
 
 Prediction F (written before the runs): Adam's copying deficit is not a learning-rate artifact. With every Adam lr scaled ×0.5 or ×2, on worlds 5 and 6, neither scaled arm reaches within a quarter of the gap of Muon's frequency-matched second-copy loss on both worlds.
+
+Result F (`results/induction/w64repvar50x4000_adamlr.json`, re-measured in `eval_repvar50x4000.json`): with every Adam lr at ×0.5 or ×2, frequency-matched second-copy loss is 6.67/7.67 (×0.5) and 6.49/6.71 (×2) on worlds 5/6. Tuned Adam gets 6.55/6.11 and Muon 4.40/5.02. Prediction F held: neither scaled arm comes within a quarter of the gap, so within a 4× lr range Adam's copying deficit is not an lr artifact. Held-out loss: 4.4465/4.4270 (×0.5) and 4.4746/4.4631 (×2).
+
+Second Opus critic (abstract-level read of the NeurIPS 2026 paper): "Muon recalls from context better than Adam" is already shown there on the synthetic RP-MQAR task across seven architectures. What may still be new is (a) web text at matched held-out loss and (b) where in the model the difference sits. Its requested controls:
+- First-copy loss on the same frequency-matched rows. It is already in `eval_repvar50x4000.json`: Muon 8.63 vs Adam 8.54 on world 5. So both predict these tokens equally well, and the gap is in copying.
+- Per-head credit on the same rows.
+
+Per-head credit (`debug/induction_heads.py` → `results/induction/heads_repvar50x4000.json`, 500 frequency-matched rows, second-copy positions). Credit is the direct logit for the copied token minus the mean logit, through the frozen final RMSNorm and the unembedding:
+
+| arm | sum over all 16 heads (w5/w6/w7) | sum over the 4 MLPs | top-head credit / its induction attention | 2nd-copy loss for the 100 most common tokens / ranks 1,000+ |
+|---|---|---|---|---|
+| Muon | 5.40 / 5.18 / 4.41 | 1.95 / 1.10 / 1.35 | 3.90/0.65, 1.71/0.52, 1.63/0.53 | 3.5-4.1 / 6.1-8.1 |
+| Adam | 3.06 / 3.48 / 3.07 | 1.76 / 1.75 / 1.58 | 1.81/0.54, 2.52/0.60, 1.32/0.54 | 4.6-5.1 / 8.8-9.8 |
+| Adam lr ×0.5, ×2 (w5, w6) | 3.16, 2.10; 3.30, 3.00 | 1.40-1.66 | | |
+| Muon, q,k on Adam | 5.32 / 4.78 / 3.35 | 1.20-1.85 | | |
+| Muon, v,o on Adam | 4.43 / 4.10 / 2.30 | 1.35-1.45 | | |
+| Adam, v,o on Muon | 2.90 / 2.19 / 4.95 | 1.49-1.86 | | |
+
+- Muon's heads write 1.3-2.5× more credit for the copied token than Adam's at every Adam lr tried, on all worlds tried. The MLPs write about the same.
+- The top induction head attends about equally (Muon 0.52-0.65, Adam 0.54-0.60).
+- In Muon models the copy write is spread over several heads; the top head holds only 1.6-1.7 of 4.4-5.2 on worlds 6-7.
+- The gap shows at every token frequency and is larger for rare tokens.
+- Status: at width 64 with planted copied spans, "same loss, same attention, Muon's heads write the copied token about 1.6× harder" holds on 3 of 3 worlds and survives a 4× Adam lr range. Still open: different data orders (all worlds share one), natural text with no planted spans, larger models (Kaggle GPU once the weekly quota resets), and an OV-circuit eigenvalue score.
