@@ -946,3 +946,20 @@ Test: width 48, 1,000 steps, 1, 2, 4 and 12 heads (head size 48, 24, 12, 4). Scr
 - The flat arm is Muon's own shape with its own lr, and it gains +.0059, the same as exact Muon at momentum .95 in papers-a. So most of the v,o gain at width 128 is the baseline's shared momentum .8, not the shape.
 - The ramp adds +.0011 over flat. At width 48 and 1,000 steps the tilt added about .0015. Both are below the .005 win line.
 - papers-c (pushed 2026-11-06 after shrinking its seed file to 0.77 MB; the 1.2 MB file was refused by Kaggle) walks Muon itself on v,o and q,k at width 128.
+
+### Results (2026-11-06)
+
+Data `results/heads/out.jsonl` (gaps) and `results/heads/map.jsonl` (runs). Gap of moving a group to Adam, worlds 5-9, mean (error) wins.
+
+| Heads (head size) | Base | q,k to Adam | v,o to Adam | FFN to Adam (lr .01) |
+|---|---|---|---|---|
+| 12 (4) | 4.1627 | +.0030 (.0022) 4/5 | -.0108 (.0055) 0/5 | -.0026 (.0039) 2/5 |
+| 4 (12) | 4.1323 | +.0011 (.0014) 4/5 | -.0136 (.0031) 0/5 | -.0026 (.0022) 2/5 |
+| 2 (24) | 4.1342 | -.0032 (.0014) 1/5 | -.0172 (.0022) 0/5 | -.0021 (.0018) 2/5 |
+| 1 (48) | 4.1441 | -.0019 (.0014) 1/5 | -.0117 (.0017) 0/5 | -.0018 (.0006) 0/5 |
+
+- The prediction fails: with one 48-wide head, moving q,k to Adam costs -.0019, not below -.005.
+- There is a weak trend: heads of 4 and 12 prefer Adam slightly (4/5 worlds), heads of 24 and 48 prefer Muon slightly (1/5). Every q,k gap is within .0035 of zero.
+- So head size alone does not make q,k need Muon at width 48. The width-512 q,k cost (-.0091) needs width, depth or length, not only big heads.
+- v,o cost is -.0108 to -.0172 at every head count, as predicted.
+- 4 heads beats 1 head by .0118 and 12 heads by .0304 on the Muon base, so 4 heads stays the default.
