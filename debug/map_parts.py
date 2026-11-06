@@ -106,17 +106,17 @@ def add_map(R, b, tune, held, tier, path):
 
 def main():
     global PATH, STEPS
-    p = argparse.ArgumentParser(); p.add_argument("tier"); p.add_argument("--results", required=True); p.add_argument("--tune", default="0,1"); p.add_argument("--held", default="5,6,7,8,9"); p.add_argument("--par", type=int, default=4); p.add_argument("--hours", type=float, default=11); p.add_argument("--out", default=""); p.add_argument("--time-only", action="store_true"); p.add_argument("--add", action="store_true", help="also run the add-Muon-to-Adam design"); p.add_argument("--add-only", action="store_true"); p.add_argument("--few", action="store_true", help="for a width too costly to map: tune only a shared Muon factor from --start, and run base, vo, qk, ffn and split"); p.add_argument("--start", default=MUON); a = p.parse_args()
+    p = argparse.ArgumentParser(); p.add_argument("tier"); p.add_argument("--results", required=True); p.add_argument("--tune", default="0,1"); p.add_argument("--held", default="5,6,7,8,9"); p.add_argument("--par", type=int, default=4); p.add_argument("--hours", type=float, default=11); p.add_argument("--out", default=""); p.add_argument("--time-only", action="store_true"); p.add_argument("--add", action="store_true", help="also run the add-Muon-to-Adam design"); p.add_argument("--add-only", action="store_true"); p.add_argument("--few", action="store_true", help="for a width too costly to map: tune only a shared Muon factor from --start, and run base, vo, qk, ffn and split"); p.add_argument("--start", default=MUON); p.add_argument("--few-groups", default="vo,qk", help="with --few, the groups whose Adam lr is walked; ffn left out is run at a fixed Adam lr .01, other groups left out are skipped"); p.add_argument("--adam-grid", default=".004,.01,.025", help="starting Adam lrs for each walk; the walk steps past a winning end at most twice"); a = p.parse_args()
     PATH = os.path.abspath(a.results); tune = [int(x) for x in a.tune.split(",")]; held = [int(x) for x in a.held.split(",")]; R = Runner(a.tier, a.par, a.hours); heads = env.TIERS[a.tier]["heads"]
     if a.time_only:
         STEPS = 200; t = time.time(); R.need([arms.parse(MUON)], [0, 1, 2, 5]); print(a.tier, "seconds for 4 runs at once, 200 steps", round(time.time() - t, 1), [(r["s_per_step"], r["train_s"], r["eval_s"]) for r in R.rows.values() if r["steps"] == 200], flush=True); return R.ex.shutdown()
     print(a.tier, "tuning Muon", flush=True); b = tune_base(R, tune, a.start, a.few); print("base", arms.show(b), f"{R.mean(b, tune):.4f}", flush=True)
     if a.add_only: add_map(R, b, tune, held, a.tier, a.out); return R.ex.shutdown()
-    lrs = dict(gate=.01, up=.01, down=.01) if a.few else {}
-    for name, parts in ({k: v for k, v in TUNED.items() if k != "ffn"} if a.few else TUNED).items():  # one Adam lr per group, chosen on tune worlds; single matrices and joint moves inherit it
-        lr = walk(R, lambda f: swapped(b, {m: f for m in parts}), (.004, .01, .025), tune, f"Adam on {name}, lr")
+    G = set(a.few_groups.split(",")); lrs = dict(gate=.01, up=.01, down=.01) if a.few and "ffn" not in G else {}; grid = tuple(float(x) for x in a.adam_grid.split(","))
+    for name, parts in ({k: v for k, v in TUNED.items() if k in G} if a.few else TUNED).items():  # one Adam lr per group, chosen on tune worlds; single matrices and joint moves inherit it
+        lr = walk(R, lambda f: swapped(b, {m: f for m in parts}), grid, tune, f"Adam on {name}, lr")
         for m in parts: lrs[m] = lr
-    f = 1 if a.few else walk(R, lambda f: split(b, heads, f), (1, 2, 4), tune, "per-head q,k, lr x"); picks = {name: swapped(b, {m: lrs[m] for m in parts}) for name, parts in SWAPS.items() if not a.few or name in ("vo", "qk", "ffn")}; picks["split"] = split(b, heads, f)
+    f = 1 if a.few else walk(R, lambda f: split(b, heads, f), (1, 2, 4), tune, "per-head q,k, lr x"); picks = {name: swapped(b, {m: lrs[m] for m in parts}) for name, parts in SWAPS.items() if not a.few or name in G | ({"ffn"} if lrs else set())}; picks["split"] = split(b, heads, f)
     R.need([b] + list(picks.values()), held); B = np.array([R.val(b, w) for w in held]); out = dict(tier=a.tier, base=arms.show(b), base_tune=round(R.mean(b, tune), 4), base_held=round(float(B.mean()), 4), s_per_step=R.rows[(arms.show(b), held[0])]["s_per_step"], adam_lr=lrs, split_factor=f, gaps={})
     print(f"{a.tier} base held-out {B.mean():.4f}", flush=True)
     for name, s in picks.items():

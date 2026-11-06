@@ -676,7 +676,7 @@ Reading: two parts. (1) A flat step about a third of Muon's (.32) gives +.0014, 
 | Query and key | -.0091 (.0006) | 0 |
 | Muon per head on query and key (not Adam) | +.0021 (.0021) | 2 |
 
-At width 512 every group needs Muon, and the order is the same as at width 48: FFN most, then value and output, then query and key. The FFN cost (.21) is about 40 times its width-128 size; Adam's FFN lr was walked only to .01, so part of it may be an untuned Adam, but value and output (Adam lr .00064, walked over 5 values) still lose .048.
+At width 512 every group needs Muon, and the order is the same as at width 48: FFN most, then value and output, then query and key. The FFN cost (.21) is about 40 times its width-128 size, and it is not a fair number: in this cut-down map (`--few`) the FFN Adam lr was fixed at .01, not walked. Value and output's walked Adam lr ended at .00064, the lowest value tried, so it also sits at the edge of its walk. Job map-g reruns both groups with Adam lrs walked from .00025 to .01 and further past a winning end. Until it returns, only the order (every group needs Muon at width 512) stands, not the sizes.
 
 ## 2026-11-06: Kaggle add design at width 128 (job map-e)
 
