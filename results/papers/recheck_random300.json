@@ -1,0 +1,36 @@
+{
+"worlds": [
+10,
+11,
+12,
+13,
+14
+],
+"base": 4.1461,
+"rows": {
+"random300_picks vo row-clip + two-speed + col-then-muon bet": {
+"old": -0.0005,
+"new": -0.0,
+"error": 0.0007,
+"wins": 2
+},
+"random300_picks vo soft-power + ortho-pull beta=0.95 p3=-0.": {
+"old": 0.0025,
+"new": 0.0015,
+"error": 0.0007,
+"wins": 4
+},
+"random300_picks ffn row-then-muon + row-size beta=0.8 p4=1.0": {
+"old": 0.0015,
+"new": 0.0009,
+"error": 0.0008,
+"wins": 4
+},
+"random300_picks ffn muon+sign beta=0.8 p3=0.1": {
+"old": 0.0,
+"new": 0.0013,
+"error": 0.0005,
+"wins": 5
+}
+}
+}

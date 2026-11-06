@@ -751,6 +751,21 @@ Same test at 4,000 steps (`results/papers/band_vo_4000.json` and `muon_vo_4000.j
 
 At 4,000 steps the tilted step no longer beats Muon: Muon with momentum .95 and a third of its tuned lr gains +.0022, and the best tilted step +.0025. The 4,000-step base was tuned on worlds 0 and 1 at momentum .9, and that tuning leaves about .002 for any smaller, longer-momentum step to take. So the tilt's edge over walked Muon is .0019 at 1,000 steps, .0018 at 250 (with large errors) and .0003 at 4,000. With exact polar, a flat step at a third of Muon's size gains only +.0013 here against +.0022 for Newton-Schulz Muon at a similar size, so Newton-Schulz's uneven singular values are worth about .001 at this length.
 
+## 2026-11-06: Random search, 300 candidates per part at 1,000 steps
+
+`debug/random_opt.py --n 300 --tier 5sx4 --parts vo,ffn --top2 20 --top3 6`, output `results/random/w48x1000_search300.json`. Screen on world 0 with three lrs, top 20 get finer lrs on worlds 0,1, top 6 scored on worlds 5-9; the top 2 per part by worlds 5-9 were then scored on worlds 10-14 (`results/papers/recheck_random300.json`). Base 4.1323.
+
+On world 0, 25 of 300 v,o candidates beat the base (best +.0034, median -.0117) and 62 of 300 FFN candidates (best +.0052, median -.0026).
+
+| Part | Candidate | Worlds 0,1 | Worlds 5-9 | Worlds 10-14 |
+|---|---|---|---|---|
+| v,o | exact (GG^T)^-c G with c=.55, momentum .95, small pull toward orthogonal weights | -.0002 | +.0025 (.0008) 5/5 | +.0015 (.0007) 4/5 |
+| v,o | row clip + two-speed momentum + column-then-Muon | -.0002 | -.0005 (.0014) 2/5 | .0000 (.0007) 2/5 |
+| FFN | row-normalize then Muon, row-wise size, momentum .8 | +.0020 | +.0015 (.0006) 4/5 | +.0009 (.0008) 4/5 |
+| FFN | Muon plus .1 sign, momentum .8 | +.0019 | .0000 (.0002) 2/5 | +.0013 (.0005) 5/5 |
+
+The search found nothing on FFN beyond +.0015. Its only v,o rule that held is the same family as the tilted step above (exponent above .5 with momentum .95), found without being told about it, and it gains less (+.0015 on unused worlds) than the hand-set ramp did at 1,000 steps.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
