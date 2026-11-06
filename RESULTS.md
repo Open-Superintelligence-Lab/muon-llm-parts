@@ -963,3 +963,58 @@ Data `results/heads/out.jsonl` (gaps) and `results/heads/map.jsonl` (runs). Gap 
 - So head size alone does not make q,k need Muon at width 48. The width-512 q,k cost (-.0091) needs width, depth or length, not only big heads.
 - v,o cost is -.0108 to -.0172 at every head count, as predicted.
 - 4 heads beats 1 head by .0118 and 12 heads by .0304 on the Muon base, so 4 heads stays the default.
+
+## 2026-11-06: Width or tokens per weight? (predictions written before any run)
+
+The ICML critic's main objection: every Kaggle width run uses 2,000 steps of 8,192 tokens, so tokens per weight fall from 23 (width 64) to 0.56 (width 512) as width grows. The v,o cost ordered by tokens per weight falls almost steadily (.0476 at 0.56, .0403 at 2.4, .0366 at 5.8, .0202 at 7.4, .0135 at 23, .0025 at 92). So "v,o need Muon more as width grows" may be "v,o need Muon more when undertrained".
+
+Test, local, 2 layers, 4 heads, V=1000, 768 tokens a step, worlds 5-9. Weights (all, with embeddings): width 32 88.7K, width 64 226K, width 128 650K.
+
+| Tier | Width | Steps | Tokens per weight |
+|---|---|---|---|
+| t32x393 | 32 | 393 | 3.4 |
+| t64x1000 | 64 | 1,000 | 3.4 |
+| t128x2876 | 128 | 2,876 | 3.4 |
+| t32x1000 | 32 | 1,000 | 8.7 |
+| t128x1000 | 128 | 1,000 | 1.2 |
+
+Each: `debug/map_parts.py TIER --few --few-groups vo,qk --start <tuned w48x1000 base>` (shared Muon lr factor walked, Adam lrs for v,o and q,k walked on worlds 0-1, FFN to Adam at .01).
+
+- Width effect: at matched 3.4 tokens per weight, the v,o cost rises from width 32 to 128 by more than .004.
+- Tokens effect: at matched width, more tokens per weight lowers the v,o cost (width 32: 393 vs 1,000 steps; width 128: 1,000 vs 2,876).
+- Prediction: both effects exist, and tokens per weight is the larger. At matched 3.4 tokens per weight the width 32 to 128 rise is less than half the rise at matched 1,000 steps.
+
+Status 2026-11-06: the tokens-per-weight test above is paused after a partial width-32 map (results/tpw/). Literature check: whole-model Muon gain vs tokens per weight is done by 2609.04577 (constant 1.4-1.7x over 1-256x overtraining), and the part split is Wang et al. 2509.26030. New direction below.
+
+## 2026-11-06: Does Muon make the induction head form earlier, and which part does it? (predictions written before any run)
+
+No paper studies Muon and induction-head timing (6 searches, 2026-11-06; closest: 2603.26554 linear associative memory capacity, 2603.00742 linear attention theory, 2410.11474 Adam vs GD on an induction toy).
+
+Setup: width 48, 2 layers, 4 heads, 1,000 steps (5sx4), tuned specs from results/add/w48x1000_out.jsonl: all Adam, Muon, Adam + Muon on v,o, Adam + Muon on q,k. Worlds 5-9. Every 10 steps: tune loss on 64 rows, and the induction score = loss on the first copy of 20 random tokens minus loss on the second copy (repeated-random-token test of Olsson et al. 2022), plus the attention each head puts on the token after the earlier copy.
+
+Formation step = first step where the induction score passes half its final Muon value.
+
+Predictions:
+1. All four arms form an induction head within 1,000 steps (induction score above 1 nat at the end).
+2. Muon forms it earlier than Adam.
+3. Muon on v,o alone moves the formation step most of the way to Muon; Muon on q,k alone moves it less than half the way.
+
+Kill rule (decides whether this becomes the paper): let lead(t) = Adam tune loss minus Muon tune loss. The idea goes on only if lead(t) peaks between the two formation steps (plus or minus 10% of the run) and that peak is at least 1.5x the lead at step 1,000. If the lead grows smoothly with no peak near formation, the speedup is not "a circuit forms sooner", and the direction is dropped.
+
+Setting change, written before the main run (2026-11-06). On the width-48 tiers (0.77M-4M tokens) no arm formed an induction head: ICL stayed between -0.13 and +0.27, and induction attention stayed at chance (0.03). Prediction 1 failed there. Natural text needs far more tokens than a CPU or this Mac's GPU can give, and the Kaggle GPU quota is used up for the week. So the main run is controlled: the map's width-64 model (4 layers, 4 heads, V=4000, batch 64, rows of 128 tokens) reads fineweb train shard 1 in order. In every batch, the first quarter of the rows repeats its first 64 tokens in its second half (`--rep 0.25`). Copying then pays off early. Specs are the tuned map rows at width 64: Muon, all Adam, and Muon with v,o / q,k / FFN on Adam. Each arm runs 4,000 steps (33M tokens), world 5, one run per arm, with probes every 100 steps. Same predictions and kill rule. A pilot at 2,000 steps already showed Muon's best head reaching induction attention 0.05 at step 500, while Adam's reached it at step 1,000. The pilot is not counted. The natural-text version (60K steps, 491M tokens) waits for the Kaggle quota.
+
+Result, `results/induction/w64rep25x4000_w5.json` (world 5, one run per arm, 4,000 steps, every 100 steps; ICL is noisy, ±0.15 from probe to probe):
+
+| arm | final loss | ICL, mean of last 5 probes | best head induction attention, final | step attention first ≥ 0.05 | step smoothed ICL first ≥ half of Muon's final |
+|---|---|---|---|---|---|
+| Muon | 4.4432 | 0.463 | 0.175 | 600 | 900 |
+| all Adam | 4.4773 | 0.644 | 0.163 | 1,000 | 2,300 |
+| Muon, v,o on Adam | 4.4741 | 0.835 | 0.150 | 1,200 | 1,000 |
+| Muon, q,k on Adam | 4.4597 | 0.221 | 0.049 | 3,900 | 1,500 |
+| Muon, FFN on Adam | 4.4467 | 0.802 | 0.113 | 500 | 900 |
+
+- Prediction 1 failed: no arm reached ICL 1 nat in 33M tokens.
+- Prediction 2 held on this one world: Muon's head formed 400 steps earlier on attention and 1,400 steps earlier on ICL.
+- Prediction 3 cannot be read as written, because the map arms switch one part from Muon to Adam rather than adding Muon to one part. Read the other way, putting q,k on Adam removed the head almost entirely (attention 0.049 against 0.15-0.18 elsewhere), while loss was only 0.016 worse than Muon's.
+- Kill rule: Adam loss minus Muon loss peaks at 0.127 at step 500 and ends at 0.034 (3.7×). The window was 500-2,700 (formation steps 900 and 2,300, ±400). The peak sits on the window's first step, so it passes only at the edge. Muon also leads early at every tier, so this peak may be general early speed rather than the head.
+- Next: worlds 6 and 7 for Muon, all Adam, and Muon with q,k on Adam, to see whether the missing head is real.
