@@ -103,7 +103,7 @@ Two patterns repeat:
 1. **Best-of-many picks shrink on fresh worlds.** Gains of +.002 to +.004 picked on worlds 5-9 fall to about +.001 on worlds 10-14.
 2. **Gains fade with training length.** The tilted step, per-head Muon and query and key's tolerance of the gradient's shape all shrink between 1,000 and 4,000 steps.
 
-Much of what first looked like a better step was a better learning rate or momentum. Re-tuning Muon itself took most of it back. For example, at 4,000 steps Muon at momentum .97 and a third of its learning rate gains +.0036, more than the tilted step's +.0031. Momentum preference is itself per group. At 4,000 steps, raising Muon's momentum to .95 helps value and output by +.0022 but query and key by only +.0004.
+Much of what first looked like a better step was a better learning rate or momentum. Re-tuning Muon itself took most of it back. For example, at 4,000 steps Muon at momentum .97 and a third of its learning rate gains +.0036, more than the tilted step's +.0031. Momentum preference is itself per group. At 4,000 steps, raising Muon's momentum to .95 helps value and output by +.0022 but query and key by only +.0004, and .97 gives query and key +.0001.
 
 ## Explanations we tested that failed
 
