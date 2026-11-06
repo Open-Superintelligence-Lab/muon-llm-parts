@@ -182,7 +182,14 @@ All seven & $-.0141$ (.0005) & $-.0184$ (.0022) & $-.0282$ (.0011) & $-.0275$ (.
 
 \paragraph{Step shapes.} Table~\ref{tab:shape} sets each direction's size to its singular value to the power $p$, scaled to Muon's step size, so $p=0$ is Muon and $p=1$ keeps the gradient's own shape, and also tries random sizes. Shumaylov et al.~\cite{shumaylov} report that random sizes match Muon on GPT-2, and we see the same in every group, within .0031. They also report that inverted sizes, $p=-1$, work as well on GPT-2. In our runs $p=-1$ is the worst shape in every group except feed-forward, where it ties the gradient's shape, and it costs .0900 on all seven. Our model is much smaller than theirs and we did not run theirs.
 
-The two groups want opposite sides of Muon. Value and output cannot take the gradient's shape but can take mildly inverted sizes, while query and key can take the gradient's shape and cannot take inverted sizes. So value and output depend on weak directions keeping their size, and query and key depend on strong directions keeping theirs. Per-group shape is thus a real difference between the matrices, and it is not visible in a map that only swaps Muon for Adam.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/shape.pdf}
+\caption{Gap from whole-matrix Muon when one group's step sizes are set to its singular values to the power $p$, scaled to Muon's step size, at width 48 (Table~\ref{tab:shape}). Left of Muon keeps more of the gradient's shape and right of it gives weak directions larger steps. Query and key accept the gradient's shape and fail when strong directions shrink; value and output fail with the gradient's shape and lose little at $p=-.5$.}
+\label{fig:shape}
+\end{figure}
+
+The two groups want opposite sides of Muon (Figure~\ref{fig:shape}). Value and output cannot take the gradient's shape but can take mildly inverted sizes, while query and key can take the gradient's shape and cannot take inverted sizes. So value and output depend on weak directions keeping their size, and query and key depend on strong directions keeping theirs. Per-group shape is thus a real difference between the matrices, and it is not visible in a map that only swaps Muon for Adam.
 
 \begin{table}[t]
 \centering
