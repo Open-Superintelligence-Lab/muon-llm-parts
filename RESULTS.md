@@ -735,6 +735,22 @@ Same band test at 250 steps (`results/papers/band_vo_250.json`, base `results/ad
 
 At 250 steps the same ramp is again best, but its neighbours are near 0 and errors are twice as large, so 250 steps neither confirms nor rules it out.
 
+Same test at 4,000 steps (`results/papers/band_vo_4000.json` and `muon_vo_4000.json`, base `results/add/w48x4000_out.jsonl` with v,o Muon momentum .9 lr .0255, held-out loss 3.9893 on worlds 5-14):
+
+| v,o setting, momentum .95 | Gain | Wins |
+|---|---|---|
+| Quarter steps .22 .28 .34 .50 | +.0025 (.0008) | 8/10 |
+| .32 .40 .48 .71 | +.0021 (.0013) | 7/10 |
+| .50 .62 .75 1.1 | +.0019 (.0010) | 8/10 |
+| .50 flat | +.0017 (.0012) | 4/10 |
+| .32 flat | +.0013 (.0011) | 6/10 |
+| Muon, lr x.25 | +.0005 (.0012) | 4/10 |
+| Muon, lr x.35 | +.0022 (.0010) | 7/10 |
+| Muon, lr x.5 | +.0017 (.0012) | 6/10 |
+| Muon, lr x.7 | +.0011 (.0008) | 8/10 |
+
+At 4,000 steps the tilted step no longer beats Muon: Muon with momentum .95 and a third of its tuned lr gains +.0022, and the best tilted step +.0025. The 4,000-step base was tuned on worlds 0 and 1 at momentum .9, and that tuning leaves about .002 for any smaller, longer-momentum step to take. So the tilt's edge over walked Muon is .0019 at 1,000 steps, .0018 at 250 (with large errors) and .0003 at 4,000. With exact polar, a flat step at a third of Muon's size gains only +.0013 here against +.0022 for Newton-Schulz Muon at a similar size, so Newton-Schulz's uneven singular values are worth about .001 at this length.
+
 ## Related results
 
 Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weights and 10,000 steps with Muon's lr fixed. In their gated table, all Muon scores 3.5125, all Adam 3.8837, query and key only 3.8518, value and output only 3.6874, and value, output and feed-forward with query and key on Adam 3.5312, so Adam on query and key costs them .019.
