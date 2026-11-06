@@ -755,6 +755,18 @@ At 4,000 steps the tilted step no longer beats Muon: Muon with momentum .95 and 
 
 At momentum .97 the same holds: Muon at a third of its lr gains +.0036 (`muon_vo_4000_b97.json`), the tilt +.0031. At 1,000 steps Muon at momentum .97 gains at most +.0007 (lr x.25 +.0007, x.35 +.0004, x.5 -.0009, `muon_vo_b97.json`), so there the tilt's edge over walked Muon (+.0032 against +.0013) stands across momentum .8 to .97.
 
+When does the tilt act at 4,000 steps? Exact SVD steps at momentum .97 (`band_grid.py --switch at,u1,u2,u3,u4`, same file):
+
+| v,o step, momentum .97 | Gain | Wins |
+|---|---|---|
+| Flat .35 throughout | +.0025 (.0012) | 6/10 |
+| Tilt .22 .28 .34 .50 for 1,000 steps, then flat .35 | +.0025 (.0010) | 8/10 |
+| Flat .35 for 1,000 steps, then tilt | +.0030 (.0012) | 7/10 |
+| Tilt throughout | +.0031 (.0010) | 8/10 |
+| Newton-Schulz Muon, lr x.35 | +.0036 (.0012) | 9/10 |
+
+At 4,000 steps the tilt adds about .0005 over the same flat step, within error, and the first quarter of training adds none of it. Newton-Schulz Muon beats the exact flat step by .0011 here.
+
 ## 2026-11-06: Random search, 300 candidates per part at 1,000 steps
 
 `debug/random_opt.py --n 300 --tier 5sx4 --parts vo,ffn --top2 20 --top3 6`, output `results/random/w48x1000_search300.json`. Screen on world 0 with three lrs, top 20 get finer lrs on worlds 0,1, top 6 scored on worlds 5-9; the top 2 per part by worlds 5-9 were then scored on worlds 10-14 (`results/papers/recheck_random300.json`). Base 4.1323.
