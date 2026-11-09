@@ -41,7 +41,7 @@ def induction(model, x):
 
 def job(x):
     global T
-    name, spec, tier, w, steps, every, stream, deadline, rep, ckdir, repvar = x; torch.set_num_threads(1); torch.manual_seed(w); c = dict(env.TIERS[tier]); steps = steps or c["steps"]; T = min(50, (c["L"] - 1) // 2)
+    name, spec, tier, w, steps, every, stream, deadline, rep, ckdir, repvar, order = x; torch.set_num_threads(1); torch.manual_seed(w); c = dict(env.TIERS[tier]); steps = steps or c["steps"]; T = min(50, (c["L"] - 1) // 2)
     dev = f"cuda:{(mp.current_process()._identity[0] - 1) % torch.cuda.device_count()}" if torch.cuda.is_available() else os.environ.get("IND_DEV", "cpu")
     if stream: c["own_shard"] = False  # the world only supplies vocabulary and probe rows; training rows come from --stream
     W = env.World(c, 10 if stream else steps, w); model = env.LM(c, W.V).to(dev); n_named = list(model.named_parameters())
@@ -49,7 +49,7 @@ def job(x):
     if stream:  # long runs: read the listed shards in order, one row after another, instead of the world's 100M-token file
         shards = [np.memmap(f, dtype=np.uint16, mode="r", offset=1024) for f in stream.split(",")]; per = [len(z) // c["L"] for z in shards]
         def batch(step):
-            r = step * c["batch"] + np.arange(c["batch"]); out = []
+            r = (step + order * steps) * c["batch"] + np.arange(c["batch"]); out = []  # --order k starts k runs' worth of rows into the stream
             for i in r:
                 j = 0
                 while i >= per[j]: i -= per[j]; j += 1
@@ -63,10 +63,10 @@ def job(x):
                         a0 = int(g.integers(1, c["L"] - 2 * 20 - 1)); b0 = int(g.integers(a0 + 21, c["L"] - 20 + 1)); xb[i, b0:b0 + 20] = xb[i, a0:a0 + 20]
                 else: xb[:k, h:2 * h] = xb[:k, :h]
             return xb
-        if steps * c["batch"] > sum(per): raise SystemExit(f"{steps} steps need {steps * c['batch'] * c['L']} tokens, the shards have {sum(per) * c['L']}")
+        if (order + 1) * steps * c["batch"] > sum(per): raise SystemExit(f"{steps} steps need {steps * c['batch'] * c['L']} tokens, the shards have {sum(per) * c['L']}")
     else:
         X = torch.as_tensor(W.look[W.rows]); batch = lambda step: X[(step * c["batch"] + np.arange(c["batch"])) % len(X)]
-    curve, start, used, t0 = [], 0, 0.0, time.time(); ck = ckdir and os.path.join(ckdir, f"{name}_w{w}_{steps}.pt")
+    curve, start, used, t0 = [], 0, 0.0, time.time(); ck = ckdir and os.path.join(ckdir, f"{name}_w{w}_{steps}" + (f"_o{order}" if order else "") + ".pt")
     if ck and os.path.exists(ck):  # resume: weights, optimizer state in parameter order, curve so far; batches depend only on the step
         z = torch.load(ck, map_location=dev, weights_only=False); model.load_state_dict(z["model"]); curve, start, used = z["curve"], z["step"], z["secs"]
         for (_, q), st in zip(n_named, z["opt"]): opt.state[id(q)] = st
@@ -88,7 +88,7 @@ def job(x):
 def main():
     p = argparse.ArgumentParser(); p.add_argument("--tier", default="5sx4"); p.add_argument("--add", default="results/add/w48x1000_out.jsonl"); p.add_argument("--out", required=True)
     p.add_argument("--worlds", default="5,6,7,8,9"); p.add_argument("--arms", default="adam,muon,adam_muon_vo,adam_muon_qk"); p.add_argument("--steps", type=int, default=0); p.add_argument("--every", type=int, default=10); p.add_argument("--par", type=int, default=9)
-    p.add_argument("--map", default="", help="a map_out.jsonl: arms muon, adam (the map's all-Adam row), muon_vo_adam, muon_qk_adam, muon_ffn_adam"); p.add_argument("--stream", default=""); p.add_argument("--max-min", type=float, default=0); p.add_argument("--rep", type=float, default=0); p.add_argument("--repvar", action="store_true", help="--rep rows copy a 20-token span to a random later place instead of repeating the first half"); p.add_argument("--extra", default="", help="json file {arm name: spec string} for arms the map does not have"); p.add_argument("--ckpt", default="", help="folder: save each arm when --max-min runs out and resume it on the next call"); a = p.parse_args()
+    p.add_argument("--map", default="", help="a map_out.jsonl: arms muon, adam (the map's all-Adam row), muon_vo_adam, muon_qk_adam, muon_ffn_adam"); p.add_argument("--stream", default=""); p.add_argument("--max-min", type=float, default=0); p.add_argument("--rep", type=float, default=0); p.add_argument("--repvar", action="store_true", help="--rep rows copy a 20-token span to a random later place instead of repeating the first half"); p.add_argument("--order", type=int, default=0, help="data order: start this many runs' worth of rows into the stream"); p.add_argument("--extra", default="", help="json file {arm name: spec string} for arms the map does not have"); p.add_argument("--ckpt", default="", help="folder: save each arm when --max-min runs out and resume it on the next call"); a = p.parse_args()
     if a.map:
         row = [x for x in map(json.loads, open(a.map)) if x["tier"] == a.tier.split("x")[0]][-1]; g = row["gaps"]
         specs = dict(muon=arms.parse(row["base"]), adam=arms.parse(g["all"]["spec"]), muon_vo_adam=arms.parse(g["vo"]["spec"]), muon_qk_adam=arms.parse(g["qk"]["spec"]), muon_ffn_adam=arms.parse(g["ffn"]["spec"]))
@@ -98,10 +98,10 @@ def main():
         specs = dict(muon=arms.parse(row["base"]), adam=arms.parse(row["adam"]), adam_muon_vo=arms.parse(row["rows"]["vo"]["spec"]), adam_muon_qk=arms.parse(row["rows"]["qk"]["spec"]))
     if a.extra: specs.update({n: arms.parse(v) for n, v in json.load(open(a.extra)).items()})
     specs = {n: specs[n] for n in a.arms.split(",")}; W = [int(x) for x in a.worlds.split(",")]
-    jobs = [(n, s, a.tier, w, a.steps, a.every, a.stream, a.max_min and time.time() + 60 * a.max_min, a.rep, a.ckpt, a.repvar) for n, s in specs.items() for w in W]
+    jobs = [(n, s, a.tier, w, a.steps, a.every, a.stream, a.max_min and time.time() + 60 * a.max_min, a.rep, a.ckpt, a.repvar, a.order) for n, s in specs.items() for w in W]
     with mp.get_context("spawn").Pool(min(a.par, len(jobs))) as pool: res = pool.map(job, jobs)
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
-    json.dump(dict(tier=a.tier, rep=a.rep, repvar=a.repvar, stream=a.stream, steps=a.steps or env.TIERS[a.tier]["steps"], worlds=W, specs={n: arms.show(s) for n, s in specs.items()}, runs=res), open(a.out, "w"))
+    json.dump(dict(tier=a.tier, order=a.order, rep=a.rep, repvar=a.repvar, stream=a.stream, steps=a.steps or env.TIERS[a.tier]["steps"], worlds=W, specs={n: arms.show(s) for n, s in specs.items()}, runs=res), open(a.out, "w"))
     for n in specs:
         rs = [r for r in res if r["name"] == n]; last = [r["curve"][-1] for r in rs]
         print(f"{n:14s} loss {np.mean([l['loss'] for l in last]):.4f} icl {np.mean([l['icl'] for l in last]):+.3f} best head att {np.mean([max(max(h) for h in l['att']) for l in last]):.3f} at step {rs[0]['step']} ({rs[0]['secs']}s)")

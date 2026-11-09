@@ -1136,3 +1136,5 @@ Per-head credit (`debug/induction_heads.py` → `results/induction/heads_repvar5
 - In Muon models the copy write is spread over several heads; the top head holds only 1.6-1.7 of 4.4-5.2 on test sets 6-7.
 - The gap shows at every token frequency and is larger for rare tokens.
 - Status: at width 64 with planted copied spans, "same loss, same attention, Muon's heads write the copied token about 1.6× harder" holds on 3 of 3 data sets and survives a 4× Adam lr range. Still open: different data orders (all data sets share one), natural text with no planted spans, larger models (Kaggle GPU once the weekly quota resets), and an OV-circuit eigenvalue score.
+
+Prediction G (written before the runs): the copy-write gap is not a property of one data order. All earlier data sets read the same 33M tokens of shard 1 in the same order. `--order 1` and `--order 2` read the next two disjoint 33M-token blocks, with the same planted-span rule. On test sets 5-7 × orders 1-2 (6 Muon/Adam pairs), Muon has lower frequency-matched second-copy loss and higher summed head credit than Adam on at least 5 of 6 pairs, with held-out loss within 0.01.

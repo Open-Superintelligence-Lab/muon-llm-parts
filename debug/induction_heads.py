@@ -41,8 +41,8 @@ def credit(model, x, T, rank):
 def main():
     p = argparse.ArgumentParser(); p.add_argument("--ckpt", required=True); p.add_argument("--steps", type=int, default=4000); p.add_argument("--tier", default="w64x60k"); p.add_argument("--n", type=int, default=500); p.add_argument("--out", required=True); p.add_argument("--only", default="")
     a = p.parse_args(); dev = os.environ.get("IND_DEV", "cpu"); c = dict(env.TIERS[a.tier]); c["own_shard"] = False; out = json.load(open(a.out)) if os.path.exists(a.out) else {}; Ws = {}
-    for f in sorted(glob.glob(os.path.join(a.ckpt, f"*_{a.steps}.pt"))):
-        name, w = re.match(r"(.+)_w(\d+)_\d+\.pt", os.path.basename(f)).groups(); w = int(w); key = f"{name}/w{w}"
+    for f in sorted(glob.glob(os.path.join(a.ckpt, f"*_{a.steps}*.pt"))):
+        name, w, o = re.match(r"(.+)_w(\d+)_\d+(_o\d+)?\.pt", os.path.basename(f)).groups(); w = int(w); key = f"{name}/w{w}" + (o or "")
         if key in out or (a.only and not re.search(a.only, key)): continue
         z = torch.load(f, map_location=dev, weights_only=False)
         if z["step"] != a.steps: continue

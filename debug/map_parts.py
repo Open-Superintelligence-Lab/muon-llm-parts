@@ -13,6 +13,7 @@ for name, width, layers, heads, steps in (("w64", 64, 4, 4, 2000), ("w128", 128,
     env.TIERS[name] = dict(SHAPE, width=width, layers=layers, heads=heads, steps=steps)
 env.TIERS["long"] = dict(width=32, layers=2, heads=4, V=1000, batch=8, L=48, steps=1000, val_rows=3200, marks=5, bench=60)  # the same as debug/pair.py
 for h in (1, 2, 4, 12): env.TIERS[f"h{h}x1000"] = dict(env.TIERS["5sx4"], heads=h)  # width 48, 1,000 steps, head size 48/h: separates head size from width
+for w, st in ((32, 393), (32, 1000), (64, 1000), (128, 1000), (128, 2876)): env.TIERS[f"t{w}x{st}"] = dict(env.TIERS["5s"], width=w, steps=st)  # width vs tokens per weight: 768 tokens a step, 393/1,000/2,876 steps put widths 32/64/128 at 3.4 tokens per weight
 env.TIERS["dbg"] = dict(width=16, layers=1, heads=2, V=2000, batch=4, L=24, steps=20, val_rows=12, marks=2, bench=4, min_facts=4)  # checks code only
 
 old_module_of = arms.module_of
