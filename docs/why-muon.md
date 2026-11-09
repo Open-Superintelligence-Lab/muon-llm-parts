@@ -18,28 +18,28 @@ Notes for co-authors, 2026-11-06. Every number comes from `RESULTS.md`, where ea
 - **Strong and weak directions.** The gradient pushes hard along a few directions (strong) and softly along many others (weak). In this note, the strongest quarter are strong and the rest are weak.
 - **What Muon does.** It keeps the gradient's directions and gives every direction the same size. Adam and plain gradient steps keep the gradient's uneven sizes, so strong directions dominate.
 - **Power p.** We set each direction's size to (its gradient size)^p and rescale to Muon's total size. p=1 is the gradient's own shape, p=0 is Muon, and p=-1 inverts the sizes so weak directions get the biggest steps.
-- **Gap.** Loss with the change minus loss of tuned Muon, on held-out worlds. Negative means Muon was better. The number in brackets is the standard error. "5/5" means the change won in 5 of 5 worlds.
+- **Gap.** Loss with the change minus loss of tuned Muon, on test sets. Negative means Muon was better. The number in brackets is the standard error. "5/5" means the change won in 5 of 5 data sets.
 
 ## How we test
 
 - **Model.** A small LLM with RoPE, RMSNorm, QK-norm and a gated feed-forward layer. Most step tests use width 48 with 2 layers. Size tests on Kaggle GPUs go from width 64 (0.71M weights) to width 512 (29M weights).
-- **Worlds.** A world is its own training text, validation text and data order. Worlds 0-4 choose settings, worlds 5-9 report them, and worlds 10-14 rescore anything picked as best of many. Five more worlds are sealed and have not been read.
-- **Fair baseline.** Muon's learning rate and momentum are tuned first. Every change gets its own learning rate chosen on tune worlds before it is scored.
-- **Win line.** A gap above .005 with the same sign on all 5 held-out worlds.
+- **Data sets.** A data set is its own training text, validation text and data order. Tuning sets 0-4 choose settings, test sets 5-9 report them, and recheck sets 10-14 rescore anything picked as best of many. Five locked test sets have not been read yet. The code still calls a data set a world (`--world 7`).
+- **Fair baseline.** Muon's learning rate and momentum are tuned first. Every change gets its own learning rate chosen on tuning sets before it is scored.
+- **Win line.** A gap above .005 with the same sign on all 5 test sets.
 
 ## Finding 1: value and output need Muon, and more so as width grows
 
-Cost of moving each group from tuned Muon to Adam at 2,000 steps, worlds 5-9:
+Cost of moving each group from tuned Muon to Adam at 2,000 steps, test sets 5-9:
 
-| Moved to Adam | Width 64 | Width 128 | Width 256 | Width 512 (worlds 5-7) |
+| Moved to Adam | Width 64 | Width 128 | Width 256 | Width 512 (test sets 5-7) |
 |---|---|---|---|---|
 | Value and output | -.0135 (.0026) | -.0202 (.0018) | -.0403 (.0019) | -.0476 (.0001) |
 | Gate, up and down | -.0022 (.0022) | -.0053 (.0015) | -.0111 (.0014) | -.0165 (.0018) |
 | Query and key | -.0002 (.0019) | +.0056 (.0014) | -.0012 (.0014) | -.0091 (.0006) |
 
 - Value and output cost about twice as much at each doubling of width up to 256. From 256 to 512 the growth slows (.0403 to .0476).
-- Query and key stay near zero up to width 256. At width 128, Adam on query alone even beats Muon by .0063 on 5/5 worlds. At width 512 they need Muon (-.0091, 3/3), so "query and key don't need Muon" holds only up to 256.
-- Width 512 is a cut-down map (3 worlds, each group's Adam learning rate walked until both ends lost). An earlier width-512 run had the feed-forward Adam learning rate fixed at .01 and showed a wrong cost of .2108.
+- Query and key stay near zero up to width 256. At width 128, Adam on query alone even beats Muon by .0063 on 5/5 data sets. At width 512 they need Muon (-.0091, 3/3), so "query and key don't need Muon" holds only up to 256.
+- Width 512 is a cut-down map (3 data sets, each group's Adam learning rate walked until both ends lost). An earlier width-512 run had the feed-forward Adam learning rate fixed at .01 and showed a wrong cost of .2108.
 - Each feed-forward matrix moved alone costs nothing at any size.
 - Longer training shrinks every gap. At width 64, moving all seven matrices costs .0433 at 500 steps, .0119 at 2,000 and .0041 at 8,000.
 
@@ -86,7 +86,7 @@ Width 48, gap from Muon:
 
 ## Finding 4: query and key weights use few directions
 
-Test: train a model, then keep only the top 12 of 48 directions in one group's weights and measure how much the loss rises. A group that uses few directions loses little. Worlds 5-9, mean (error):
+Test: train a model, then keep only the top 12 of 48 directions in one group's weights and measure how much the loss rises. A group that uses few directions loses little. Test sets 5-9, mean (error):
 
 | Model | Steps | Query and key | Value and output | Feed-forward |
 |---|---|---|---|---|
@@ -128,14 +128,14 @@ This supports one half of the guess: deciding where to attend uses few direction
 | What | Best result |
 |---|---|
 | Published variants: Kaon, Freon (powers), Dion3 at fractions .25, .5, 1 | All lose on all hidden matrices together (-.008 to -.093). Best on one group: Freon c=1/4 on query and key, +.0032 at 250 steps |
-| 1,000 random update rules (100 per part at 250 and 1,000 steps, 300 per part at 1,000) | Best v,o rule +.0025 on worlds 5-9, +.0015 on unused worlds 10-14. FFN best +.0015 → +.0009 |
-| Hand-set "tilted" step on value and output (bigger weak, smaller strong, like [BulkBoost](https://arxiv.org/abs/2610.07497)) | Beats a re-tuned Muon by .0019 at 1,000 steps on 10/10 worlds, by nothing at 4,000 |
+| 1,000 random update rules (100 per part at 250 and 1,000 steps, 300 per part at 1,000) | Best v,o rule +.0025 on test sets 5-9, +.0015 on recheck sets 10-14. FFN best +.0015 → +.0009 |
+| Hand-set "tilted" step on value and output (bigger weak, smaller strong, like [BulkBoost](https://arxiv.org/abs/2610.07497)) | Beats a re-tuned Muon by .0019 at 1,000 steps on 10/10 data sets, by nothing at 4,000 |
 | Own step shape per group (exponent and lr chosen per group) | +.0052 at 250 steps, +.0028 at 1,000 |
-| Per-head Muon on query and key (like [Group Muon](https://arxiv.org/abs/2605.08933)) | +.0032 on worlds 5-9 → +.0020 on unused worlds → +.0011 at 4,000 steps |
+| Per-head Muon on query and key (like [Group Muon](https://arxiv.org/abs/2605.08933)) | +.0032 on test sets 5-9 → +.0020 on recheck sets → +.0011 at 4,000 steps |
 
 Two patterns repeat:
 
-1. **Best-of-many picks shrink on fresh worlds.** Gains of +.002 to +.004 picked on worlds 5-9 fall to about +.001 on worlds 10-14.
+1. **Best-of-many picks shrink on fresh data sets.** Gains of +.002 to +.004 picked on test sets 5-9 fall to about +.001 on recheck sets 10-14.
 2. **Gains fade with training length.** The tilted step, per-head Muon and query and key's tolerance of the gradient's shape all shrink between 1,000 and 4,000 steps.
 
 Much of what first looked like a better step was a better learning rate or momentum. Re-tuning Muon itself took most of it back. For example, at 4,000 steps Muon at momentum .97 and a third of its learning rate gains +.0036, more than the tilted step's +.0031. Momentum preference is itself per group. At 4,000 steps, raising Muon's momentum to .95 helps value and output by +.0022 but query and key by only +.0004, and .97 gives query and key +.0001.
@@ -164,7 +164,7 @@ Each had a prediction written before the run.
 
 Not yet. On the reviewer form:
 
-- **Soundness:** good. Held-out worlds, re-tuned baselines, picks rescored on unused worlds, predictions written before runs.
+- **Soundness:** good. Test sets, re-tuned baselines, picks rescored on recheck sets, predictions written before runs.
 - **Originality:** medium. The main value and output map repeats Wang et al. The query and key side and the flat-middle account are new.
 - **Significance:** limited. Our models go up to 29M weights, against 160M in the closest work, and every per-group gain fades with length.
 - **Main gap:** we say why value and output need Muon, using Wang et al.'s associative-memory account. We do not yet know why query and key don't. Our guess: deciding where to attend needs only a few strong directions, while storing facts needs many. Finding 4 supports the first half (query and key use few directions, also without QK-norm). The second half failed its first test: the value and output gain is not on rare tokens in our models.

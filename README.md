@@ -4,15 +4,17 @@ We are using this repo to write a paper for ICML 2027. The question is how Muon 
 
 This repo is private and shared with co-authors. [QUESTIONS.md](QUESTIONS.md) lists 12 open questions, each with a result whichever way it turns out.
 
+The text is split into data sets that never share a token: tuning sets 0-4 pick settings, test sets 5-9 report scores, recheck sets 10-14 confirm a best-of-many pick, and 5 locked test sets are opened only by `gate.py`. The code calls a data set a world (`--world`).
+
 - `docs/why-muon.md`: start here. What we found, why Muon helps each part, why other optimizers don't beat it, and what's next.
 - `paper/main.tex`: the draft.
 - `RESULTS.md`: every experiment, its numbers and where its data is.
 - `results/`, `kaggle/out/`: the data behind those numbers. `kaggle/map-*/job.py` is the exact code each GPU job ran.
 - `debug/map_parts.py`, `kaggle/make.py`: map where Muon matters on GPUs.
 - `env.py`, `arms.py`, `rules.py`, `evals.py`: train an LLM with one optimizer per part.
-- `baselines.py`, `baselines.jsonl`: train the 11 baselines once on an open world. These scores come from before momentum tuning and must be rerun.
-- `search.py`: tune lrs and pick a rule per part, on tune rows of world 0 only. Its rows hold no report score.
-- `gate.py`: score a design on sealed worlds. A person runs it.
+- `baselines.py`, `baselines.jsonl`: train the 11 baselines once on an open data set. These scores come from before momentum tuning and must be rerun.
+- `search.py`: tune lrs and pick a rule per part, on tune rows of tuning set 0 only. Its rows hold no report score.
+- `gate.py`: score a design on locked test sets. A person runs it.
 - `sandbox.py`, `optimizers/`: where invented optimizers live and what they may touch.
 - `check.py`, `debug/`: code checks, cheat tests, leak test and gate test.
 - `attnenv.py`: test query and key rules on six attention tasks.
@@ -41,7 +43,7 @@ An AI agent gets `search.py` and `optimizers/` only. It gets no shell, no `env.p
 | Taking a second gradient or more tokens | No access to the model or data, and the gate compares tokens and gradients. |
 | Memorising numbers | At most 6,000 bytes and 200 numbers per file. |
 | Sharing state between weights or runs | No globals, shared defaults or other weights, and state is capped at 3x the weight. |
-| Tuning on the test | Tuning sees tune rows of world 0 only, and `debug/poison.py` checks this. |
+| Tuning on the test | Tuning sees tune rows of tuning set 0 only, and `debug/poison.py` checks this. |
 | Winning on momentum that the opponent never tuned | Every arm tunes lrs and momentum per module, and the gate refuses rows without momentum tuning. |
 | Reaching the training code through `torch.inspect`, `torch.sys` or `torch.os` | Those attributes are refused before running, and frame and live-object calls are blocked while running. |
 | Trying designs until one wins | Every submission is logged before scoring, and each one raises the bar for later ones. |

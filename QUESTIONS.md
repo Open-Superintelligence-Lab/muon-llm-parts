@@ -38,6 +38,6 @@ Pick one question, tell Vuk which one, and post your results within one week. Wr
 
 - Read [docs/why-muon.md](docs/why-muon.md) first, then the README's "What stops cheating" table.
 - `pip install -r requirements.txt`, `python3 setup_data.py`, then `python3 env.py --spec muon --tier 5s --world 7` runs one small model.
-- Tune Muon's learning rate and momentum for every part before you compare with it. Choose settings on worlds 0-4 and report on worlds 5-9.
-- A win is a gap above .005 with the same sign on all 5 report worlds.
+- Tune Muon's learning rate and momentum for every part before you compare with it. Choose settings on tuning sets 0-4 and report on test sets 5-9.
+- A win is a gap above .005 with the same sign on all 5 test sets.
 - Write your prediction in RESULTS.md before the run, as the earlier entries do.

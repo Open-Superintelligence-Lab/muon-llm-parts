@@ -1,22 +1,22 @@
 # Results log
 
-Every experiment in this repo, what ran and where its data lives. Positive gaps mean the change beat the baseline, and negative gaps mean Muon was better. Brackets hold the standard error over the five held-out worlds. All scores come from tune rows of open worlds; the sealed worlds and their numbers are kept outside this repo and are not used here.
+Every experiment in this repo, what ran and where its data lives. Positive gaps mean the change beat the baseline, and negative gaps mean Muon was better. Brackets hold the standard error over the five test sets. All scores come from tune rows of open data sets; the locked test sets and their numbers are kept outside this repo and are not used here.
 
 ## Where the data is
 
 | Data | Files |
 | --- | --- |
-| Tuning runs on world 0 | `tune_results.jsonl`, `choices.jsonl` |
+| Tuning runs on tuning set 0 | `tune_results.jsonl`, `choices.jsonl` |
 | Screening runs at the smallest size | `results/small/tiny_check.jsonl`, `tiny_screen.jsonl`, `tiny2.jsonl` |
-| Design comparisons on open worlds | `results/small/open_pick.jsonl`, `open_qk.jsonl`, `open_joint.jsonl` |
-| Five-world tuned rows, width 48 and width 32 | `results/small/robust.jsonl`, `long.jsonl` |
+| Design comparisons on open data sets | `results/small/open_pick.jsonl`, `open_qk.jsonl`, `open_joint.jsonl` |
+| Five-set tuned rows, width 48 and width 32 | `results/small/robust.jsonl`, `long.jsonl` |
 | Per-matrix map at small size | `results/small/fine.jsonl`, `fine5.jsonl`, `fine_long.jsonl`, `whole.jsonl` |
 | Per-matrix map on Kaggle GPUs | `kaggle/out/map-*/map.jsonl` (every run), `map_out.jsonl` (gaps), `log.txt` |
 | The exact code each Kaggle job ran | `kaggle/map-*/job.py`, made by `kaggle/make.py` |
 
 ## 2026-11-04: Variants of the update, width 48, 250 steps
 
-Compared with a tuned per-head row on open worlds, using `debug/open_pick.py`, `debug/open_worlds.py` and `debug/pair.py`. No design reached a gap of .005.
+Compared with a tuned per-head row on open data sets, using `debug/open_pick.py`, `debug/open_worlds.py` and `debug/pair.py`. No design reached a gap of .005.
 
 | Design | Gap |
 | --- | --- |
@@ -28,7 +28,7 @@ Compared with a tuned per-head row on open worlds, using `debug/open_pick.py`, `
 
 ## 2026-11-04: Per-matrix map at small size
 
-One matrix or group moves to Adam from a five-world tuned baseline with per-head query and key, using `debug/pair.py` with `FINE=1`. Tuned on worlds 0 to 4 and scored on worlds 5 to 9.
+One matrix or group moves to Adam from a five-set tuned baseline with per-head query and key, using `debug/pair.py` with `FINE=1`. Tuned on tuning sets 0 to 4 and scored on test sets 5 to 9.
 
 | Moved to Adam | Width 48, 2 layers, 250 steps | Width 32, 2 layers, 1,000 steps |
 | --- | --- | --- |
@@ -45,11 +45,11 @@ One matrix or group moves to Adam from a five-world tuned baseline with per-head
 | Query, key, gate, up and down | -.0065 (.0018) | -.0029 (.0009) |
 | All seven | -.0271 (.0020) | -.0176 (.0016) |
 
-With a whole-matrix Muon baseline at width 48 (`results/small/whole.jsonl`), query and key on Adam at lr .01 gave -.0008 (.0016), at lr .025 gave +.0026 (.0023), and per-head Muon gave +.0069 (.0015), winning 5 of 5. These Adam lrs were compared on held-out worlds, so they were not chosen on tune worlds.
+With a whole-matrix Muon baseline at width 48 (`results/small/whole.jsonl`), query and key on Adam at lr .01 gave -.0008 (.0016), at lr .025 gave +.0026 (.0023), and per-head Muon gave +.0069 (.0015), winning 5 of 5. These Adam lrs were compared on test sets, so they were not chosen on tuning sets.
 
 ## 2026-11-05: Per-matrix map on Kaggle GPUs
 
-All tiers use V=4000, 64 rows of 128 tokens per step and a 100M-token file per world, with whole-matrix Muon as the baseline. Tuned on worlds 0 and 1 with `debug/map_parts.py` and scored on worlds 5 to 9. Each cell gives the gap, the error, and how many of 5 worlds the change won.
+All tiers use V=4000, 64 rows of 128 tokens per step and a 100M-token file per data set, with whole-matrix Muon as the baseline. Tuned on tuning sets 0 and 1 with `debug/map_parts.py` and scored on test sets 5 to 9. Each cell gives the gap, the error, and how many of 5 data sets the change won.
 
 | Moved to Adam | Width 64, 4 layers, 500 steps | Width 64, 4 layers, 2,000 steps | Width 128, 6 layers, 2,000 steps |
 | --- | --- | --- | --- |
@@ -75,13 +75,13 @@ All tiers use V=4000, 64 rows of 128 tokens per step and a 100M-token file per w
 | Adam lr, feed-forward | .01 | .01 | .01 |
 | Per-head lr factor | 2 | 2 | 1 |
 
-Limits of this design: settings are tuned on 2 worlds, single matrices and joint moves inherit their group's Adam lr, and the "all seven" row was not tuned jointly.
+Limits of this design: settings are tuned on 2 data sets, single matrices and joint moves inherit their group's Adam lr, and the "all seven" row was not tuned jointly.
 
 Width 256 (`map-c`) and width 64 at 8,000 steps (`map-d`) were still running when this was written.
 
 ## 2026-11-05: Adding Muon to Adam with fixed lrs, width 48, 250 steps
 
-Wang et al.'s design on our model, with `debug/map_parts.py 5s --add`, data in `results/add/w48.jsonl`. Adam everywhere uses one lr chosen on worlds 0 and 1 (.01). Muon lrs stay at the whole-matrix baseline's. All Muon scores 4.3606 and all Adam scores 4.3871 on worlds 5 to 9.
+Wang et al.'s design on our model, with `debug/map_parts.py 5s --add`, data in `results/add/w48.jsonl`. Adam everywhere uses one lr chosen on tuning sets 0 and 1 (.01). Muon lrs stay at the whole-matrix baseline's. All Muon scores 4.3606 and all Adam scores 4.3871 on test sets 5 to 9.
 
 | Muon on | Against all Muon | Against all Adam |
 | --- | --- | --- |
@@ -122,7 +122,7 @@ Wang et al.'s gated table does not behave this way: each feed-forward matrix add
 
 ## 2026-11-05: When the gain appears during training
 
-From the saved curves, averaged over worlds 5 to 9. Curve values use only the first 64 validation rows at each mark, while final gaps use 3,200 rows, so one world's curve gap can differ by .01 from its final gap. Use final gaps for claims.
+From the saved curves, averaged over test sets 5 to 9. Curve values use only the first 64 validation rows at each mark, while final gaps use 3,200 rows, so one data set's curve gap can differ by .01 from its final gap. Use final gaps for claims.
 
 | Moved to Adam, width 128 | Step 250 | Step 500 | Step 1,000 | Step 2,000 |
 | --- | --- | --- | --- | --- |
@@ -135,7 +135,7 @@ At width 64, value and output go from -.0473 at step 250 to -.0043 at step 2,000
 
 ## 2026-11-05: Muon on value and output alone, width 48, 1,000 steps
 
-`debug/map_parts.py 5sx4 --add`, data in `results/add/w48x1000.jsonl`. All Muon scores 4.1323 and all Adam 4.1463 on worlds 5 to 9, with Adam's shared lr at .01.
+`debug/map_parts.py 5sx4 --add`, data in `results/add/w48x1000.jsonl`. All Muon scores 4.1323 and all Adam 4.1463 on test sets 5 to 9, with Adam's shared lr at .01.
 
 | Muon on | Against all Muon | Against all Adam |
 | --- | --- | --- |
@@ -149,7 +149,7 @@ Removing from all Muon at this size: value and output -.0136 (.0031), gate, up a
 
 ## 2026-11-05: Muon on value and output alone, width 48, 4,000 steps
 
-`debug/map_parts.py 5sx16 --add-only`, data in `results/add/w48x4000.jsonl` and `w48x4000_out.jsonl`. All Muon 3.9826, all Adam 3.9965, so the whole gap is .0139. Gaps are from all Muon on worlds 5 to 9.
+`debug/map_parts.py 5sx16 --add-only`, data in `results/add/w48x4000.jsonl` and `w48x4000_out.jsonl`. All Muon 3.9826, all Adam 3.9965, so the whole gap is .0139. Gaps are from all Muon on test sets 5 to 9.
 
 | Muon on | Gap from all Muon | Gain over all Adam |
 | --- | --- | --- |
@@ -163,7 +163,7 @@ Muon on value and output alone matched all Muon at 1,000 steps (-.0001) but not 
 
 ## 2026-11-05: Why Muon helps: its weak directions, width 48, 250 steps
 
-Prediction written before running: removing weak directions from Muon's step hurts value and output far more than query and key. `debug/weak_parts.py`, data in `results/weak/w48.jsonl`. `optimizers/x_muon_shape.py` splits the step into its strongest quarter of directions and the weak rest. "Removed" drops the weak rest. "Scrambled" keeps its size and pairs each weak left direction with the wrong right direction, so it loses the gradient's information. The lr factor is chosen on worlds 0 and 1, and gaps are on worlds 5 to 9 from whole-matrix Muon.
+Prediction written before running: removing weak directions from Muon's step hurts value and output far more than query and key. `debug/weak_parts.py`, data in `results/weak/w48.jsonl`. `optimizers/x_muon_shape.py` splits the step into its strongest quarter of directions and the weak rest. "Removed" drops the weak rest. "Scrambled" keeps its size and pairs each weak left direction with the wrong right direction, so it loses the gradient's information. The lr factor is chosen on tuning sets 0 and 1, and gaps are on test sets 5 to 9 from whole-matrix Muon.
 
 | Group | Weak removed | Weak scrambled | Moved to Adam |
 | --- | --- | --- | --- |
@@ -193,7 +193,7 @@ Shumaylov et al. (2605.11181) report that on GPT-2 a Muon step with random singu
 
 Prediction: on value, output and feed-forward, the gradient's own shape loses at least .005 and random and reversed sizes lose less than half of that. On query and key, no shape changes the loss by more than .004.
 
-Result at width 48, 250 steps, data in `results/spec/w48.jsonl`. Base 4.3606, gaps from whole-matrix Muon on worlds 5 to 9, lr factor chosen on worlds 0 and 1.
+Result at width 48, 250 steps, data in `results/spec/w48.jsonl`. Base 4.3606, gaps from whole-matrix Muon on test sets 5 to 9, lr factor chosen on tuning sets 0 and 1.
 
 | Group | Gradient's own shape | Random sizes | Reversed sizes |
 | --- | --- | --- | --- |
@@ -230,7 +230,7 @@ The pattern from 250 steps holds, with smaller gaps for query and key at `p=-.5`
 
 ### Step shapes at 4,000 steps
 
-`debug/spec_parts.py 5sx16` (now reads base files with no `gaps` line), data in `results/spec/w48x4000.jsonl` and `w48x4000_out.jsonl`. Base 3.9826 on worlds 5-9. Flat sizes by SVD on all seven give -0.0008 (0.0010) and `p=.5` gives -0.0083 (0.0010).
+`debug/spec_parts.py 5sx16` (now reads base files with no `gaps` line), data in `results/spec/w48x4000.jsonl` and `w48x4000_out.jsonl`. Base 3.9826 on test sets 5-9. Flat sizes by SVD on all seven give -0.0008 (0.0010) and `p=.5` gives -0.0083 (0.0010).
 
 | Group | `p=1` (gradient) | Random sizes | `p=-.5` | `p=-1` (inverted) | Reversed sizes |
 | --- | --- | --- | --- | --- | --- |
@@ -280,7 +280,7 @@ The prediction failed. Without QK-norm, query and key still gain nothing from Mu
 
 ## 2026-11-05: Kaggle map, width 256, 2,000 steps (job map-c)
 
-`kaggle/out/map-c`, 9.7 GPU hours, 6.8M weights, base held-out 4.1375. Whole-matrix Muon baseline, gaps on worlds 5 to 9.
+`kaggle/out/map-c`, 9.7 GPU hours, 6.8M weights, base held-out 4.1375. Whole-matrix Muon baseline, gaps on test sets 5 to 9.
 
 | Moved to Adam | Width 64 | Width 128 | Width 256 | Wins of 5 at 256 |
 | --- | --- | --- | --- | --- |
@@ -294,11 +294,11 @@ The prediction failed. Without QK-norm, query and key still gain nothing from Mu
 | All seven | -.0119 (.0017) | -.0511 (.0029) | -.0507 (.0019) | 0 |
 | Muon per head on q,k | .0000 (.0021) | +.0052 (.0008) | +.0038 (.0015) | 5 |
 
-The cost of moving value and output to Adam roughly doubles with each doubling of width, feed-forward does too, and query and key stay near zero. Muon per head on query and key beats whole-matrix Muon by .0052 and .0038 in all 5 worlds at widths 128 and 256, which is under the .005 win line at 256.
+The cost of moving value and output to Adam roughly doubles with each doubling of width, feed-forward does too, and query and key stay near zero. Muon per head on query and key beats whole-matrix Muon by .0052 and .0038 in all 5 data sets at widths 128 and 256, which is under the .005 win line at 256.
 
 ## 2026-11-05: Kaggle map, width 64, 8,000 steps (job map-d)
 
-`kaggle/out/map-d`, 7.25 GPU hours, base held-out 4.3148. Whole-matrix Muon baseline, gaps on worlds 5 to 9.
+`kaggle/out/map-d`, 7.25 GPU hours, base held-out 4.3148. Whole-matrix Muon baseline, gaps on test sets 5 to 9.
 
 | Moved to Adam | Gap | Wins of 5 |
 | --- | --- | --- |
@@ -315,7 +315,7 @@ Kaggle refused the next job on 2026-11-05 with "Maximum weekly GPU quota of 30.0
 
 ## 2026-11-05: Each group gets its own step shape, prediction before running
 
-`debug/pick_shape.py` picks a power `p` and lr factor per group on worlds 0 and 1, with `p` from .1, .25, .5, 1 on query and key and from -.25, -.1, .1 on the other two groups, and keeps a group's pick only if it beats the baseline on the tune worlds. Prediction: at width 48 the joint optimizer beats whole-matrix Muon by less than the .005 win line at both 250 and 1,000 steps.
+`debug/pick_shape.py` picks a power `p` and lr factor per group on tuning sets 0 and 1, with `p` from .1, .25, .5, 1 on query and key and from -.25, -.1, .1 on the other two groups, and keeps a group's pick only if it beats the baseline on the tuning sets. Prediction: at width 48 the joint optimizer beats whole-matrix Muon by less than the .005 win line at both 250 and 1,000 steps.
 
 Result at width 48, 250 steps, data in `results/spec/pick_w48.jsonl`. Base 4.3606.
 
@@ -326,7 +326,7 @@ Result at width 48, 250 steps, data in `results/spec/pick_w48.jsonl`. Base 4.360
 | Gate, up and down | .1 | 1 | -.0006 (.0017) | 3 |
 | All three together | | | +.0052 (.0008) | 5 |
 
-The prediction failed at this size: the joint optimizer passes the .005 line, though worlds 5 to 9 have now scored many candidates, so it needs other lengths, a larger width and the sealed worlds before it counts. The sealed gate needs Vuk's word and has not been used.
+The prediction failed at this size: the joint optimizer passes the .005 line, though test sets 5 to 9 have now scored many candidates, so it needs other lengths, a larger width and the locked test sets before it counts. The sealed gate needs Vuk's word and has not been used.
 
 Result at width 48, 1,000 steps, data in `results/spec/pick_w48x1000.jsonl`. Base 4.1323.
 
@@ -337,13 +337,13 @@ Result at width 48, 1,000 steps, data in `results/spec/pick_w48x1000.jsonl`. Bas
 | Gate, up and down | .1 | 1 | +.0002 (.0010) | 3 |
 | All three together | | | +.0028 (.0011) | 4 |
 
-The gain falls below .005 at 1,000 steps and the query-and-key pick moves from `p=1` to `p=.25`, so this is a short-training effect and we drop the candidate. No sealed world was used.
+The gain falls below .005 at 1,000 steps and the query-and-key pick moves from `p=1` to `p=.25`, so this is a short-training effect and we drop the candidate. No locked test set was used.
 
 ## 2026-11-05: Do weak directions keep the weights healthy, prediction before running
 
-`debug/weights.py` trains once per setting on world 0 and reads each group's weight matrices at the end. Stable rank is squared Frobenius norm over squared largest singular value. Prediction at width 48, 1,000 steps: value and output end with a clearly lower stable rank under the gradient's shape than under Muon, at least 20% lower, and query and key differ by under 10%.
+`debug/weights.py` trains once per setting on tuning set 0 and reads each group's weight matrices at the end. Stable rank is squared Frobenius norm over squared largest singular value. Prediction at width 48, 1,000 steps: value and output end with a clearly lower stable rank under the gradient's shape than under Muon, at least 20% lower, and query and key differ by under 10%.
 
-Result at width 48, 1,000 steps, world 0, one run per setting, data in `results/spec/weights_w48x1000.json` (250 steps in `weights_w48.json`). Stable rank averaged over layers; a fresh matrix starts near 13 for q, k, v, o and near 20 for gate, up, down.
+Result at width 48, 1,000 steps, tuning set 0, one run per setting, data in `results/spec/weights_w48x1000.json` (250 steps in `weights_w48.json`). Stable rank averaged over layers; a fresh matrix starts near 13 for q, k, v, o and near 20 for gate, up, down.
 
 | Setting | Loss | v | o | q | k | gate | up | down |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -357,11 +357,11 @@ The first half of the prediction held: v fell 41% and o fell 57%. The second hal
 
 ## 2026-11-05: When do value and output need Muon, prediction before running
 
-`optimizers/x_muon_switch.py` changes step shape once during training, on v and o only, using each shape's own tuned lr. `debug/switch_parts.py` runs gradient's shape then Muon, and Muon then gradient's shape, switching at 1/4, 1/2 and 3/4 of training, on worlds 5-9 at width 48, 1,000 steps. Gradient's shape throughout costs .0192.
+`optimizers/x_muon_switch.py` changes step shape once during training, on v and o only, using each shape's own tuned lr. `debug/switch_parts.py` runs gradient's shape then Muon, and Muon then gradient's shape, switching at 1/4, 1/2 and 3/4 of training, on test sets 5-9 at width 48, 1,000 steps. Gradient's shape throughout costs .0192.
 
 Prediction: the cost comes mostly from late steps, not from lasting damage to the weights. Switching to Muon at 1/2 costs under .006, and switching to the gradient's shape at 1/2 costs over .010. If the first number is over .010, early steps do lasting damage, and the weights explanation comes back.
 
-Result at width 48, 250 steps, worlds 5-9, data in `results/spec/switch_w48.jsonl`. Base 4.3606. Gradient's shape throughout costs .0229 (.0020). Negative means worse than Muon.
+Result at width 48, 250 steps, test sets 5-9, data in `results/spec/switch_w48.jsonl`. Base 4.3606. Gradient's shape throughout costs .0229 (.0020). Negative means worse than Muon.
 
 | Gradient's shape used during | Gap | Wins of 5 |
 | --- | --- | --- |
@@ -376,7 +376,7 @@ At 250 steps the prediction fails: early steps cost more than late ones. The pre
 
 ## 2026-11-05: For each part, does the optimizer matter, and is a better one known? Rule and prediction before running
 
-Vuk's question: for each part of the LLM, either any optimizer works, or a better optimizer exists. `debug/panel_parts.py` changes one part at a time from the tuned baseline to another published optimizer, and tunes that optimizer's learning rate and momentum on worlds 0 and 1. It then scores on worlds 5-9, tune rows, with no sealed world. A frozen control trains the part not at all, which shows the most that part can matter.
+Vuk's question: for each part of the LLM, either any optimizer works, or a better optimizer exists. `debug/panel_parts.py` changes one part at a time from the tuned baseline to another published optimizer, and tunes that optimizer's learning rate and momentum on tuning sets 0 and 1. It then scores on test sets 5-9, tune rows, with no locked test set. A frozen control trains the part not at all, which shows the most that part can matter.
 
 - Parts: value and output, query and key, gate up and down, embedding, head, norm scales.
 - Optimizers: Muon, Adam, SGD with momentum, Lion, RowNorm, normalized SGD and per-head Muon, where each one applies.
@@ -385,12 +385,12 @@ Verdict for each part, fixed now:
 
 - **Any optimizer works:** every tuned optimizer stays within .004 of the baseline.
 - **Optimizer matters, baseline is best:** some optimizer loses by over .004 and over 2 errors, and none is a candidate.
-- **Candidate for better:** a gain above .005 with the same sign in all 5 worlds.
-- **Win:** a candidate at both 250 and 1,000 steps with gain above 7.53 errors, which is the t value for 30 comparisons on 5 worlds. A win still needs larger models and Vuk's word before any sealed test.
+- **Candidate for better:** a gain above .005 with the same sign in all 5 data sets.
+- **Win:** a candidate at both 250 and 1,000 steps with gain above 7.53 errors, which is the t value for 30 comparisons on 5 data sets. A win still needs larger models and Vuk's word before any sealed test.
 
 Prediction: value and output are "matters, baseline is best", with only Muon-like rules close. Query and key are the part closest to "any optimizer works". Embedding and head matter and keep Adam. Norm scales are "any optimizer works". A candidate may appear at 250 steps on query and key, as Lion did, but no win appears at 1,000 steps.
 
-All parts at width 48 and 250 steps, data in `results/panel/w48.jsonl`, summary in `results/panel/w48_out.json`. Base 4.3606. Each cell is the gap to the baseline, with the error in brackets and wins of 5 worlds after it. Positive beats the baseline. The baseline uses Muon on value, output, query, key and the feed-forward layers, and Adam on embeddings, the head and norms.
+All parts at width 48 and 250 steps, data in `results/panel/w48.jsonl`, summary in `results/panel/w48_out.json`. Base 4.3606. Each cell is the gap to the baseline, with the error in brackets and wins of 5 data sets after it. Positive beats the baseline. The baseline uses Muon on value, output, query, key and the feed-forward layers, and Adam on embeddings, the head and norms.
 
 | Part | Frozen | Adam | SGD with momentum | Lion | RowNorm | Normalized SGD | Muon | Per-head Muon | norm1d |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -404,7 +404,7 @@ All parts at width 48 and 250 steps, data in `results/panel/w48.jsonl`, summary 
 Verdicts by the rule above, at 250 steps only. No part has a candidate, since no gain passes .005.
 
 - Value and output: the optimizer matters and Muon is best of those tried.
-- Query and key: any tuned optimizer works. Normalized SGD, RowNorm and per-head Muon win 5 of 5 worlds with gains under .005, which the 1,000-step run will check.
+- Query and key: any tuned optimizer works. Normalized SGD, RowNorm and per-head Muon win 5 of 5 data sets with gains under .005, which the 1,000-step run will check.
 - Feed-forward: Adam and normalized SGD lose over .004 and 2 errors; Lion and RowNorm stay inside .004. The optimizer matters a little and Muon is best of those tried.
 - Embeddings: the optimizer matters and Adam is best of those tried. RowNorm's loss of .0048 is exactly 2 errors, so it does not clear the rule.
 - Head: the optimizer matters and Adam is best of those tried.
@@ -434,17 +434,17 @@ Limits: this is one model size, width 48, at two short lengths. Earlier map resu
 
 ## 2026-11-05: Random optimizer search, prediction before running
 
-Vuk asked for many random, diverse optimizers on each part. `optimizers/x_rand.py` has five stages: gradient edit (10 choices plus none), memory (9 plus Nesterov), direction shape (25, each tried equally often), step size (9 plus constant) and weight edit (6 plus none). All stages at 0 is Muon, with a difference of 0 on random inputs. `debug/random_opt.py` screens candidates at width 48, 250 steps, on world 0, with three lrs. The top 20 per part get three finer lrs on worlds 0,1, and the top 6 are scored on worlds 5-9.
+Vuk asked for many random, diverse optimizers on each part. `optimizers/x_rand.py` has five stages: gradient edit (10 choices plus none), memory (9 plus Nesterov), direction shape (25, each tried equally often), step size (9 plus constant) and weight edit (6 plus none). All stages at 0 is Muon, with a difference of 0 on random inputs. `debug/random_opt.py` screens candidates at width 48, 250 steps, on tuning set 0, with three lrs. The top 20 per part get three finer lrs on tuning sets 0,1, and the top 6 are scored on test sets 5-9.
 
 The size check for the screen: over the 13 moves in the map, part costs at width 32 and 48 correlate .97 and .96 with width 256, and width 64 at 8,000 steps correlates .25. Small runs predict size better than they predict long training, so a winner must also hold at longer runs.
 
-Prediction: no candidate passes the win rule (gain above .005 in 5 of 5 worlds at both lengths, and above 7.53 errors). Many will beat the base on world 0 by chance, since a one-world gap under about .004 is noise.
+Prediction: no candidate passes the win rule (gain above .005 in 5 of 5 data sets at both lengths, and above 7.53 errors). Many will beat the base on tuning set 0 by chance, since a one-set gap under about .004 is noise.
 
 ## 2026-11-05: Random optimizer search, first results
 
-Width 48, 250 steps, gain over the tuned baseline on worlds 5-9. Each part had 100 random candidates, and q,k had 300.
+Width 48, 250 steps, gain over the tuned baseline on test sets 5-9. Each part had 100 random candidates, and q,k had 300.
 
-| Part | Beat base on world 0 | Best on worlds 5-9 |
+| Part | Beat base on tuning set 0 | Best on test sets 5-9 |
 |---|---|---|
 | v,o | 2 of 100 | col-then-muon +.0003, 3/5; plain Muon came back as a top candidate |
 | q,k | 176 of 300 | head-muon + agreement +.0058 error .0007, 5/5; rownorm + weight-size +.0057 error .0007, 5/5 |
@@ -452,7 +452,7 @@ Width 48, 250 steps, gain over the tuned baseline on worlds 5-9. Each part had 1
 | Embeddings | 0 of 100 | tanh + grow -.0036, 1/5 |
 | Head | 0 of 100 | head-muon -.0075, 1/5 |
 
-The q,k survivors at 1,000 steps, with lr retuned on worlds 0,1:
+The q,k survivors at 1,000 steps, with lr retuned on tuning sets 0,1:
 
 | Candidate | 250 steps | 1,000 steps |
 |---|---|---|
@@ -463,7 +463,7 @@ The q,k survivors at 1,000 steps, with lr retuned on worlds 0,1:
 | centre-cols + muon+adam + tangent | +.0044 | -.0017 error .0014, 1/5 |
 | adam-scale + raw | +.0034 | +.0006 error .0017, 3/5 |
 
-Published rules on q,k at 1,000 steps gain: MuonSplit +.0019, Lion +.0015, RowNorm +.0008, Adam +.0002. The prediction held: no candidate passes the win rule at both lengths. These candidates were picked on worlds 0,1, but worlds 5-9 have also scored earlier searches, so they are not fully clean.
+Published rules on q,k at 1,000 steps gain: MuonSplit +.0019, Lion +.0015, RowNorm +.0008, Adam +.0002. The prediction held: no candidate passes the win rule at both lengths. These candidates were picked on tuning sets 0,1, but test sets 5-9 have also scored earlier searches, so they are not fully clean.
 
 What this says: a 250-step q,k gain mostly fades by 1,000 steps. A 250-step screen therefore picks fast starters, so the next search runs at 1,000 steps directly.
 
@@ -473,9 +473,9 @@ The same candidates, 100 each on q,k, v,o and FFN, screened at width 48, 1,000 s
 
 ## 2026-11-05: Random search at 1,000 steps, results
 
-Width 48, 1,000 steps, gain on worlds 5-9, 100 candidates on each part. No candidate passes the win rule, as predicted. Q,k reached +.0041, above the +.003 I predicted.
+Width 48, 1,000 steps, gain on test sets 5-9, 100 candidates on each part. No candidate passes the win rule, as predicted. Q,k reached +.0041, above the +.003 I predicted.
 
-| Part | Beat base on world 0 | Best on worlds 5-9 |
+| Part | Beat base on tuning set 0 | Best on test sets 5-9 |
 |---|---|---|
 | q,k | 67 of 100 | head-muon +.0041 error .0011, 5/5 (published as MuonSplit) |
 | v,o | 9 of 100 | plain Muon +.0013 error .0008, 3/5, at a different momentum |
@@ -483,7 +483,7 @@ Width 48, 1,000 steps, gain on worlds 5-9, 100 candidates on each part. No candi
 
 ## 2026-11-05: Kaon, Freon and Dion3 on each part
 
-Vuk asked about Dion3 (NorDion2, microsoft/dion, 2608.11612) and 2605.11181 (Kaon and Freon). Kaon follows Algorithm 2 of the paper. Dion3 follows `nordion2.py` without weight decay. Freon is the exact SVD form of (GG^T)^-c G, resized to Muon's Frobenius norm instead of the paper's normalization. Width 48, 250 steps, lr and momentum tuned on worlds 0,1 per arm, scored on worlds 5-9.
+Vuk asked about Dion3 (NorDion2, microsoft/dion, 2608.11612) and 2605.11181 (Kaon and Freon). Kaon follows Algorithm 2 of the paper. Dion3 follows `nordion2.py` without weight decay. Freon is the exact SVD form of (GG^T)^-c G, resized to Muon's Frobenius norm instead of the paper's normalization. Width 48, 250 steps, lr and momentum tuned on tuning sets 0,1 per arm, scored on test sets 5-9.
 
 | Arm | q,k | v,o | FFN | All hidden matrices |
 |---|---|---|---|---|
@@ -500,7 +500,7 @@ On all hidden matrices at this size, every arm loses to Muon, so this does not r
 
 ## 2026-11-05: Exponent c, Newton-Schulz steps and joined arms
 
-Width 48, gain on worlds 5-9, lr and momentum tuned on worlds 0,1 per arm. Each row uses exact SVD (GG^T)^-c G, resized to Muon's Frobenius norm, so c=.5 is the exact polar direction and real Muon is the base at 5 Newton-Schulz steps.
+Width 48, gain on test sets 5-9, lr and momentum tuned on tuning sets 0,1 per arm. Each row uses exact SVD (GG^T)^-c G, resized to Muon's Frobenius norm, so c=.5 is the exact polar direction and real Muon is the base at 5 Newton-Schulz steps.
 
 | c | q,k 250 steps | q,k 1,000 | v,o 250 steps | v,o 1,000 | FFN 250 steps |
 |---|---|---|---|---|---|
@@ -530,7 +530,7 @@ Dion3 is built to cut step cost, and this bench does not score cost. Its README 
 
 Joined at 1,000 steps, head-muon on q,k (+.0041 alone) with each v,o arm, no retuning: exact c=.5 +.0038, c=.7 +.0037, Kaon +.0029, each 5/5. The v,o gain does not add to the q,k gain.
 
-Verdict: nothing passes the win rule. These are small gains from many arms on worlds that have scored earlier searches. Kaggle job `papers-a` tests c on v,o and q,k, Kaon and step counts at width 128.
+Verdict: nothing passes the win rule. These are small gains from many arms on data sets that have scored earlier searches. Kaggle job `papers-a` tests c on v,o and q,k, Kaon and step counts at width 128.
 
 ## 2026-11-05: Learned spectrum exponent per matrix
 
@@ -538,7 +538,7 @@ Question: can each matrix learn its own exponent c during training, instead of a
 
 Method, `optimizers/x_hyc.py`: update U S^(1-2c) V^T of the Nesterov momentum, resized to Muon's size. After each step c moves by eta times the cosine of the new gradient with d(update)/dc, the hypergradient. With rho > 0, d(update)/dc is summed over past steps with decay rho, so c is scored by its effect over about 1/(1-rho) steps. eta=0 is exact c=.5 and reproduces the earlier fixed arm (q,k -.0029 both times).
 
-Width 48, 1,000 steps, gain on worlds 5-9, lr and momentum tuned per arm on worlds 0,1:
+Width 48, 1,000 steps, gain on test sets 5-9, lr and momentum tuned per arm on tuning sets 0,1:
 
 | Arm | q,k | v,o | FFN |
 |---|---|---|---|
@@ -550,13 +550,13 @@ Width 48, 1,000 steps, gain on worlds 5-9, lr and momentum tuned per arm on worl
 | eta=.03, rho=.99 | -.0035, 2/5 | -.0000, 2/5 | +.0010, 2/5 |
 | best fixed c, for comparison | +.0034 at .2, 250 steps only | +.0030 at .7 | +.0012 at .6 |
 
-Where c goes (`debug/hyc_trace.py`, world 0). With the next-step signal, c rises from .5 on every part and every matrix: q,k to .71-.84, v,o to .87-.90, FFN to .87-.94. It rises on q,k too, where low c is better, so the next-step loss always asks for a flatter spectrum than the final loss wants. This is the short-horizon bias known from learning-rate hypergradients, here in the spectrum shape. With rho=.99, q,k first falls to .41-.49 over the first 200 steps and then climbs to .67-.75; v,o climbs to .82-.86. The longer horizon recovers the early q,k preference for low c.
+Where c goes (`debug/hyc_trace.py`, tuning set 0). With the next-step signal, c rises from .5 on every part and every matrix: q,k to .71-.84, v,o to .87-.90, FFN to .87-.94. It rises on q,k too, where low c is better, so the next-step loss always asks for a flatter spectrum than the final loss wants. This is the short-horizon bias known from learning-rate hypergradients, here in the spectrum shape. With rho=.99, q,k first falls to .41-.49 over the first 200 steps and then climbs to .67-.75; v,o climbs to .82-.86. The longer horizon recovers the early q,k preference for low c.
 
 Verdict: no arm passes the win rule. With rho=.99 the learned exponent matches the best hand-picked c on v,o (+.0029 against +.0030) and beats it on FFN (+.0019 against +.0012, inside one error), without choosing c, but it still loses on q,k.
 
 ## 2026-11-05: Does the next gradient repeat each update direction?
 
-Question: v,o gains from boosting small singular directions (c=.7), q,k loses. Are small directions signal in v,o and noise in q,k? `debug/spectrum_probe.py` takes the SVD of each matrix's momentum every 10 steps and reads the raw gradient 1 and 20 steps later along each direction, z = u^T G v / |G| * sqrt(rows*cols). Noise gives z near 0 with spread 1; z > 0 means the gradient still pushes the same way. Width 48, 1,000 steps, world 0, every hidden matrix on exact polar (c=.5) at its tuned lr.
+Question: v,o gains from boosting small singular directions (c=.7), q,k loses. Are small directions signal in v,o and noise in q,k? `debug/spectrum_probe.py` takes the SVD of each matrix's momentum every 10 steps and reads the raw gradient 1 and 20 steps later along each direction, z = u^T G v / |G| * sqrt(rows*cols). Noise gives z near 0 with spread 1; z > 0 means the gradient still pushes the same way. Width 48, 1,000 steps, tuning set 0, every hidden matrix on exact polar (c=.5) at its tuned lr.
 
 Mean z by quarter of the spectrum, top singular values first:
 
@@ -570,7 +570,7 @@ Every part and every quarter overshoots a little after one step (z about -.1 to 
 
 Confound found in the stored runs: each arm's tuned lr gives a different relative update size on v,o (trainer's opt.rel): exact polar .015, c=.7 .024, c=.8 .037, Muon .027. `debug/c_lr_grid.py` maps gain over c x lr to separate shape from step size.
 
-Result of `debug/c_lr_grid.py` on v,o (width 48, 1,000 steps, worlds 5-9, momentum .9, gain over tuned Muon; lr is a multiple of Muon's tuned v,o lr, and every c has the same update size at the same lr):
+Result of `debug/c_lr_grid.py` on v,o (width 48, 1,000 steps, test sets 5-9, momentum .9, gain over tuned Muon; lr is a multiple of Muon's tuned v,o lr, and every c has the same update size at the same lr):
 
 | c | lr x.25 | x.35 | x.5 | x.7 | x1 | x1.4 | x2 |
 |---|---|---|---|---|---|---|---|
@@ -585,7 +585,7 @@ Errors are about .0015. Reading: the best gain is about the same for c=.5, .6 an
 
 ## 2026-11-05: Exponent x lr grid on query, key and FFN
 
-Same `debug/c_lr_grid.py` as v,o above (width 48, 1,000 steps, worlds 5-9, momentum .9, gain over tuned Muon, lr is a multiple of Muon's tuned lr for each matrix). Data in `results/papers/c_lr_qk*.json` and `c_lr_ffn*.json`. Errors .0004-.0024, median about .0014.
+Same `debug/c_lr_grid.py` as v,o above (width 48, 1,000 steps, test sets 5-9, momentum .9, gain over tuned Muon, lr is a multiple of Muon's tuned lr for each matrix). Data in `results/papers/c_lr_qk*.json` and `c_lr_ffn*.json`. Errors .0004-.0024, median about .0014.
 
 Query and key:
 
@@ -611,15 +611,15 @@ FFN (gate, up, down together):
 | .7 | -.0037 | -.0030 | -.0005 | +.0011 | +.0025 | +.0032 | -.0007 | -.0054 |
 | .8 | -.0047 | -.0031 | -.0001 | +.0001 | +.0015 | -.0008 | -.0013 | -.0035 |
 
-Reading: unlike v,o, FFN's exact polar (c=.5) peaks at only +.0011, while c=.6 at the tuned lr gives +.0039 (error .0007, 5/5 worlds) and c=.7 gives +.0032 at 1.4x. On FFN the exponent is not only a step-size change; a little extra weight on small singular directions helps by about .003 at its best lr. This is the best of 40 cells, so it needs a check on worlds not used for picking it before it counts.
+Reading: unlike v,o, FFN's exact polar (c=.5) peaks at only +.0011, while c=.6 at the tuned lr gives +.0039 (error .0007, 5/5 data sets) and c=.7 gives +.0032 at 1.4x. On FFN the exponent is not only a step-size change; a little extra weight on small singular directions helps by about .003 at its best lr. This is the best of 40 cells, so it needs a check on data sets not used for picking it before it counts.
 
 Summary of the three grids: q,k is flat in both c and lr; v,o has a flat ridge from c=.5 to .7 where the best lr grows with c; FFN has a real peak near c=.6-.7.
 
-## 2026-11-06: Do the exponent gains hold on worlds no choice looked at?
+## 2026-11-06: Do the exponent gains hold on data sets no choice looked at?
 
-Every choice so far was made on worlds 0-1 (lr) and read on worlds 5-9. `debug/recheck_worlds.py` scores each positive 1,000-step arm's stored spec on worlds 10-14, which nothing in this repo was picked on (sealed worlds untouched). Data in `results/papers/recheck_w10.json`.
+Every choice so far was made on tuning sets 0-1 (lr) and read on test sets 5-9. `debug/recheck_worlds.py` scores each positive 1,000-step arm's stored spec on recheck sets 10-14, which nothing in this repo was picked on (locked test sets untouched). Data in `results/papers/recheck_w10.json`.
 
-| Arm (part) | Worlds 5-9 | Worlds 10-14 | Wins 10-14 |
+| Arm (part) | Test sets 5-9 | Recheck sets 10-14 | Wins 10-14 |
 |---|---|---|---|
 | c=.7, momentum .95, lr x1 (v,o) | +.0030 | +.0025 (.0006) | 5/5 |
 | Dion3 f=1 (FFN) | +.0012 | +.0013 (.0006) | 4/5 |
@@ -631,17 +631,17 @@ Every choice so far was made on worlds 0-1 (lr) and read on worlds 5-9. `debug/r
 | Learned exponent rho=.99 (FFN) | +.0019 | +.0007 (.0009) | 3/5 |
 | c=.6 (FFN) | +.0012 | -.0008 (.0007) | 1/5 |
 
-The c x lr grid peaks also shrank on worlds 10-14: FFN c=.6 at x1 went from +.0039 to +.0011, v,o c=.7 at x1 with momentum .9 from +.0034 to +.0008 (`c_lr_ffn_confirm.json`, `c_lr_vo_confirm.json`). Most gains near +.002 on worlds 5-9 were partly the luck of picking the best of many. Only v,o c=.7 with momentum .95 held 5/5.
+The c x lr grid peaks also shrank on recheck sets 10-14: FFN c=.6 at x1 went from +.0039 to +.0011, v,o c=.7 at x1 with momentum .9 from +.0034 to +.0008 (`c_lr_ffn_confirm.json`, `c_lr_vo_confirm.json`). Most gains near +.002 on test sets 5-9 were partly the luck of picking the best of many. Only v,o c=.7 with momentum .95 held 5/5.
 
 ## 2026-11-06: Is v,o's gain the exponent, the momentum or the step size?
 
-Ten worlds (5-14), width 48, 1,000 steps, gain over tuned Muon (Newton-Schulz, momentum .8, lr .051).
+Ten data sets (5-14), width 48, 1,000 steps, gain over tuned Muon (Newton-Schulz, momentum .8, lr .051).
 
-Muon itself, walked again on these 10 worlds (`muon_vo_b*.json`), best cells: momentum .8 at x.7 +.0008 (6/10), .9 at x.5 +.0011 (6/10), .95 at x.35 +.0013 (7/10). Tuned Muon is close to its best; a retuned Muon gains at most about .0013.
+Muon itself, walked again on these 10 data sets (`muon_vo_b*.json`), best cells: momentum .8 at x.7 +.0008 (6/10), .9 at x.5 +.0011 (6/10), .95 at x.35 +.0013 (7/10). Tuned Muon is close to its best; a retuned Muon gains at most about .0013.
 
 Exponent at momentum .95 (`c_lr_vo_b95.json`): c=.6 at x.5 +.0027 (.0007, 10/10), c=.7 at x1 +.0027 (.0005, 10/10), c=.5 at x.5 +.0006 (5/10). Exact polar at x1 loses .0077.
 
-Why does the best lr double from c=.5 to c=.7? `debug/top_step.py` takes the momentum's singular values every 25 steps of one v,o c=.7 run (world 0) and computes, for each c, the RMS step in each quarter of directions (top first) relative to a flat update of the same size:
+Why does the best lr double from c=.5 to c=.7? `debug/top_step.py` takes the momentum's singular values every 25 steps of one v,o c=.7 run (tuning set 0) and computes, for each c, the RMS step in each quarter of directions (top first) relative to a flat update of the same size:
 
 | c | Top singular value vs c=.5 | Quarter 1 | 2 | 3 | 4 |
 |---|---|---|---|---|---|
@@ -653,7 +653,7 @@ Why does the best lr double from c=.5 to c=.7? `debug/top_step.py` takes the mom
 
 Matching the top step would predict a best-lr ratio near 6 between c=.5 and c=.7; the grid shows about 2, so that explanation fails. But c=.6 at x.5 and c=.7 at x1 give the top quarter the same step (.32 of flat), and both win by +.0027, while their bottom quarters differ 2.5x (.71 against 1.77).
 
-`optimizers/x_band.py` sets the step of each quarter directly (exact SVD, momentum .95, Muon's v,o lr; 1,1,1,1 is exact polar at Muon's size). `debug/band_grid.py`, 10 worlds, data in `results/papers/band_vo.json`:
+`optimizers/x_band.py` sets the step of each quarter directly (exact SVD, momentum .95, Muon's v,o lr; 1,1,1,1 is exact polar at Muon's size). `debug/band_grid.py`, 10 data sets, data in `results/papers/band_vo.json`:
 
 | Quarter steps, top first | Gain | Wins |
 |---|---|---|
@@ -680,7 +680,7 @@ Reading: two parts. (1) A flat step about a third of Muon's (.32) gives +.0014, 
 
 ## 2026-11-06: Kaggle map at width 512, 2,000 steps (job map-f)
 
-`kaggle/out/map-f`, width 512, 8 layers (29M weights), 2,000 steps, 6 GPU hours on two T4s, 3 held-out worlds. Muon tuned to momentum .9 (one walk), base held-out 4.0445. Each group moved to Adam at its own tuned Adam lr.
+`kaggle/out/map-f`, width 512, 8 layers (29M weights), 2,000 steps, 6 GPU hours on two T4s, 3 test sets. Muon tuned to momentum .9 (one walk), base held-out 4.0445. Each group moved to Adam at its own tuned Adam lr.
 
 | Moved to Adam | Gap | Wins of 3 |
 | --- | --- | --- |
@@ -705,9 +705,9 @@ At width 512 every group needs Muon, and the order is the same as at width 48: F
 
 Muon on value and output alone recovers 60% of the all-Muon gain, FFN alone 20%, query and key nothing. With Muon on value, output and FFN and Adam on query and key, the model beats all Muon by .0056. This matches width 48: query and key do not need Muon.
 
-Same tests on FFN (`results/papers/band_ffn.json`, 10 worlds, Muon's FFN lrs, momentum .95): exact polar 1,1,1,1 -.0012 (4/10); .5 flat +.0003; .7 flat +.0006 (8/10); .7 .7 .7 1.4 +.0015 (.0012, 5/10); .32 .40 .48 .71 +.0007; 1 1 1 2 -.0016. No shape beats tuned Muon on FFN by more than one error, so the band gain is specific to value and output.
+Same tests on FFN (`results/papers/band_ffn.json`, 10 data sets, Muon's FFN lrs, momentum .95): exact polar 1,1,1,1 -.0012 (4/10); .5 flat +.0003; .7 flat +.0006 (8/10); .7 .7 .7 1.4 +.0015 (.0012, 5/10); .32 .40 .48 .71 +.0007; 1 1 1 2 -.0016. No shape beats tuned Muon on FFN by more than one error, so the band gain is specific to value and output.
 
-Does the weakest quarter carry direction, or only size? `x_band.py` with `flip4=1` gives each bottom-quarter direction a random sign every step, which keeps the step size and removes the direction (v,o, 10 worlds):
+Does the weakest quarter carry direction, or only size? `x_band.py` with `flip4=1` gives each bottom-quarter direction a random sign every step, which keeps the step size and removes the direction (v,o, 10 data sets):
 
 | Quarter steps | Real signs | Random signs in quarter 4 |
 |---|---|---|
@@ -720,7 +720,7 @@ Does the weakest quarter carry direction, or only size? `x_band.py` with `flip4=
 
 With random signs the gain is gone, and dropping the weakest quarter gives 0 against +.0014 for keeping it at the flat size. So the weakest momentum directions carry real direction information; the gain is not noise or rank upkeep. This disagrees with the one-step probe above, which saw no signal at lag 1 or 20 in single noisy gradients.
 
-Momentum (v,o, 10 worlds):
+Momentum (v,o, 10 data sets):
 
 | Momentum | .32 .40 .48 .71 | .32 flat | .50 flat | .20 .25 .30 .45 |
 |---|---|---|---|---|
@@ -734,7 +734,7 @@ The gain needs momentum .95 and a step about a third of Muon's; the ramp beats t
 
 A per-direction curvature probe (gradient change along each update direction divided by the step taken) returned step ratios that exactly echoed the step sizes put in, and a flat step gave flat "curvature". The step directions come from momentum that already holds the current gradient's noise, so that estimate is biased; the probe was dropped. A gradient summed over the next 50 steps opposes every quarter about equally (z -.8 to -1.0, `debug/spectrum_probe.py --sum 50`), so it does not separate the quarters either.
 
-Same band test at 250 steps (`results/papers/band_vo_250.json`, base `results/add/w48_out.jsonl`, 10 worlds, errors .0009-.0018):
+Same band test at 250 steps (`results/papers/band_vo_250.json`, base `results/add/w48_out.jsonl`, 10 data sets, errors .0009-.0018):
 
 | v,o setting, momentum .95 | Gain | Wins |
 |---|---|---|
@@ -748,7 +748,7 @@ Same band test at 250 steps (`results/papers/band_vo_250.json`, base `results/ad
 
 At 250 steps the same ramp is again best, but its neighbours are near 0 and errors are twice as large, so 250 steps neither confirms nor rules it out.
 
-Same test at 4,000 steps (`results/papers/band_vo_4000.json` and `muon_vo_4000.json`, base `results/add/w48x4000_out.jsonl` with v,o Muon momentum .9 lr .0255, held-out loss 3.9893 on worlds 5-14):
+Same test at 4,000 steps (`results/papers/band_vo_4000.json` and `muon_vo_4000.json`, base `results/add/w48x4000_out.jsonl` with v,o Muon momentum .9 lr .0255, held-out loss 3.9893 on test and recheck sets 5-14):
 
 | v,o setting, momentum .95 | Gain | Wins |
 |---|---|---|
@@ -764,7 +764,7 @@ Same test at 4,000 steps (`results/papers/band_vo_4000.json` and `muon_vo_4000.j
 | Quarter steps .22 .28 .34 .50, momentum .97 | +.0031 (.0010) | 8/10 |
 | Muon, momentum .97, lr x.25 / x.35 / x.5 | +.0014 / +.0036 / +.0020 | |
 
-At 4,000 steps the tilted step no longer beats Muon: Muon with momentum .95 and a third of its tuned lr gains +.0022, and the best tilted step +.0025. The 4,000-step base was tuned on worlds 0 and 1 at momentum .9, and that tuning leaves about .002 for any smaller, longer-momentum step to take. So the tilt's edge over walked Muon is .0019 at 1,000 steps, .0018 at 250 (with large errors) and .0003 at 4,000. With exact polar, a flat step at a third of Muon's size gains only +.0013 here against +.0022 for Newton-Schulz Muon at a similar size, so Newton-Schulz's uneven singular values are worth about .001 at this length.
+At 4,000 steps the tilted step no longer beats Muon: Muon with momentum .95 and a third of its tuned lr gains +.0022, and the best tilted step +.0025. The 4,000-step base was tuned on tuning sets 0 and 1 at momentum .9, and that tuning leaves about .002 for any smaller, longer-momentum step to take. So the tilt's edge over walked Muon is .0019 at 1,000 steps, .0018 at 250 (with large errors) and .0003 at 4,000. With exact polar, a flat step at a third of Muon's size gains only +.0013 here against +.0022 for Newton-Schulz Muon at a similar size, so Newton-Schulz's uneven singular values are worth about .001 at this length.
 
 At momentum .97 the same holds: Muon at a third of its lr gains +.0036 (`muon_vo_4000_b97.json`), the tilt +.0031. At 1,000 steps Muon at momentum .97 gains at most +.0007 (lr x.25 +.0007, x.35 +.0004, x.5 -.0009, `muon_vo_b97.json`), so there the tilt's edge over walked Muon (+.0032 against +.0013) stands across momentum .8 to .97.
 
@@ -782,22 +782,22 @@ At 4,000 steps the tilt adds about .0005 over the same flat step, within error, 
 
 ## 2026-11-06: Random search, 300 candidates per part at 1,000 steps
 
-`debug/random_opt.py --n 300 --tier 5sx4 --parts vo,ffn --top2 20 --top3 6`, output `results/random/w48x1000_search300.json`. Screen on world 0 with three lrs, top 20 get finer lrs on worlds 0,1, top 6 scored on worlds 5-9; the top 2 per part by worlds 5-9 were then scored on worlds 10-14 (`results/papers/recheck_random300.json`). Base 4.1323.
+`debug/random_opt.py --n 300 --tier 5sx4 --parts vo,ffn --top2 20 --top3 6`, output `results/random/w48x1000_search300.json`. Screen on tuning set 0 with three lrs, top 20 get finer lrs on tuning sets 0,1, top 6 scored on test sets 5-9; the top 2 per part by test sets 5-9 were then scored on recheck sets 10-14 (`results/papers/recheck_random300.json`). Base 4.1323.
 
-On world 0, 25 of 300 v,o candidates beat the base (best +.0034, median -.0117) and 62 of 300 FFN candidates (best +.0052, median -.0026).
+On tuning set 0, 25 of 300 v,o candidates beat the base (best +.0034, median -.0117) and 62 of 300 FFN candidates (best +.0052, median -.0026).
 
-| Part | Candidate | Worlds 0,1 | Worlds 5-9 | Worlds 10-14 |
+| Part | Candidate | Tuning sets 0,1 | Test sets 5-9 | Recheck sets 10-14 |
 |---|---|---|---|---|
 | v,o | exact (GG^T)^-c G with c=.55, momentum .95, small pull toward orthogonal weights | -.0002 | +.0025 (.0008) 5/5 | +.0015 (.0007) 4/5 |
 | v,o | row clip + two-speed momentum + column-then-Muon | -.0002 | -.0005 (.0014) 2/5 | .0000 (.0007) 2/5 |
 | FFN | row-normalize then Muon, row-wise size, momentum .8 | +.0020 | +.0015 (.0006) 4/5 | +.0009 (.0008) 4/5 |
 | FFN | Muon plus .1 sign, momentum .8 | +.0019 | .0000 (.0002) 2/5 | +.0013 (.0005) 5/5 |
 
-The search found nothing on FFN beyond +.0015. Its only v,o rule that held is the same family as the tilted step above (exponent above .5 with momentum .95), found without being told about it, and it gains less (+.0015 on unused worlds) than the hand-set ramp did at 1,000 steps.
+The search found nothing on FFN beyond +.0015. Its only v,o rule that held is the same family as the tilted step above (exponent above .5 with momentum .95), found without being told about it, and it gains less (+.0015 on recheck sets) than the hand-set ramp did at 1,000 steps.
 
-## 2026-11-06: Per-head Muon on query and key, unused worlds and 4,000 steps
+## 2026-11-06: Per-head Muon on query and key, recheck sets and 4,000 steps
 
-Per-head Muon on q,k (4 heads, lr x4 of whole-matrix Muon's) gained +.0032 (.0013) on worlds 5-9 at 1,000 steps. On worlds 10-14 it gains +.0020 (.0016), 3/5 (`results/papers/recheck_perhead.json`). At 4,000 steps on worlds 5-14 (`debug/perhead_long.py`, `results/papers/perhead_4000.json`) it gains +.0011 (.0008) 7/10 at lr x4 and +.0004 (.0009) 6/10 at x2. Per-head q,k is a small, early gain that fades with length, like the v,o tilt.
+Per-head Muon on q,k (4 heads, lr x4 of whole-matrix Muon's) gained +.0032 (.0013) on test sets 5-9 at 1,000 steps. On recheck sets 10-14 it gains +.0020 (.0016), 3/5 (`results/papers/recheck_perhead.json`). At 4,000 steps on test and recheck sets 5-14 (`debug/perhead_long.py`, `results/papers/perhead_4000.json`) it gains +.0011 (.0008) 7/10 at lr x4 and +.0004 (.0009) 6/10 at x2. Per-head q,k is a small, early gain that fades with length, like the v,o tilt.
 
 ## Related results
 
@@ -805,7 +805,7 @@ Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weig
 
 ## 2026-11-06: Width 128 exponent sweep (Kaggle papers-a)
 
-`debug/papers_parts.py w128`, 2,000 steps, lr then momentum chosen on worlds 0,1, scored on worlds 5-9. Base 4.2629, Muon at momentum .8 on every hidden matrix. Data in `kaggle/out/papers-a/` (map.jsonl not committed, 0.6 MB; out*.json committed).
+`debug/papers_parts.py w128`, 2,000 steps, lr then momentum chosen on tuning sets 0,1, scored on test sets 5-9. Base 4.2629, Muon at momentum .8 on every hidden matrix. Data in `kaggle/out/papers-a/` (map.jsonl not committed, 0.6 MB; out*.json committed).
 
 | Arm | Gain | Wins | Chosen lr x, momentum |
 | --- | --- | --- | --- |
@@ -820,11 +820,11 @@ Wang et al., arXiv:2509.26030, add Muon to Adam one group at a time at 160M weig
 | q,k Kaon | -.0038 (.0019) | 1/5 | .63, .9 |
 | q,k 1 Newton-Schulz step | -.0009 (.0009) | 2/5 | .63, .9 |
 
-Every v,o arm that wins chose momentum .9-.95 against the base's .8, and flat exact c=.5 already gains +.0059, so most of the v,o gain is likely momentum, not the step shape. c=.7 over c=.5 is +.0025, close to the +.0019 at width 48 and 1,000 steps. q,k again prefers the gradient side (c=.3) to flat. Kaggle job `papers-c` walks Muon itself on v,o (momentum .9, .95, .97) and q,k (.9, .95) over lr x .35-1.4 on the same worlds, seeded with these runs; it decides whether c=.7 beats a walked Muon at width 128.
+Every v,o arm that wins chose momentum .9-.95 against the base's .8, and flat exact c=.5 already gains +.0059, so most of the v,o gain is likely momentum, not the step shape. c=.7 over c=.5 is +.0025, close to the +.0019 at width 48 and 1,000 steps. q,k again prefers the gradient side (c=.3) to flat. Kaggle job `papers-c` walks Muon itself on v,o (momentum .9, .95, .97) and q,k (.9, .95) over lr x .35-1.4 on the same data sets, seeded with these runs; it decides whether c=.7 beats a walked Muon at width 128.
 
 ## 2026-11-06: Why q,k don't need Muon: mechanism tests (predictions written before any run)
 
-Script `debug/mech.py`. Width 48, worlds 5-9, models trained with the tuned Muon baseline, all Adam, and Adam plus Muon on one group (the `add` rows of `results/add/`). Analysis only, no new training settings.
+Script `debug/mech.py`. Width 48, test sets 5-9, models trained with the tuned Muon baseline, all Adam, and Adam plus Muon on one group (the `add` rows of `results/add/`). Analysis only, no new training settings.
 
 Guess under test: deciding where to attend needs a few strong directions, while storing facts needs many.
 
@@ -834,7 +834,7 @@ Guess under test: deciding where to attend needs a few strong directions, while 
 
 ### Results (2026-11-06)
 
-Data: `results/mech/w48.json` (250 steps), `w48x1000.json` (1,000), `w48x4000_cut.json` (4,000, Muon only), `w48x1000_noqknorm_cut.json` (1,000, no QK-norm, Muon only). Loss rise on report rows, worlds 5-9, mean (error).
+Data: `results/mech/w48.json` (250 steps), `w48x1000.json` (1,000), `w48x4000_cut.json` (4,000, Muon only), `w48x1000_noqknorm_cut.json` (1,000, no QK-norm, Muon only). Loss rise on report rows, test sets 5-9, mean (error).
 
 **Test 1 holds: q,k weights use few directions.** Loss rise when a group keeps its top 12 of 48 directions (whole matrices):
 
@@ -864,7 +864,7 @@ At 1,000 steps the rare-token gain is 1.36 times the common one (prediction: at 
 
 ## 2026-11-06: Does spreading v,o over more directions explain Muon's v,o gain? (predictions written before any run)
 
-Test 4, length side, local. Script `debug/mech.py`, width 48, worlds 5-9, 250, 1,000 and 4,000 steps. Every model is now cut, including Adam plus Muon on v,o.
+Test 4, length side, local. Script `debug/mech.py`, width 48, test sets 5-9, 250, 1,000 and 4,000 steps. Every model is now cut, including Adam plus Muon on v,o.
 
 Spread gap: the v,o top-12-of-48 cut cost in Adam plus Muon on v,o, minus the same cut cost in all Adam. Only the v,o optimizer differs between the two models.
 
@@ -877,7 +877,7 @@ Width side (Kaggle, not run yet): the same spread gap at widths 64, 128 and 256,
 
 ### Results (2026-11-06)
 
-Data: `results/mech/w48_spread.json`, `w48x1000_spread.json`, `w48x4000_spread.json`. Worlds 5-9, mean (error) and worlds above 0. The gains below come from these new runs, so they differ slightly from `results/add/`.
+Data: `results/mech/w48_spread.json`, `w48x1000_spread.json`, `w48x4000_spread.json`. Test sets 5-9, mean (error) and data sets above 0. The gains below come from these new runs, so they differ slightly from `results/add/`.
 
 **The prediction holds: the spread grows while the gain shrinks.**
 
@@ -905,7 +905,7 @@ Data: `results/mech/w48_spread.json`, `w48x1000_spread.json`, `w48x4000_spread.j
 
 ## 2026-11-06: Width 512 with tuned Adam lrs (job map-g)
 
-`kaggle/out/map-g`, same width-512 shape, worlds 5-7. Adam lrs walked on world 0: v,o tried .00025, .00064, .0016, .004, .01, .025 and picked .00064; FFN tried .00025, .00064, .0016, .004, .01 and picked .0016. Both picks are inside their walks.
+`kaggle/out/map-g`, same width-512 shape, test sets 5-7. Adam lrs walked on tuning set 0: v,o tried .00025, .00064, .0016, .004, .01, .025 and picked .00064; FFN tried .00025, .00064, .0016, .004, .01 and picked .0016. Both picks are inside their walks.
 
 | Moved to Adam | Gap | Wins of 3 |
 | --- | --- | --- |
@@ -924,15 +924,15 @@ Data: `results/mech/w48_spread.json`, `w48x1000_spread.json`, `w48x4000_spread.j
 
 Width 512 is the first size where q,k need Muon (-.0091). Its heads are 64 wide; widths 64 and 128 have heads of 16 and width 256 has 32. q,k costs by width: -.0002, +.0056, -.0012, -.0091. So head size and width move together in the map.
 
-Test: width 48, 1,000 steps, 1, 2, 4 and 12 heads (head size 48, 24, 12, 4). Script `debug/map_parts.py h{H}x1000 --few --few-groups vo,qk --start <the tuned w48x1000 base>`: shared Muon lr factor walked, Adam lrs for v,o and for q,k walked on worlds 0-1, scored on 5-9. FFN goes to Adam at a fixed lr .01.
+Test: width 48, 1,000 steps, 1, 2, 4 and 12 heads (head size 48, 24, 12, 4). Script `debug/map_parts.py h{H}x1000 --few --few-groups vo,qk --start <the tuned w48x1000 base>`: shared Muon lr factor walked, Adam lrs for v,o and for q,k walked on tuning sets 0-1, scored on 5-9. FFN goes to Adam at a fixed lr .01.
 
-- If head size drives it: moving q,k to Adam costs more with fewer, bigger heads. Prediction: 1 head costs below -.005 on 5/5 worlds, 4 heads costs about 0.
+- If head size drives it: moving q,k to Adam costs more with fewer, bigger heads. Prediction: 1 head costs below -.005 on 5/5 data sets, 4 heads costs about 0.
 - If width (or depth) drives it, the q,k cost stays near 0 for every head count at width 48.
 - v,o's cost should not depend much on head count.
 
 ## 2026-11-06: Width 128 quarter-step shapes and HyC on v,o (Kaggle papers-b)
 
-`debug/papers_parts.py w128 --band` and `--hyc`, 2,000 steps, lr then a fine lr factor chosen on worlds 0,1, scored on worlds 5-9. Base 4.2629 (Muon momentum .8 on every hidden matrix). Data `kaggle/out/papers-b/out*.json`.
+`debug/papers_parts.py w128 --band` and `--hyc`, 2,000 steps, lr then a fine lr factor chosen on tuning sets 0,1, scored on test sets 5-9. Base 4.2629 (Muon momentum .8 on every hidden matrix). Data `kaggle/out/papers-b/out*.json`.
 
 | Arm | Gap over base | Wins |
 |---|---|---|
@@ -949,7 +949,7 @@ Test: width 48, 1,000 steps, 1, 2, 4 and 12 heads (head size 48, 24, 12, 4). Scr
 
 ### Results (2026-11-06)
 
-Data `results/heads/out.jsonl` (gaps) and `results/heads/map.jsonl` (runs). Gap of moving a group to Adam, worlds 5-9, mean (error) wins.
+Data `results/heads/out.jsonl` (gaps) and `results/heads/map.jsonl` (runs). Gap of moving a group to Adam, test sets 5-9, mean (error) wins.
 
 | Heads (head size) | Base | q,k to Adam | v,o to Adam | FFN to Adam (lr .01) |
 |---|---|---|---|---|
@@ -959,7 +959,7 @@ Data `results/heads/out.jsonl` (gaps) and `results/heads/map.jsonl` (runs). Gap 
 | 1 (48) | 4.1441 | -.0019 (.0014) 1/5 | -.0117 (.0017) 0/5 | -.0018 (.0006) 0/5 |
 
 - The prediction fails: with one 48-wide head, moving q,k to Adam costs -.0019, not below -.005.
-- There is a weak trend: heads of 4 and 12 prefer Adam slightly (4/5 worlds), heads of 24 and 48 prefer Muon slightly (1/5). Every q,k gap is within .0035 of zero.
+- There is a weak trend: heads of 4 and 12 prefer Adam slightly (4/5 data sets), heads of 24 and 48 prefer Muon slightly (1/5). Every q,k gap is within .0035 of zero.
 - So head size alone does not make q,k need Muon at width 48. The width-512 q,k cost (-.0091) needs width, depth or length, not only big heads.
 - v,o cost is -.0108 to -.0172 at every head count, as predicted.
 - 4 heads beats 1 head by .0118 and 12 heads by .0304 on the Muon base, so 4 heads stays the default.
@@ -968,7 +968,7 @@ Data `results/heads/out.jsonl` (gaps) and `results/heads/map.jsonl` (runs). Gap 
 
 The ICML critic's main objection: every Kaggle width run uses 2,000 steps of 8,192 tokens, so tokens per weight fall from 23 (width 64) to 0.56 (width 512) as width grows. The v,o cost ordered by tokens per weight falls almost steadily (.0476 at 0.56, .0403 at 2.4, .0366 at 5.8, .0202 at 7.4, .0135 at 23, .0025 at 92). So "v,o need Muon more as width grows" may be "v,o need Muon more when undertrained".
 
-Test, local, 2 layers, 4 heads, V=1000, 768 tokens a step, worlds 5-9. Weights (all, with embeddings): width 32 88.7K, width 64 226K, width 128 650K.
+Test, local, 2 layers, 4 heads, V=1000, 768 tokens a step, test sets 5-9. Weights (all, with embeddings): width 32 88.7K, width 64 226K, width 128 650K.
 
 | Tier | Width | Steps | Tokens per weight |
 |---|---|---|---|
@@ -978,7 +978,7 @@ Test, local, 2 layers, 4 heads, V=1000, 768 tokens a step, worlds 5-9. Weights (
 | t32x1000 | 32 | 1,000 | 8.7 |
 | t128x1000 | 128 | 1,000 | 1.2 |
 
-Each: `debug/map_parts.py TIER --few --few-groups vo,qk --start <tuned w48x1000 base>` (shared Muon lr factor walked, Adam lrs for v,o and q,k walked on worlds 0-1, FFN to Adam at .01).
+Each: `debug/map_parts.py TIER --few --few-groups vo,qk --start <tuned w48x1000 base>` (shared Muon lr factor walked, Adam lrs for v,o and q,k walked on tuning sets 0-1, FFN to Adam at .01).
 
 - Width effect: at matched 3.4 tokens per weight, the v,o cost rises from width 32 to 128 by more than .004.
 - Tokens effect: at matched width, more tokens per weight lowers the v,o cost (width 32: 393 vs 1,000 steps; width 128: 1,000 vs 2,876).
@@ -990,7 +990,7 @@ Status 2026-11-06: the tokens-per-weight test above is paused after a partial wi
 
 No paper studies Muon and induction-head timing (6 searches, 2026-11-06; closest: 2603.26554 linear associative memory capacity, 2603.00742 linear attention theory, 2410.11474 Adam vs GD on an induction toy).
 
-Setup: width 48, 2 layers, 4 heads, 1,000 steps (5sx4), tuned specs from results/add/w48x1000_out.jsonl: all Adam, Muon, Adam + Muon on v,o, Adam + Muon on q,k. Worlds 5-9. Every 10 steps: tune loss on 64 rows, and the induction score = loss on the first copy of 20 random tokens minus loss on the second copy (repeated-random-token test of Olsson et al. 2022), plus the attention each head puts on the token after the earlier copy.
+Setup: width 48, 2 layers, 4 heads, 1,000 steps (5sx4), tuned specs from results/add/w48x1000_out.jsonl: all Adam, Muon, Adam + Muon on v,o, Adam + Muon on q,k. Test sets 5-9. Every 10 steps: tune loss on 64 rows, and the induction score = loss on the first copy of 20 random tokens minus loss on the second copy (repeated-random-token test of Olsson et al. 2022), plus the attention each head puts on the token after the earlier copy.
 
 Formation step = first step where the induction score passes half its final Muon value.
 
@@ -1001,9 +1001,9 @@ Predictions:
 
 Kill rule (decides whether this becomes the paper): let lead(t) = Adam tune loss minus Muon tune loss. The idea goes on only if lead(t) peaks between the two formation steps (plus or minus 10% of the run) and that peak is at least 1.5x the lead at step 1,000. If the lead grows smoothly with no peak near formation, the speedup is not "a circuit forms sooner", and the direction is dropped.
 
-Setting change, written before the main run (2026-11-06). On the width-48 tiers (0.77M-4M tokens) no arm formed an induction head: ICL stayed between -0.13 and +0.27, and induction attention stayed at chance (0.03). Prediction 1 failed there. Natural text needs far more tokens than a CPU or this Mac's GPU can give, and the Kaggle GPU quota is used up for the week. So the main run is controlled: the map's width-64 model (4 layers, 4 heads, V=4000, batch 64, rows of 128 tokens) reads fineweb train shard 1 in order. In every batch, the first quarter of the rows repeats its first 64 tokens in its second half (`--rep 0.25`). Copying then pays off early. Specs are the tuned map rows at width 64: Muon, all Adam, and Muon with v,o / q,k / FFN on Adam. Each arm runs 4,000 steps (33M tokens), world 5, one run per arm, with probes every 100 steps. Same predictions and kill rule. A pilot at 2,000 steps already showed Muon's best head reaching induction attention 0.05 at step 500, while Adam's reached it at step 1,000. The pilot is not counted. The natural-text version (60K steps, 491M tokens) waits for the Kaggle quota.
+Setting change, written before the main run (2026-11-06). On the width-48 tiers (0.77M-4M tokens) no arm formed an induction head: ICL stayed between -0.13 and +0.27, and induction attention stayed at chance (0.03). Prediction 1 failed there. Natural text needs far more tokens than a CPU or this Mac's GPU can give, and the Kaggle GPU quota is used up for the week. So the main run is controlled: the map's width-64 model (4 layers, 4 heads, V=4000, batch 64, rows of 128 tokens) reads fineweb train shard 1 in order. In every batch, the first quarter of the rows repeats its first 64 tokens in its second half (`--rep 0.25`). Copying then pays off early. Specs are the tuned map rows at width 64: Muon, all Adam, and Muon with v,o / q,k / FFN on Adam. Each arm runs 4,000 steps (33M tokens), test set 5, one run per arm, with probes every 100 steps. Same predictions and kill rule. A pilot at 2,000 steps already showed Muon's best head reaching induction attention 0.05 at step 500, while Adam's reached it at step 1,000. The pilot is not counted. The natural-text version (60K steps, 491M tokens) waits for the Kaggle quota.
 
-Result, `results/induction/w64rep25x4000_w5.json` (world 5, one run per arm, 4,000 steps, every 100 steps; ICL is noisy, ±0.15 from probe to probe):
+Result, `results/induction/w64rep25x4000_w5.json` (test set 5, one run per arm, 4,000 steps, every 100 steps; ICL is noisy, ±0.15 from probe to probe):
 
 | arm | final loss | ICL, mean of last 5 probes | best head induction attention, final | step attention first ≥ 0.05 | step smoothed ICL first ≥ half of Muon's final |
 |---|---|---|---|---|---|
@@ -1014,29 +1014,29 @@ Result, `results/induction/w64rep25x4000_w5.json` (world 5, one run per arm, 4,0
 | Muon, FFN on Adam | 4.4467 | 0.802 | 0.113 | 500 | 900 |
 
 - Prediction 1 failed: no arm reached ICL 1 nat in 33M tokens.
-- Prediction 2 held on this one world: Muon's head formed 400 steps earlier on attention and 1,400 steps earlier on ICL.
+- Prediction 2 held on this one data set: Muon's head formed 400 steps earlier on attention and 1,400 steps earlier on ICL.
 - Prediction 3 cannot be read as written, because the map arms switch one part from Muon to Adam rather than adding Muon to one part. Read the other way, putting q,k on Adam removed the head almost entirely (attention 0.049 against 0.15-0.18 elsewhere), while loss was only 0.016 worse than Muon's.
 - Kill rule: Adam loss minus Muon loss peaks at 0.127 at step 500 and ends at 0.034 (3.7×). The window was 500-2,700 (formation steps 900 and 2,300, ±400). The peak sits on the window's first step, so it passes only at the edge. Muon also leads early at every tier, so this peak may be general early speed rather than the head.
-- Next: worlds 6 and 7 for Muon, all Adam, and Muon with q,k on Adam, to see whether the missing head is real.
+- Next: test sets 6 and 7 for Muon, all Adam, and Muon with q,k on Adam, to see whether the missing head is real.
 
-Replication on worlds 6 and 7 (`results/induction/w64rep25x4000_w67.json`), with the same setting. Each world has its own init and tune rows; the training stream is the same. Values are ICL (mean of the last 5 probes) / best-head induction attention at step 4,000 / first step attention ≥ 0.05:
+Replication on test sets 6 and 7 (`results/induction/w64rep25x4000_w67.json`), with the same setting. Each data set has its own init and tune rows; the training stream is the same. Values are ICL (mean of the last 5 probes) / best-head induction attention at step 4,000 / first step attention ≥ 0.05:
 
-| arm | world 5 | world 6 | world 7 | final loss w5 / w6 / w7 |
+| arm | test set 5 | test set 6 | test set 7 | final loss w5 / w6 / w7 |
 |---|---|---|---|---|
 | Muon | 0.463 / 0.175 / 600 | 0.624 / 0.071 / 2,500 | 0.394 / 0.065 / 2,400 | 4.4432 / 4.3785 / 4.4124 |
 | all Adam | 0.644 / 0.157 / 1,000 | 2.025 / 0.375 / 800 | 0.458 / 0.075 / 100 | 4.4773 / 4.4210 / 4.4194 |
 | Muon, q,k on Adam | 0.242 / 0.049 / 3,700 | 0.338 / 0.032 / never | 0.175 / 0.014 / never | 4.4597 / 4.3994 / 4.4263 |
 
-- Prediction 2 failed. Muon's head formed earlier only on world 5. On worlds 6 and 7, Adam's formed first (step 800 vs 2,500 on world 6), and Adam ended with the larger copy score on all three worlds.
-- Muon had the lowest loss on all three worlds, 0.007-0.043 below Adam. So lower loss did not come with a stronger induction head.
+- Prediction 2 failed. Muon's head formed earlier only on test set 5. On test sets 6 and 7, Adam's formed first (step 800 vs 2,500 on test set 6), and Adam ended with the larger copy score on all three data sets.
+- Muon had the lowest loss on all three data sets, 0.007-0.043 below Adam. So lower loss did not come with a stronger induction head.
 - By the kill rule's own terms, the direction "Muon forms the induction head earlier" is dropped.
-- One result held on all three worlds: Muon with q,k on Adam had the lowest copy score (0.18-0.34, against 0.39-0.62 for Muon and 0.46-2.03 for Adam), and its best head never passed attention 0.05 by step 3,600. Its loss sits within 0.02 of the other two. Untested: whether this comes from the mix itself or from the q,k learning rate (0.0625, tuned for loss at 2,000 steps).
+- One result held on all three data sets: Muon with q,k on Adam had the lowest copy score (0.18-0.34, against 0.39-0.62 for Muon and 0.46-2.03 for Adam), and its best head never passed attention 0.05 by step 3,600. Its loss sits within 0.02 of the other two. Untested: whether this comes from the mix itself or from the q,k learning rate (0.0625, tuned for loss at 2,000 steps).
 
 ### 2026-11-06, follow-up: why does Muon with q,k on Adam copy worst? (predictions written before the runs)
 
-All-Adam uses the same q,k Adam lr (0.0625) and still copies, so the lr alone is not an obvious cause. Arms in the same setting (width 64, `--rep 0.25`, 4,000 steps, worlds 5-7): Muon with q,k on Adam at q,k lr 0.0156 and 0.25 (¼× and 4× the tuned 0.0625), and the reverse mix, all Adam with q,k on Muon (lr 0.067).
-- Prediction A (lr): if the lr causes it, at least one of the two other lrs lifts the copy score to ≥ 0.39 (Muon's lowest) on at least 2 of 3 worlds. My guess: neither does.
-- Prediction B (mismatch): if mixing optimizers between q,k and the rest causes it, the reverse mix also copies worse than both pure arms on at least 2 of 3 worlds. My guess: it does not; Muon's v,o/FFN with Adam's q,k is the specific bad pair.
+All-Adam uses the same q,k Adam lr (0.0625) and still copies, so the lr alone is not an obvious cause. Arms in the same setting (width 64, `--rep 0.25`, 4,000 steps, test sets 5-7): Muon with q,k on Adam at q,k lr 0.0156 and 0.25 (¼× and 4× the tuned 0.0625), and the reverse mix, all Adam with q,k on Muon (lr 0.067).
+- Prediction A (lr): if the lr causes it, at least one of the two other lrs lifts the copy score to ≥ 0.39 (Muon's lowest) on at least 2 of 3 data sets. My guess: neither does.
+- Prediction B (mismatch): if mixing optimizers between q,k and the rest causes it, the reverse mix also copies worse than both pure arms on at least 2 of 3 data sets. My guess: it does not; Muon's v,o/FFN with Adam's q,k is the specific bad pair.
 
 Result (`results/induction/w64rep25x4000_qkfollow.json`; table from `python3 debug/induction_table.py` on all three files). Copy score = ICL, the mean of the last 5 probes:
 
@@ -1049,22 +1049,22 @@ Result (`results/induction/w64rep25x4000_qkfollow.json`; table from `python3 deb
 | Muon | 0.463 | 0.624 | 0.394 | 4.4114 |
 | all Adam | 0.644 | 2.025 | 0.458 | 4.4392 |
 
-- Prediction A: at ¼× and 4× the q,k lr, the copy score reaches Muon's lowest value (0.39) on 2 of 3 worlds. So the low copy score belongs to the tuned lr only; my guess was wrong. Because it is not monotone in lr, it is most likely a narrow effect, so I drop "the mix removes the head".
-- Prediction B is met by its letter (the reverse mix is below both pure arms on worlds 5 and 6), but the world-5 margin is 0.012. On world 7, the reverse mix has the highest copy score of all arms. Not a finding.
-- One pattern holds on all three worlds: all Adam copies better than Muon (0.644 vs 0.463, 2.025 vs 0.624, 0.458 vs 0.394), while Muon has the lower loss (by 0.034, 0.043 and 0.007).
+- Prediction A: at ¼× and 4× the q,k lr, the copy score reaches Muon's lowest value (0.39) on 2 of 3 data sets. So the low copy score belongs to the tuned lr only; my guess was wrong. Because it is not monotone in lr, it is most likely a narrow effect, so I drop "the mix removes the head".
+- Prediction B is met by its letter (the reverse mix is below both pure arms on test sets 5 and 6), but the test set 5 margin is 0.012. On test set 7, the reverse mix has the highest copy score of all arms. Not a finding.
+- One pattern holds on all three data sets: all Adam copies better than Muon (0.644 vs 0.463, 2.025 vs 0.624, 0.458 vs 0.394), while Muon has the lower loss (by 0.034, 0.043 and 0.007).
 
 ### 2026-11-06: does Adam learn in-context copying better than Muon at lower or equal loss? (predictions written before the runs)
 
-Same setting, worlds 8 and 9, Muon and all Adam.
-- Prediction C: Adam's copy score is above Muon's on both new worlds, and Muon's loss is below Adam's on both. If either fails on either world, the pattern is 3 of 5 or 4 of 5, and I treat it as unproven.
+Same setting, test sets 8 and 9, Muon and all Adam.
+- Prediction C: Adam's copy score is above Muon's on both new data sets, and Muon's loss is below Adam's on both. If either fails on either data set, the pattern is 3 of 5 or 4 of 5, and I treat it as unproven.
 
 Result C (`results/induction/w64rep25x4000_w89.json`). Every saved final model was re-measured on 1,000 probe rows and on all tune rows (`debug/induction_eval.py` → `results/induction/eval_rep25x4000.json`), following the Opus critic, who pointed out that ICL = first-copy loss minus second-copy loss rewards a model for doing badly on rare first-copy tokens:
-- Prediction C failed. Muon's copy score beat Adam's on world 8 (0.459 vs 0.100) and world 9 (0.656 vs 0.346). "Adam copies better" holds on 3 of 5 worlds, so it is dropped.
-- Muon's held-out loss is below Adam's on all 5 worlds: 4.407/4.444, 4.412/4.446, 4.434/4.450, 4.421/4.493, 4.403/4.437.
+- Prediction C failed. Muon's copy score beat Adam's on test set 8 (0.459 vs 0.100) and test set 9 (0.656 vs 0.346). "Adam copies better" holds on 3 of 5 data sets, so it is dropped.
+- Muon's held-out loss is below Adam's on all 5 data sets: 4.407/4.444, 4.412/4.446, 4.434/4.450, 4.421/4.493, 4.403/4.437.
 - No model in this setting has a working copying head. Second-copy loss on uniform random tokens is 9.5-11.0 nats, above the 8.29 of a uniform guess, and copy accuracy is 0.0-1.4%. At a 63-token look-back, the copy score goes up to 3.8 for some models and down to -5.9 for others. The repeated-first-half data taught a fixed 64-token look-back, not content copying, so the whole `--rep 0.25` series measures that look-back and not induction.
-- Next: `--repvar`, where each repeat copies a 20-token span to a random later place, 21-87 tokens back, so that only content-based copying helps. Pilot on world 5, Muon and Adam, half of the rows. Pass condition before any Muon/Adam comparison counts: copy accuracy above 30% on the uniform probe for both arms.
+- Next: `--repvar`, where each repeat copies a 20-token span to a random later place, 21-87 tokens back, so that only content-based copying helps. Pilot on test set 5, Muon and Adam, half of the rows. Pass condition before any Muon/Adam comparison counts: copy accuracy above 30% on the uniform probe for both arms.
 
-Pilot result, `--repvar --rep 0.5`, world 5, 4,000 steps (`results/induction/w64repvar50x4000_w5.json`, re-measure in `eval_repvar50x4000.json`):
+Pilot result, `--repvar --rep 0.5`, tuning set 5, 4,000 steps (`results/induction/w64repvar50x4000_w5.json`, re-measure in `eval_repvar50x4000.json`):
 
 | step | 1,000 | 1,500 | 2,000 | 2,500 | 3,000 | 3,500 | 4,000 |
 |---|---|---|---|---|---|---|---|
@@ -1076,25 +1076,25 @@ Pilot result, `--repvar --rep 0.5`, world 5, 4,000 steps (`results/induction/w64
 - Re-measured at the end: copy accuracy is 3.7% (Muon) vs 0.3% (Adam) on uniform probes, and 27.8% vs 10.0% on frequency-matched probes. Second-copy loss on frequency-matched probes is 4.40 vs 6.55. Held-out loss is 4.4493 vs 4.4473, nearly equal.
 - The pass condition I set (above 30% uniform-probe accuracy for both arms) failed. Uniform probes use mostly rare tokens that these models barely predict at all, so I switch the accuracy check to frequency-matched probes for the next runs. This is a change made after seeing data, and I record it here as one.
 
-Prediction D (written before the runs): on worlds 6 and 7 in the same setting, Muon's best head passes attention 0.2 at least 500 steps before Adam's, and Muon's frequency-matched copy accuracy at step 4,000 is higher than Adam's on both worlds.
+Prediction D (written before the runs): on test sets 6 and 7 in the same setting, Muon's best head passes attention 0.2 at least 500 steps before Adam's, and Muon's frequency-matched copy accuracy at step 4,000 is higher than Adam's on both data sets.
 
 Result D (`results/induction/w64repvar50x4000_w67.json`, re-measured in `eval_repvar50x4000.json`). Frequency-matched probes, 1,000 rows, step 4,000:
 
-| world | step best head ≥ 0.2 (Muon / Adam) | 2nd-copy loss (Muon / Adam) | copy accuracy (Muon / Adam) | ICL, training probe (Muon / Adam) | held-out loss (Muon / Adam) |
+| data set | step best head ≥ 0.2 (Muon / Adam) | 2nd-copy loss (Muon / Adam) | copy accuracy (Muon / Adam) | ICL, training probe (Muon / Adam) | held-out loss (Muon / Adam) |
 |---|---|---|---|---|---|
 | 5 | 1,300 / 2,700 | 4.40 / 6.55 | 27.8% / 10.0% | 3.52 / 1.84 | 4.4493 / 4.4473 |
 | 6 | 2,000 / 1,800 | 5.02 / 6.11 | 21.7% / 12.6% | 3.75 / 1.82 | 4.4481 / 4.4521 |
 | 7 | 2,153 / 3,000 | 5.50 / 6.71 | 18.0% / 10.6% | 2.53 / 1.61 | 4.4580 / 4.4568 |
 
-- Prediction D, timing part: failed. On world 6, Adam's head passed 0.2 attention 200 steps earlier. Earlier formation under Muon is 2 of 3 worlds, so the timing claim is dropped.
-- Prediction D, copying part: held on all three worlds. At equal held-out loss (within 0.004), Muon's model copies much better: second-copy loss is 1.1-2.2 nats lower, and accuracy is 1.7-2.8× higher.
+- Prediction D, timing part: failed. On test set 6, Adam's head passed 0.2 attention 200 steps earlier. Earlier formation under Muon is 2 of 3 data sets, so the timing claim is dropped.
+- Prediction D, copying part: held on all three data sets. At equal held-out loss (within 0.004), Muon's model copies much better: second-copy loss is 1.1-2.2 nats lower, and accuracy is 1.7-2.8× higher.
 - Both optimizers end with the same attention to the right token (0.40-0.55). So the difference is in what the head writes once it attends, which is the v,o (OV) circuit, not in where it looks (q,k).
 - Related: the Opus critic cites a NeurIPS 2026 paper ("Optimizers Select Algorithms") in which orthogonalized updates favour in-context recall in associative-recall toys. This result points the same way on web text, with the extra finding that attention is equal and only the copied output differs.
 
-Prediction E (written before the runs): in the same setting, on worlds 5-7, the copying advantage follows v,o.
-- Muon with v,o on Adam: frequency-matched second-copy loss ends at least halfway from Muon's toward Adam's on all 3 worlds.
-- Muon with q,k on Adam: ends within a quarter of the gap from Muon's on at least 2 of 3 worlds.
-- All Adam with v,o on Muon: ends at least halfway from Adam's toward Muon's on at least 2 of 3 worlds.
+Prediction E (written before the runs): in the same setting, on test sets 5-7, the copying advantage follows v,o.
+- Muon with v,o on Adam: frequency-matched second-copy loss ends at least halfway from Muon's toward Adam's on all 3 data sets.
+- Muon with q,k on Adam: ends within a quarter of the gap from Muon's on at least 2 of 3 data sets.
+- All Adam with v,o on Muon: ends at least halfway from Adam's toward Muon's on at least 2 of 3 data sets.
 
 Result E (`results/induction/w64repvar50x4000_parts.json`, re-measured in `eval_repvar50x4000.json`). Each cell is frequency-matched second-copy loss and, in brackets, the share of the Muon→Adam gap. 0 = like Muon, 1 = like Adam:
 
@@ -1107,17 +1107,17 @@ Result E (`results/induction/w64repvar50x4000_parts.json`, re-measured in `eval_
 | all Adam | 6.55 (1) | 6.11 (1) | 6.71 (1) |
 
 Held-out loss stays within 4.427-4.468 across all 15 models.
-- "Taking v,o off Muon loses at least half the copying advantage, on all 3 worlds": held (0.56, 0.85, 1.61).
+- "Taking v,o off Muon loses at least half the copying advantage, on all 3 data sets": held (0.56, 0.85, 1.61).
 - "Taking q,k off Muon keeps it, on at least 2 of 3": held, but at the edge (0.09, 0.25, 1.00).
 - "Muon on v,o alone in an Adam model gives at least half of it, on at least 2 of 3": failed (1 of 3).
-- Reading: Muon on v,o is needed for the copying advantage but is not enough on its own. World 7 swings widely in every arm, so single runs per world are noisy here.
+- Reading: Muon on v,o is needed for the copying advantage but is not enough on its own. Test set 7 swings widely in every arm, so single runs per data set are noisy here.
 
-Prediction F (written before the runs): Adam's copying deficit is not a learning-rate artifact. With every Adam lr scaled ×0.5 or ×2, on worlds 5 and 6, neither scaled arm reaches within a quarter of the gap of Muon's frequency-matched second-copy loss on both worlds.
+Prediction F (written before the runs): Adam's copying deficit is not a learning-rate artifact. With every Adam lr scaled ×0.5 or ×2, on test sets 5 and 6, neither scaled arm reaches within a quarter of the gap of Muon's frequency-matched second-copy loss on both data sets.
 
-Result F (`results/induction/w64repvar50x4000_adamlr.json`, re-measured in `eval_repvar50x4000.json`): with every Adam lr at ×0.5 or ×2, frequency-matched second-copy loss is 6.67/7.67 (×0.5) and 6.49/6.71 (×2) on worlds 5/6. Tuned Adam gets 6.55/6.11 and Muon 4.40/5.02. Prediction F held: neither scaled arm comes within a quarter of the gap, so within a 4× lr range Adam's copying deficit is not an lr artifact. Held-out loss: 4.4465/4.4270 (×0.5) and 4.4746/4.4631 (×2).
+Result F (`results/induction/w64repvar50x4000_adamlr.json`, re-measured in `eval_repvar50x4000.json`): with every Adam lr at ×0.5 or ×2, frequency-matched second-copy loss is 6.67/7.67 (×0.5) and 6.49/6.71 (×2) on test sets 5/6. Tuned Adam gets 6.55/6.11 and Muon 4.40/5.02. Prediction F held: neither scaled arm comes within a quarter of the gap, so within a 4× lr range Adam's copying deficit is not an lr artifact. Held-out loss: 4.4465/4.4270 (×0.5) and 4.4746/4.4631 (×2).
 
 Second Opus critic (abstract-level read of the NeurIPS 2026 paper): "Muon recalls from context better than Adam" is already shown there on the synthetic RP-MQAR task across seven architectures. What may still be new is (a) web text at matched held-out loss and (b) where in the model the difference sits. Its requested controls:
-- First-copy loss on the same frequency-matched rows. It is already in `eval_repvar50x4000.json`: Muon 8.63 vs Adam 8.54 on world 5. So both predict these tokens equally well, and the gap is in copying.
+- First-copy loss on the same frequency-matched rows. It is already in `eval_repvar50x4000.json`: Muon 8.63 vs Adam 8.54 on test set 5. So both predict these tokens equally well, and the gap is in copying.
 - Per-head credit on the same rows.
 
 Per-head credit (`debug/induction_heads.py` → `results/induction/heads_repvar50x4000.json`, 500 frequency-matched rows, second-copy positions). Credit is the direct logit for the copied token minus the mean logit, through the frozen final RMSNorm and the unembedding:
@@ -1131,8 +1131,8 @@ Per-head credit (`debug/induction_heads.py` → `results/induction/heads_repvar5
 | Muon, v,o on Adam | 4.43 / 4.10 / 2.30 | 1.35-1.45 | | |
 | Adam, v,o on Muon | 2.90 / 2.19 / 4.95 | 1.49-1.86 | | |
 
-- Muon's heads write 1.3-2.5× more credit for the copied token than Adam's at every Adam lr tried, on all worlds tried. The MLPs write about the same.
+- Muon's heads write 1.3-2.5× more credit for the copied token than Adam's at every Adam lr tried, on all data sets tried. The MLPs write about the same.
 - The top induction head attends about equally (Muon 0.52-0.65, Adam 0.54-0.60).
-- In Muon models the copy write is spread over several heads; the top head holds only 1.6-1.7 of 4.4-5.2 on worlds 6-7.
+- In Muon models the copy write is spread over several heads; the top head holds only 1.6-1.7 of 4.4-5.2 on test sets 6-7.
 - The gap shows at every token frequency and is larger for rare tokens.
-- Status: at width 64 with planted copied spans, "same loss, same attention, Muon's heads write the copied token about 1.6× harder" holds on 3 of 3 worlds and survives a 4× Adam lr range. Still open: different data orders (all worlds share one), natural text with no planted spans, larger models (Kaggle GPU once the weekly quota resets), and an OV-circuit eigenvalue score.
+- Status: at width 64 with planted copied spans, "same loss, same attention, Muon's heads write the copied token about 1.6× harder" holds on 3 of 3 data sets and survives a 4× Adam lr range. Still open: different data orders (all data sets share one), natural text with no planted spans, larger models (Kaggle GPU once the weekly quota resets), and an OV-circuit eigenvalue score.
