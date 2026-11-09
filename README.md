@@ -2,7 +2,7 @@
 
 We are using this repo to write a paper for ICML 2027. The question is how Muon influences each part of an LLM, and whether custom optimizers per part help, maybe focusing on attention heads.
 
-This repo is private and shared with co-authors. [QUESTIONS.md](QUESTIONS.md) lists 12 open questions, each with a result whichever way it turns out.
+This repo is private and shared with co-authors. **The 12 questions to pick are on the [paper page](https://vcn2lh6dzewa.feishu.cn/wiki/NnnowGBw0iibM4kVlvvcQxpLngb), and the start point for each one is on the [Setup page](https://vcn2lh6dzewa.feishu.cn/wiki/CGBuweZ1Ai6wLNkJ1facGbBMn6f).**
 
 The text is split into data sets that never share a token: tuning sets 0-4 pick settings, test sets 5-9 report scores, recheck sets 10-14 confirm a best-of-many pick, and 5 locked test sets are opened only by `gate.py`. The code calls a data set a world (`--world`).
 
